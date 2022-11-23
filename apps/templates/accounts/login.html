@@ -1,0 +1,66 @@
+{% extends "layouts/base-fullscreen.html" %}
+{% load static %}{% load socialaccount %}
+{% block title %} Login {% endblock %}
+
+{% block content %}
+
+    <div class="auth-wrapper">
+        <div class="auth-content">
+            <div class="auth-bg">
+                <span class="r"></span>
+                <span class="r s"></span>
+                <span class="r s"></span>
+                <span class="r"></span>
+            </div>
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <img src="{% static 'media/brgy_logo/logo.png' %}">
+                    </div>
+
+                    <h3 class="mb-4">Masili Portal</h3>
+
+                    <span class="mb-0 text-muted">
+                        {% if msg %}
+                            <span class="text-danger">{{ msg | safe }}</span>
+                        {% else %}
+                            Enter your login credentials
+                        {% endif %} 
+                    </span>
+
+                    <br />
+                    <br />
+
+                    <form role="form" method="post" action="">
+
+                        {% csrf_token %}
+
+                        <div class="input-group mb-3">
+                            {{ form.email }}
+                        </div>
+
+                        <div class="input-group mb-1">
+                            {{ form.password }}
+                        </div>
+
+                        <p class="mb-0 text-muted mb-4 text-right"><a href="{% url 'password_reset' %}" >Forgot Password?</a></p>
+
+
+                        <button type="submit" name="login" class="btn btn-primary shadow-2 mb-4">Login</button>
+
+                    </form>
+
+                    <p class="mb-0 text-muted">Don’t have an account? <a href="{% url 'register' %}">Sign up</a></p>
+
+                    <br />
+
+                    <div class="social">
+                        <a href="{% provider_login_url 'facebook' %}" class="btn btn-primary mb-4"><i class="fas fa-facebook-f"></i> </a>
+                        <a href="{% provider_login_url 'google' %}" class="btn btn-google shadow-2 mb-4"><i class="fa fa-google"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock content %}

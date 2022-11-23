@@ -1,0 +1,57 @@
+{% extends "layouts/base-fullscreen.html" %}
+{% load static %}
+{% block title %}{% endblock %}
+
+{% block content %}
+
+    <div class="auth-wrapper">
+        <div class="auth-content">
+            <div class="auth-bg">
+                <span class="r"></span>
+                <span class="r s"></span>
+                <span class="r s"></span>
+                <span class="r"></span>
+            </div>
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <img src="{% static 'media/brgy_logo/logo.png' %}">
+                    </div>
+
+                    <h3 class="mb-4">Masili Portal</h3>
+
+                    <span class="mb-0 text-muted">
+                        {% if msg %}
+                            <span class="text-danger">{{ msg | safe }}</span>
+                        {% else %}
+                            Enter your email address and we will send you an OTP to reset your password.
+                        {% endif %} 
+                    </span>
+
+                    <br />
+                    <br />
+
+                    <form role="form" method="post" action="">
+
+                        {% csrf_token %}
+
+                        <div class="input-group mb-3">
+                            {{ form.email }}
+                        </div>
+
+                        <button type="submit" name="login" class="btn btn-primary shadow-2 mb-4">Continue</button>
+
+                    </form>
+
+
+
+                    <p class="mb-3 text-muted">Go back to login<a href="{% url 'login' %}" >Login</a></p>
+                    <p class="mb-0 text-muted">Don’t have an account? <a href="{% url 'register' %}" >Sign up</a></p>
+
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

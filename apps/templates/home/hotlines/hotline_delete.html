@@ -1,0 +1,46 @@
+{% extends 'includes/delete_base.html' %}
+
+{% block title %} Delete {% endblock %}
+
+{% block header_title %}Delete Hotline{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'hotlines' %}">List of Directories</a></li>
+    <li class="breadcrumb-item active">Delete</li>
+{% endblock %}
+
+{% block data_to_delete %}
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>Hotline</th>
+            <th>Phone Number(s)</th>
+            <th>Telephone No.</th>
+            <th>Email</th>
+            <th>Address</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ hotline.name }}</td>
+            <td>{{ hotline.phone_no1 }}<br>{{ hotline.phone_no2 }}</td>
+            <td>{{ hotline.tel_no }}</td>
+            <td>{{ hotline.email }}</td>
+            <td>{{ hotline.address }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="col-sm-12 mb-2 mt-2">
+        <div class="form-group">
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger float-right">
+                    <i class="fa fa-trash"></i> Yes, Delete.
+                </button>
+                <a href="{% url 'hotlines' %}" class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Cancel</a>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

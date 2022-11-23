@@ -1,0 +1,107 @@
+{% load static %}
+<!-- [ navigation menu ] start -->
+<nav class="pcoded-navbar">
+    <div class="navbar-wrapper">
+        <div class="navbar-brand header-logo">
+            <a href="/" class="b-brand">
+                <div class="w-25">
+                    <img class="w-100" src="{% static 'media/brgy_logo/logo.png' %}">
+                </div>
+                <span class="b-title">Masili Portal</span>
+            </a>
+            <a class="mobile-menu" id="mobile-collapse" href="javascript:"><span></span></a>
+        </div>
+        <div class="navbar-content scroll-div">
+            <ul class="nav pcoded-inner-navbar">
+                <li class="nav-item pcoded-menu-caption">
+                    <label>Navigation</label>
+                </li>
+                <li data-username="dashboard"
+                    class="nav-item {% if 'index' in segment %} active {% endif %}">
+                    <a href="/" class="nav-link "><span class="pcoded-micon"><i class="fas fa-tachometer-alt"></i></span><span
+                            class="pcoded-mtext">Dashboard</span></a>
+                </li>
+                <li class="nav-item pcoded-hasmenu {% if 'brgy_info' in segment %} active pcoded-trigger {% endif %}">
+                    <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="fas fa-info"></i></span><span
+                            class="pcoded-mtext">Barangay Information</span></a>
+                    <ul class="pcoded-submenu">
+                        <li class="{% if 'hotlines' in segment %} active {% endif %}"><a href="{% url 'hotlines' %}" class="">Hotline Directories</a></li>
+                        <li class="{% if 'org' in segment %} active {% endif %}"><a href="{% url 'hotlines' %}" class="">Organizations</a></li>
+                    </ul>
+                </li>
+
+                {% if request.user.profile.is_superadmin %}
+                    <li class="nav-item {% if 'blotters' in segment %} active {% endif %}">
+                        <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-gavel"></i></span><span
+                                class="pcoded-mtext">Blotters</span></a>
+                    </li>
+                {% endif %}
+
+                <li class="nav-item {% if 'officials' in segment %} active {% endif %}">
+                    <a href="{% url 'officials' %}" class="nav-link "><span class="pcoded-micon"><i class="fas fa-user-tie"></i></span><span
+                            class="pcoded-mtext">Officials</span></a>
+                </li>
+
+                <li class="nav-item {% if 'ordinances' in segment %} active {% endif %}">
+                    <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-book"></i></span><span
+                            class="pcoded-mtext">Ordinances</span></a>
+                </li>
+
+                <li class="nav-item {% if 'residents' in segment %} active {% endif %}">
+                    <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-users"></i></span><span
+                            class="pcoded-mtext">Residents</span></a>
+                </li>
+
+                <li class="nav-item pcoded-menu-caption">
+                    <label>Forms</label>
+                </li>
+
+                <li class="nav-item {% if 'sessions' in segment %} active {% endif %}">
+                    <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-book-open"></i></span><span
+                            class="pcoded-mtext">Sessions</span></a>
+                </li>
+
+                <li class="nav-item {% if 'certificates' in segment %} active {% endif %}">
+                    <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-file"></i></span><span
+                            class="pcoded-mtext">Certificates</span></a>
+                </li>
+
+                <li class="nav-item {% if 'clearances' in segment %} active {% endif %}">
+                    <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-file-alt"></i></span><span
+                            class="pcoded-mtext">Clearances</span></a>
+                </li>
+
+                <li class="nav-item {% if 'permits' in segment %} active {% endif %}">
+                    <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-file-archive"></i></span><span
+                            class="pcoded-mtext">Permits</span></a>
+                </li>
+
+                <li class="nav-item pcoded-menu-caption">
+                    <label>Others</label>
+                </li>
+
+                <li class="nav-item {% if 'gallery' in segment %} active {% endif %}">
+                    <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-bullhorn"></i></span><span
+                            class="pcoded-mtext">Announcements</span></a>
+                </li>
+
+                <li class="nav-item {% if 'gallery' in segment %} active {% endif %}">
+                    <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-images"></i></span><span
+                            class="pcoded-mtext">Gallery</span></a>
+                </li>
+
+                <li class="nav-item {% if 'gallery' in segment %} active {% endif %}">
+                    <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-calendar-alt"></i></span><span
+                            class="pcoded-mtext">Events</span></a>
+                </li>
+
+                <li class="nav-item {% if 'gallery' in segment %} active {% endif %}">
+                    <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-calendar"></i></span><span
+                            class="pcoded-mtext">Calendar</span></a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- [ navigation menu ] end -->

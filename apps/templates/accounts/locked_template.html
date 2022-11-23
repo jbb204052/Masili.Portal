@@ -1,0 +1,35 @@
+{% extends "layouts/base-fullscreen.html" %}
+{% load static %}
+{% block title %}{% endblock %}
+
+{% block content %}
+
+    <div class="auth-wrapper">
+        <div class="auth-content">
+            <div class="auth-bg">
+                <span class="r"></span>
+                <span class="r s"></span>
+                <span class="r s"></span>
+                <span class="r"></span>
+            </div>
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <img src="{% static 'media/brgy_logo/logo.png' %}">
+                    </div>
+
+                    <h3 class="mb-4">Masili Portal</h3>
+
+                    <br />
+
+
+                    <div class="mb-5">
+
+                        <p class="mb-3 text-muted">Account is temporarily locked due to too many login attempts. Please try to login again after a few minutes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

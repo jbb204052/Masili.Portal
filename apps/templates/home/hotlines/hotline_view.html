@@ -1,0 +1,91 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Hotlines {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <style>
+        .border-start {
+            border-left: 1px solid #dee2e6!important;
+        }
+    </style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">
+                                            Add Hotline
+                                        </h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'hotlines' %}">List of Directories</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">
+                                            View - {{ hotline }}
+                                        </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <form class="row" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="col-sm-5">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Hotline Data</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row mb-3 align-items-center">
+                                                <div class="col-sm-3 text-center">
+                                                    <h1 class="fa-10x text-muted">
+                                                        <i class="fa fa-address-book"></i></h1>
+                                                </div>
+                                                <div class="col-sm-9 border-start">
+                                                    <h3>{{ hotline.name }}</h3>
+                                                    <p class="mb-1">{{ hotline.phone_no1 }}</p>
+                                                    {% if hotline.phone_no2 %}
+                                                        <p class="mb-1">{{ hotline.phone_no2 }}</p>
+                                                    {% endif %}
+
+                                                    <p class="mb-1">{{ hotline.tel_no}}</p>
+                                                    <p class="mb-1">{{ hotline.email }}</p>
+                                                    <p class="mb-1">{{ hotline.address }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 mb-2 mt-2">
+                                                <div class="form-group">
+                                                    <a href="{% url 'hotline_edit' hotline.id %}" class="btn btn-primary float-right">
+                                                        <i class="fa fa-save"></i> Update
+                                                    </a>
+                                                    <a href="{% url 'hotlines' %}" class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+{% endblock javascripts %}
