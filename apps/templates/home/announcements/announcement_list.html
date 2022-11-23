@@ -1,0 +1,167 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %} Organizations {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <!-- Data Tables -->
+    <link rel="stylesheet" href="{% static 'assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/style.min.css' %}">
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <section class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">Organizations</h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">List of Organizations</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <div class="row">
+                                <div class="col-xl-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>List</h5>
+                                            <a href="{% url 'organization_add' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i>Add New Organization</a>
+                                        </div>
+                                        <div class="card-block table-border-style">
+                                            {% for message in messages %}
+                                                {% if 'success' in message.tags %}
+                                                    <p class="alert alert-success" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+                                                {% else %}
+                                                    <p class="alert alert-warning" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <div class="table-responsive">
+                                                <table id="example1" class="table table-bordered table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Organization Name</th>
+                                                        <th>Organization Description</th>
+                                                        <th>Date Added</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for org in orgs %}
+                                                        <tr>
+                                                            <td>{{ org.org_name }}</td>
+                                                            <td>{{ org.org_description }}</td>
+                                                            <td>{{ org.date_added }}</td>
+                                                            <td>
+
+                                                                <a class="btn btn-icon btn-outline-primary" href="#" title="Edit Info"><i class="feather icon-check-circle"></i></a>
+
+                                                                <a href="#" class="btn btn-icon btn-outline-success" title="View Members"><i class="fas fa-list"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                    <tfoot>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ Hover-table ] end -->
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- [ Main Content ] end -->
+{% endblock %}
+
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script src="{% static 'assets/plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/jszip/jszip.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/pdfmake/pdfmake.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/pdfmake/vfs_fonts.js' %}"></script>
+    <script src="{% static 'assets/plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+
+    <script>
+        $(function () {
+            $("#example1").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false, "paging": true, 'order':[2, 'desc'],
+                buttons:[
+                    {
+                        extend: 'excel',
+                        text: 'Excel',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)'
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        text: 'PDF',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)'
+                        },
+                        customize: function (doc) {
+                            doc.content[1].table.widths =
+                                Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        exportOptions: {
+                            columns: ':visible:not(:last-child)'
+                        }
+                    },
+                    {
+                        extend: 'colvis',
+                        text: 'Column Visibility'
+                    }
+                ],
+                columnDefs:[
+                    {'visible': false, 'targets': 2}
+                ]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+    </script>
+    <script>
+        //close alert after 3 seconds
+        window.setTimeout(function() {
+            $(".alert").fadeTo(300, 0).slideUp(300, function(){
+                $(this).remove();
+            });
+        }, 3000);
+    </script>
+{% endblock javascripts %}
