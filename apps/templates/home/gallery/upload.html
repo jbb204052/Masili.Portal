@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Organizations {% endblock %}
+{% block title %} Gallery {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -19,18 +19,13 @@
                                 <div class="col-md-12">
                                     <div class="page-header-title">
                                         <h5 class="m-b-10">
-                                            Organizations
+                                            Gallery
                                         </h5>
                                     </div>
                                     <ul class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
-                                        <li class="breadcrumb-item"><a href="{% url 'organizations' %}">List of Organizations</a></li>
-                                        <li class="breadcrumb-item"><a href="javascript:">
-                                            {% if 'add' in segment %}
-                                                Add
-                                            {% else %}
-                                                Update - {{ organization.org_name }}
-                                            {% endif %}</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'gallery' %}">Barangay Photos</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">Add Photo</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -43,7 +38,7 @@
                                 <div class="col-sm-6">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5>Organization Details</h5>
+                                            <h5>Upload Photo</h5>
                                         </div>
                                         <div class="card-block">
                                             {% for message in messages %}
@@ -55,17 +50,21 @@
                                             {% endfor %}
                                             <div class="row">
 
+                                            {{ formset.management_data }}
+
+                                            {{ formset.as_p }}
+
                                                 <div class="col-sm-12 mb-4">
                                                     <div class="form-group">
-                                                        <label>Organization Name</label>
-                                                        {{ form.org_name }}
+                                                        <label>Caption</label>
+                                                        {{ formset.caption }}
                                                     </div>
                                                 </div>
 
                                                 <div class="col-sm-12 mb-4">
                                                     <div class="form-group">
-                                                        <label>Description</label>
-                                                        {{ form.org_description }}
+                                                        <label>Caption</label>
+                                                        {{ formset.photo }}
                                                     </div>
                                                 </div>
 
@@ -79,7 +78,7 @@
                                                                 Update
                                                             {% endif %}
                                                         </button>
-                                                        <a href='{% url 'organizations' %}' class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
+                                                        <a href='{% url 'gallery' %}' class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
                                                     </div>
                                                 </div>
                                             </div>

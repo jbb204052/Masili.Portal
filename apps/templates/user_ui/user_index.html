@@ -1,7 +1,4 @@
-{% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -19,14 +16,15 @@
         <!-- SimpleLightbox plugin CSS-->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="{% static 'user_static/styles.css' %}" rel="stylesheet" />
+        <link href="user_static/styles.css" rel="stylesheet" />
+        <!-- swiper-->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
     </head>
     <body id="page-top">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
             <div class="container px-4 px-lg-5">
-                <img src="images/logo.png" height="100px" width="100px" alt="Brgy Masili">
+                <img class="w-100" src="media/brgy_logo/logo.png">
                 <a class="navbar-brand" href="#page-top">Brgy Masili</a>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -36,7 +34,7 @@
                         <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
                         <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                         <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#Account">{{ request.user.first_name }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#Account">Account</a></li>
                     </ul>
                 </div>
             </div>
@@ -49,19 +47,19 @@
                     <!-- Additional required wrapper -->
                     <div class="swiper-wrapper">
                     <!-- Slides -->
-                        {% for photo in photoes %}
+
+                    {% for photo in photos %}
                         <div class="swiper-slide">
-                            <img src="{{ photo.photo.url }}" alt="Brgy Masili">
-                            <ht class="SliderText">{{ photo.caption }}</ht>
+                            <img src="{{ photo.photo.url }}" alt="">             
+                            <h2 class="Slidetext">{{ photo.caption }}</h2>      
                         </div>
-                        {% endfor %}
-                        
+                    {% endfor %}
                     ...
                   </div>
-                  <!-- If we need pagination -->
+                  <!--pagination -->
                   <div class="swiper-pagination"></div>
           
-                  <!-- If we need navigation buttons -->
+                  <!-- navigation buttons -->
                   <div class="swiper-button-prev"></div>
                   <div class="swiper-button-next"></div>
           
@@ -247,7 +245,7 @@
         <!-- SimpleLightbox plugin JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
         <!-- Core theme JS-->
-        <script src="{% static 'user_static/scripts.js' %}"></script>
+        <script src="js/scripts.js"></script>
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <!-- * *                               SB Forms JS                               * *-->
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
@@ -275,4 +273,4 @@
           
           });</script>
     </body>
-</html>
+

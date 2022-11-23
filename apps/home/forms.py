@@ -38,6 +38,34 @@ class OrganizationForm(ModelForm):
         fields = '__all__'
         widgets = {
             'org_name': TextInput(attrs={'class': 'form-control', 'placeholder': 'Organization Name'}),
-            'org_description': Textarea(attrs={'class': 'form-control', 'placeholder': 'Description'}),
-            'org_head': TextInput(attrs={'class': 'form-control', 'placeholder': 'Organization Leader'}),
+            'org_description': TextInput(attrs={'class': 'form-control', 'placeholder': 'Description'}),
+        }
+
+
+class OrgMemberForm(ModelForm):
+    class Meta:
+        model = models.OrgMember
+        fields = ['member']
+        widgets = {
+            'member': Select(attrs={'class': 'form-control', 'placeholder': 'Member'}),
+        }
+
+
+class AnnouncementForm(ModelForm):
+    class Meta:
+        model = models.Announcement
+        fields = '__all__'
+        widgets = {
+            'title': TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}),
+            'content': Textarea(attrs={'class': 'form-control', 'placeholder': 'Content'}),
+        }
+
+
+class GalleryForm(ModelForm):
+    class Meta:
+        model = models.Gallery
+        fields = '__all__'
+        widgets = {
+            'caption': TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}),
+            'photo': FileInput(attrs={'class': 'form-control', 'placeholder': 'Image'}),
         }

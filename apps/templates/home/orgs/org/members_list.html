@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 
-{% block title %} Hotlines {% endblock %}
+{% block title %} {{ organization.org_name }} {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
@@ -26,11 +26,13 @@
                             <div class="row align-items-center">
                                 <div class="col-md-12">
                                     <div class="page-header-title">
-                                        <h5 class="m-b-10">Hotline Directories</h5>
+                                        <h5 class="m-b-10">Organizations</h5>
                                     </div>
                                     <ul class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
-                                        <li class="breadcrumb-item"><a href="javascript:">List of Directories</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'organizations' %}">List of Organizations</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">{{ organization.org_name }}</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">Members</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -43,8 +45,8 @@
                                 <div class="col-xl-12">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5>List</h5>
-                                            <a href="{% url 'organization_add' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i>Add New Organization</a>
+                                            <h5>{{ organization.org_name }}</h5>
+                                            <a href="{#  #}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i>Add New Member</a>
                                         </div>
                                         <div class="card-block table-border-style">
                                             {% for message in messages %}
@@ -58,20 +60,16 @@
                                                 <table id="example1" class="table table-bordered table-hover">
                                                     <thead>
                                                     <tr>
-                                                        <th>Organization Name</th>
-                                                        <th>Organization Description</th>
-                                                        <th>Date Added</th>
-                                                        <th>Action</th>
+                                                        <th>Fullname</th>
+                                                        <th>Gender</th>
+                                                        <th>Address</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    {% for org in orgs %}
+                                                    {% for member in members %}
                                                         <tr>
-                                                            <td>{{ org.org_name }}</td>
-                                                            <td>{{ org.org_description }}</td>
-                                                            <td>{{ org.date_added }}</td>
+                                                        <td>{{ member.fname }}&nbsp;{{ member.lname }}</td>
                                                             <td>
-
                                                                 <a class="btn btn-icon btn-outline-primary" href="#" title="Edit Info"><i class="feather icon-check-circle"></i></a>
 
                                                                 <a href="#" class="btn btn-icon btn-outline-success" title="View Members"><i class="fas fa-list"></i></a>

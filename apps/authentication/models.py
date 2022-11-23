@@ -8,7 +8,8 @@ from apps.authentication.helper import OverwriteStorage
 def photo_path(path):
     def _func(instance, filename):
         return os.path.join(path, str(instance.id) + '.png')
-    return _func
+
+    # return _func
 
 
 class Profile(models.Model):
@@ -16,13 +17,11 @@ class Profile(models.Model):
         ['RESIDENT', 'RESIDENT'],
         ['ADMIN', 'ADMIN'],
         ['SUPERADMIN', 'SUPERADMIN'],
-        ['GUEST', 'GUEST']
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    is_resident = models.BooleanField(default=False)
+    is_resident = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_superadmin = models.BooleanField(default=False)
-    is_guest = models.BooleanField(default=True)
     photo = models.ImageField(upload_to=photo_path('profile_pics'), blank=True, default='profile_pics/default.jpg', storage=OverwriteStorage())
 
     def __str__(self):
@@ -31,3 +30,5 @@ class Profile(models.Model):
     def delete(self, *args, **kwargs):
         self.photo.delete()
         super().delete(*args, **kwargs)
+
+

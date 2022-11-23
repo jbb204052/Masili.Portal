@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 
-{% block title %} Hotlines {% endblock %}
+{% block title %} Organizations {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
@@ -26,11 +26,11 @@
                             <div class="row align-items-center">
                                 <div class="col-md-12">
                                     <div class="page-header-title">
-                                        <h5 class="m-b-10">Hotline Directories</h5>
+                                        <h5 class="m-b-10">Organizations</h5>
                                     </div>
                                     <ul class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
-                                        <li class="breadcrumb-item"><a href="javascript:">List of Directories</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">List of Organizations</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -44,7 +44,7 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <h5>List</h5>
-                                            <a href="{% url 'hotline_add' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i>Add New Hotline</a>
+                                            <a href="{% url 'organization_add' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i>Add New Organization</a>
                                         </div>
                                         <div class="card-block table-border-style">
                                             {% for message in messages %}
@@ -58,29 +58,23 @@
                                                 <table id="example1" class="table table-bordered table-hover">
                                                     <thead>
                                                     <tr>
-                                                        <th>Directory Name</th>
-                                                        <th>Phone Number(s)</th>
-                                                        <th>Telephone No.</th>
-                                                        <th>Email</th>
-                                                        <th>Address</th>
+                                                        <th>Organization Name</th>
+                                                        <th>Organization Description</th>
                                                         <th>Date Added</th>
-                                                        <th>Actions</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    {% for hotline in hotlines %}
+                                                    {% for org in orgs %}
                                                         <tr>
-                                                            <td>{{ hotline.name }}</td>
-                                                            <td>{{ hotline.phone_no1 }} <br> {{ hotline.phone_no2 }}</td>
-                                                            <td>{{ hotline.tel_no }}</td>
-                                                            <td>{{ hotline.email }}</td>
-                                                            <td>{{ hotline.address }}</td>
-                                                            <td>{{ hotline.date_added }}</td>
+                                                            <td>{{ org.org_name }}</td>
+                                                            <td>{{ org.org_description }}</td>
+                                                            <td>{{ org.date_added }}</td>
                                                             <td>
 
-                                                                <a class="btn btn-icon btn-outline-primary" href="{% url 'hotline_view' hotline.id %}"><i class="feather icon-check-circle"></i></a>
+                                                                <a class="btn btn-icon btn-outline-primary" href="#" title="Edit Info"><i class="feather icon-check-circle"></i></a>
 
-                                                                <a href="{% url 'hotline_delete' hotline.id %}" class="btn btn-icon btn-outline-danger" ><i class="fas fa-trash"></i></a>
+                                                                <a href="#" class="btn btn-icon btn-outline-success" title="View Members"><i class="fas fa-list"></i></a>
                                                             </td>
                                                         </tr>
                                                     {% endfor %}
@@ -124,7 +118,7 @@
     <script>
         $(function () {
             $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false, "paging": true, 'order':[5, 'desc'],
+                "responsive": true, "lengthChange": false, "autoWidth": false, "paging": true, 'order':[2, 'desc'],
                 buttons:[
                     {
                         extend: 'excel',
@@ -157,7 +151,7 @@
                     }
                 ],
                 columnDefs:[
-                    {'visible': false, 'targets': 5}
+                    {'visible': false, 'targets': 2}
                 ]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });

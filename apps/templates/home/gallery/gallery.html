@@ -1,0 +1,111 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Gallery {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">
+                                            Gallery
+                                        </h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/apps/static"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="#">Gallery</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="main-body" bis_skin_checked="1">
+                        <div class="page-wrapper" bis_skin_checked="1">
+                            <!-- [ Main Content ] start -->
+                            <div class="row" bis_skin_checked="1">
+                                <!-- [ Gallery-Grid ] start -->
+                                <div class="col-sm-12" bis_skin_checked="1">
+                                    <div class="card" bis_skin_checked="1">
+                                        <div class="card-header" bis_skin_checked="1">
+                                            <h5>Barangay Photos</h5>
+                                            <a href="{% url 'gallery_upload' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i> Upload Photo</a>
+                                        </div>
+                                        <div class="card-block" bis_skin_checked="1">
+                                            <div class="row" bis_skin_checked="1">
+
+                                                {% for photo in gallery %}
+                                                    <div class="col-lg-4 col-sm-6" bis_skin_checked="1">
+                                                        <div class="thumbnail mb-4" bis_skin_checked="1">
+                                                            <div class="thumb" bis_skin_checked="1">
+                                                                <a data-lightbox="{{ photo.photo.url }}"><img src="{{ photo.photo.url }}" class="img-fluid img-thumbnail m-b-10" alt=""></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ Gallery-Grid ] end -->
+                            </div>
+                            <!-- [ Main Content ] end -->
+
+                            <div class="modal fade modal-lightbox" id="lightboxModal" tabindex="-1" aria-labelledby="lightboxModalLabel" bis_skin_checked="1" style="display: none;" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" bis_skin_checked="1">
+                                    <div class="modal-content border-0" bis_skin_checked="1">
+                                        <button type=" button" class="btn-close btn-close-white position-absolute bottom-100 start-100 translate-middle1" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <div class="modal-body p-0" bis_skin_checked="1">
+                                            <img src="#" alt="images" class="modal-image img-fluid">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+    <script>
+        var lightboxModal = new bootstrap.Modal(document.getElementById('lightboxModal'));
+        var elem = document.querySelectorAll("[data-lightbox]");
+        for (var j = 0; j < elem.length; j++) {
+            elem[j].addEventListener('click', function () {
+                var imagespath = event.target;
+                if (imagespath.tagName == "IMG") {
+                    imagespath = imagespath.parentNode;
+                }
+                var recipient = imagespath.getAttribute('data-lightbox');
+                var image = document.querySelector('.modal-image');
+                image.setAttribute('src', recipient);
+                lightboxModal.show();
+            });
+        }
+
+        function removeClassByPrefix(node, prefix) {
+            for (let i = 0; i < node.classList.length; i++) {
+                let value = node.classList[i];
+                if (value.startsWith(prefix)) {
+                    node.classList.remove(value);
+                }
+            }
+        }
+    </script>
+{% endblock javascripts %}

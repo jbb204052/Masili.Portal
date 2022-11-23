@@ -12,6 +12,7 @@ admin.site.register(models.BrgyOfficial)
 admin.site.register(models.Resident)
 admin.site.register(models.Purok)
 admin.site.register(models.BrgyOrganization)
+admin.site.register(models.OrgMember)
 
 # BLOTTER
 admin.site.register(models.Blotter)
@@ -19,3 +20,10 @@ admin.site.register(models.Complainant)
 admin.site.register(models.Respondent)
 admin.site.register(models.Witness)
 
+
+# ANNOUNCEMENT
+admin.site.register(models.Announcement)
+
+
+
+admin.site.register(models.Gallery)

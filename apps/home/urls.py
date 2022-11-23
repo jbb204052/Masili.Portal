@@ -21,6 +21,20 @@ urlpatterns = [
     path('hotlines/view/<int:id>/', views.hotline_view, name='hotline_view'),
     path('hotlines/delete/<int:id>/', views.hotline_delete, name='hotline_delete'),
 
+    # ANNOUNCEMENT
+    path('announcements/', views.announcements, name='announcements'),
+    path('announcements/new/', views.announcement_data, name='announcement_add'),
+
+    # ORGANIZATIONS
+    path('organizations/', views.organizations, name='organizations'),
+    path('organizations/add/', views.organization_data, name='organization_add'),
+
+
+
+    # GALLERY
+    path('gallery/', views.gallery, name='gallery'),
+    path('gallery/upload/', views.gallery_upload, name='gallery_upload'),
+
     # OFFICIALS
     path('officials/', views.officials, name='officials'),
     path('officials/add/', views.official_data, name='official_add'),

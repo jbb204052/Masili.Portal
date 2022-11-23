@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Organizations {% endblock %}
+{% block title %} Announcement {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -24,12 +24,12 @@
                                     </div>
                                     <ul class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
-                                        <li class="breadcrumb-item"><a href="{% url 'organizations' %}">List of Organizations</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'organizations' %}">List of Announcements</a></li>
                                         <li class="breadcrumb-item"><a href="javascript:">
                                             {% if 'add' in segment %}
                                                 Add
                                             {% else %}
-                                                Update - {{ organization.org_name }}
+                                                Update
                                             {% endif %}</a></li>
                                     </ul>
                                 </div>
@@ -43,7 +43,7 @@
                                 <div class="col-sm-6">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5>Organization Details</h5>
+                                            <h5>Announcement Content</h5>
                                         </div>
                                         <div class="card-block">
                                             {% for message in messages %}
@@ -57,15 +57,31 @@
 
                                                 <div class="col-sm-12 mb-4">
                                                     <div class="form-group">
-                                                        <label>Organization Name</label>
-                                                        {{ form.org_name }}
+                                                        <label>Title</label>
+                                                        {{ form.title }}
                                                     </div>
                                                 </div>
 
                                                 <div class="col-sm-12 mb-4">
                                                     <div class="form-group">
-                                                        <label>Description</label>
-                                                        {{ form.org_description }}
+                                                        <label>Content</label>
+                                                        {{ form.content }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-12 mb-4">
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-2">
+                                                            <label>Send To:</label>
+                                                        </div>
+                                                        <div class="col-md-10">
+                                                            <select name="send_to" class="form-control">
+                                                                <option value="ALL">ALL</option>
+                                                                {% for org in organization %}
+                                                                    <option value="{{ org.org_name }}">{{ org.org_name }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -74,12 +90,12 @@
                                                         <button type="submit" class="btn btn-primary float-right">
                                                             <i class="fa fa-save"></i>
                                                             {% if 'add' in segment %}
-                                                                Save
+                                                                Send
                                                             {% elif 'update' in segment %}
-                                                                Update
+                                                                Resend
                                                             {% endif %}
                                                         </button>
-                                                        <a href='{% url 'organizations' %}' class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
+                                                        <a href='{% url 'announcements' %}' class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
                                                     </div>
                                                 </div>
                                             </div>

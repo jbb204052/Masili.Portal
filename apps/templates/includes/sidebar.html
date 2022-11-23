@@ -26,7 +26,7 @@
                             class="pcoded-mtext">Barangay Information</span></a>
                     <ul class="pcoded-submenu">
                         <li class="{% if 'hotlines' in segment %} active {% endif %}"><a href="{% url 'hotlines' %}" class="">Hotline Directories</a></li>
-                        <li class="{% if 'org' in segment %} active {% endif %}"><a href="{% url 'hotlines' %}" class="">Organizations</a></li>
+                        <li class="{% if 'org' in segment %} active {% endif %}"><a href="{% url 'organizations' %}" class="">Organizations</a></li>
                     </ul>
                 </li>
 
@@ -80,22 +80,22 @@
                     <label>Others</label>
                 </li>
 
-                <li class="nav-item {% if 'gallery' in segment %} active {% endif %}">
-                    <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-bullhorn"></i></span><span
+                <li class="nav-item {% if 'announcements' in segment %} active {% endif %}">
+                    <a href="{% url 'announcements' %}" class="nav-link "><span class="pcoded-micon"><i class="fas fa-bullhorn"></i></span><span
                             class="pcoded-mtext">Announcements</span></a>
                 </li>
 
                 <li class="nav-item {% if 'gallery' in segment %} active {% endif %}">
-                    <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-images"></i></span><span
+                    <a href="{% url 'gallery' %}" class="nav-link "><span class="pcoded-micon"><i class="fas fa-images"></i></span><span
                             class="pcoded-mtext">Gallery</span></a>
                 </li>
 
-                <li class="nav-item {% if 'gallery' in segment %} active {% endif %}">
+                <li class="nav-item {% if 'events' in segment %} active {% endif %}">
                     <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-calendar-alt"></i></span><span
                             class="pcoded-mtext">Events</span></a>
                 </li>
 
-                <li class="nav-item {% if 'gallery' in segment %} active {% endif %}">
+                <li class="nav-item {% if 'calendar' in segment %} active {% endif %}">
                     <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-calendar"></i></span><span
                             class="pcoded-mtext">Calendar</span></a>
                 </li>
