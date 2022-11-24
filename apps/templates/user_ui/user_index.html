@@ -1,4 +1,7 @@
+{% load static %}
 
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -7,7 +10,7 @@
         <title>Brgy Masili</title>
         
         <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="{% static 'media/brgy_logo/logo.png' %}" />
         <!-- Bootstrap Icons-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Google fonts-->
@@ -16,25 +19,25 @@
         <!-- SimpleLightbox plugin CSS-->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="user_static/styles.css" rel="stylesheet" />
-        <!-- swiper-->
+        <link href="{% static 'user_static/css/styles.css' %}" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
     </head>
     <body id="page-top">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
             <div class="container px-4 px-lg-5">
-                <img class="w-100" src="media/brgy_logo/logo.png">
-                <a class="navbar-brand" href="#page-top">Brgy Masili</a>
+                <img src="images/logo.png" height="100px" width="100px" alt="">
+                <a class="navbar-brand">Brgy Masili</a>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
+                    
                     <ul class="navbar-nav ms-auto my-2 my-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="#page-top">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#Account">Account</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#page-top" onclick="closeNav()">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#page-top" onclick="openNav()">Services</a></li> 
+                        <li class="nav-item"><a class="nav-link" href="#portfolio" onclick="closeNav()">Portfolio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#about" onclick="closeNav()">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#contact" onclick="closeNav()">Contact</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#Account"onclick="closeNav()">Account</a></li>
                     </ul>
                 </div>
             </div>
@@ -43,68 +46,108 @@
         <header class="masthead">
             <div class="container">
                 <!-- Slider main container -->
-                  <div class="swiper">
+                <div class="swiper">
                     <!-- Additional required wrapper -->
                     <div class="swiper-wrapper">
-                    <!-- Slides -->
-
-                    {% for photo in photos %}
+                        <!-- Slides -->
                         <div class="swiper-slide">
-                            <img src="{{ photo.photo.url }}" alt="">             
-                            <h2 class="Slidetext">{{ photo.caption }}</h2>      
+                            <img src="images/BrgyHall.jpg" alt="">                 
+                            <h2 class="Slidetext">Brgy Hall</h2>                 
                         </div>
-                    {% endfor %}
-                    ...
-                  </div>
-                  <!--pagination -->
+                        <div class="swiper-slide">
+                            <img src="images/Multipurpose_building.jpg" alt="">
+                            <h2 class="Slidetext">Multipurpose Hall</h2>                           
+                        </div>
+
+                        <div class="swiper-slide">
+                            <img src="images/Mga-konsehal.jpg" alt="">                       
+                            <h2 class="Slidetext">Konsehal</h2>                   
+                        </div>
+
+                        <div class="swiper-slide">
+                            <img src="images/BrgyOfficial.jpg" alt="">                       
+                            <h2 class="Slidetext">Brgy Officials</h2>                   
+                        </div>
+
+                        <div class="swiper-slide">
+                            <img src="images/SK_Officials.jpg" alt="">
+                            <h2 class="Slidetext">SK Officials</h2>                           
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="images/Kagawad.jpg" alt="">
+                            <h2 class="Slidetext">Kagawad</h2>                           
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="images/health-care.jpg" alt="">
+                            <h2 class="Slidetext">Healt Care Workers</h2>                           
+                        </div>
+                                           
+                    </div>
+                  <!-- If we need pagination -->
                   <div class="swiper-pagination"></div>
           
-                  <!-- navigation buttons -->
+                  <!-- If we need navigation buttons -->
                   <div class="swiper-button-prev"></div>
                   <div class="swiper-button-next"></div>
           
                 </div>
-              </div>
-        </header>
-        <!-- Services-->
-        <section class="page-section" id="services">
-            <div class="container px-4 px-lg-5">
-                <h2 class="text-center mt-0">Service</h2>
-                <hr class="divider" />
-                <div class="row gx-3 gx-lg-5">
-                    <div class="col-lg-3 col-md-6 text-center">
-                        <div class="mt-5">
-                            <div class="mb-2"><i class="bi-gem fs-1 text-primary"></i></div>
-                            <h3 class="h4 mb-2">Documents</h3>
-                            <p class="text-muted mb-0">Our themes are updated regularly to keep them bug free!</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 text-center">
-                        <div class="mt-5">
-                            <div class="mb-2"><i class="bi-laptop fs-1 text-primary"></i></div>
-                            <h3 class="h4 mb-2">Up to Date</h3>
-                            <p class="text-muted mb-0">All dependencies are kept current to keep things fresh.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 text-center">
-                        <div class="mt-5">
-                            <div class="mb-2"><i class="bi-globe fs-1 text-primary"></i></div>
-                            <h3 class="h4 mb-2">Ready to Publish</h3>
-                            <p class="text-muted mb-0">You can use this design as is, or you can make changes!</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 text-center">
-                        <div class="mt-5">
-                            <div class="mb-2"><i class="bi-heart fs-1 text-primary"></i></div>
-                            <h3 class="h4 mb-2">Made with Love</h3>
-                            <p class="text-muted mb-0">Is it really open source if it's not made with love?</p>
-                        </div>
-                    </div>
-                </div>
             </div>
-        </section>
+        </header>
+        <!-- Services
+        <span onclick="openNav()"></span>-->
+           
+         <div id="myNav" class="overlay">
+            
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> 
+
+                <div id="clearance" class="overlay-content">                  
+                    <a href="#" >BRGY CLEARANCE</a>
+                </div> 
+                <div id="BGpermit" class="overlay-content"> 
+                    <a href="#" >BRGY PERMIT</a>
+                </div>
+                <div id="BDpermit" class="overlay-content">
+                    <a href="#" >BUILDING PERMIT</a>
+                </div>
+                <div id="CT-P-L-P" class="overlay-content">  
+                    <a href="#" >CERTIFICATION-TRANSPORTATION<br>PERMIT-and-LANDING-PERMIT</a>
+                </div> 
+                <div id="Indigency" class="overlay-content">
+                    <a href="#" >INDIGENCY-FOR-FINANCIAL</a>
+                </div>
+                <div id="Di-iisang-tao" class="overlay-content">
+                    <a href="#" >PAGPAPATUNAY-NA-DI-IISANG-TAO</a>
+                </div>
+                <div id="Live-in" class="overlay-content">
+                    <a href="#" >PAGPAPATUNAY-NA-LIVE-IN</a>
+                </div>  
+                
+        </div>
+        <!--button id="myBtn">Open Modal</button-->
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                
+                <div class="modal-header">                   
+                    <h2>Brgy Clearance</h2>
+                    <span class="close">&times;</span>
+                </div>
+
+                <div class="modal-body">
+                    <p>Some text in the Modal Body</p>
+                    <p>Some other text...</p>
+                </div>
+
+                <div class="modal-footer justify-content-left" >
+                    <h3>Modal Footer</h3>
+                </div>
+            </div> 
+        </div>
+        
+            
         <!-- Portfolio-->
         <div id="portfolio">
+            
             <div class="container-fluid p-0">
                 <div class="row g-0">
                     <div class="col-lg-4 col-sm-6">
@@ -161,10 +204,32 @@
         </div>
         <!-- About-->
         <section class="page-section bg-primary" id="about">
-            <div class="container px-4 px-lg-5">
-                <div class="info">Bilang Ng Tao</div>
-                <div class="row gx-4 gx-lg-0 justify-content-right">
-                    <div class="col-lg-7 text-center">
+            <div class="container px-2 px-lg-0">
+                <div class="info text-white mt-0">
+                    <h1>Chairman:</h1>
+                    <p>Eliseo G. Maligaya</p>
+                    
+                    <h1>Councilors:</h1>
+                    <p>Edwin H. De Leon<br>
+                        Christopher M. Apacionado<br>
+                        Solidario M. Apacionado<br>
+                        Mary Grace S. Roldan<br>
+                        Violeta O. Espinosa<br>
+                        Abelardo P. Calimlim Jr.<br>
+                        Cherryl R. Alviar</p>     
+                    <h1>SK Chairman:</h1>
+                    <p>Dale Luther A. Quinia</p>
+                    <h1>SK Councilors:</h1>
+                    <p>Eduard Kyle A. Herbosa<br>
+                        Rinzel Joyce D. Laparan<br>
+                        Jay D. Hamuat<br>
+                        Alaisa A. Oclarino<br>
+                        Jerome A. Trollano<br>
+                        Lyn Mark V. Burac<br>
+                        Ruel M. Apacionado Jr.</p>
+                </div>
+                <div class="row gx-3 gx-lg-0 justify-content-left">
+                    <div class="col-lg-9 text-center">
                         <h1 class="text-white mt-0">Maikling Kasaysayan:</h1>
                         <hr class="divider divider-light" />
                         <p class="text-white-75 mb-4">Ang unang pangalan ng Masili ay “SUMILE” na hinango sa salitng  “SUMILANG” na ang kahulugan ang bagong           silang dahil sa ito ay bagong litaw na pook. 
@@ -186,9 +251,9 @@
         </section>
         
         <!-- Contact-->
-        <section class="page-section" id="contact">
+        <section class="page-section" id="contact"> 
             <div class="container gx-0 gx-lg-0">
-                <div class="map">
+                <div class="map mt-0">
                     <h1>Masili Location</h1>
                      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7736.407289339509!2d121.19852192503336!3d14.182847512109602!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33bd613926c4267f%3A0x62fd88e8affa6ac1!2sMasili%2C%20Real%2C%20Calamba%2C%20Laguna!5e0!3m2!1sfil!2sph!4v1669042628362!5m2!1sfil!2sph" width="350" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
@@ -211,6 +276,9 @@
             </div>
             
         </section>
+        <!--Account-->
+
+
         <!-- Brgy emergency contacts-->
         <section class="page-section bg-dark text-white">
             <div class="container">
@@ -228,12 +296,7 @@
                     <br>CITY HEALTH OFFICE&emsp;&emsp;&emsp;&emsp;545-6597/545-6789(8016)<br>
                     <br>VAW/C-Violence against Women and Children
                     <br>0909-341-2375
-                </p>
-               
-
-                
-                    
-                        
+                </p>                                                           
             </div>
         </section>
         <!-- Footer-->
@@ -245,7 +308,7 @@
         <!-- SimpleLightbox plugin JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
         <!-- Core theme JS-->
-        <script src="js/scripts.js"></script>
+        <script src="{% static 'user_static/js/scripts.js' %}"></script>
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <!-- * *                               SB Forms JS                               * *-->
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
@@ -273,4 +336,4 @@
           
           });</script>
     </body>
-
+</html>

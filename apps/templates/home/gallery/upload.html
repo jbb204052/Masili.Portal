@@ -48,35 +48,26 @@
                                                     <p class="alert alert-warning" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
                                                 {% endif %}
                                             {% endfor %}
+
                                             <div class="row">
-
-                                            {{ formset.management_data }}
-
-                                            {{ formset.as_p }}
-
                                                 <div class="col-sm-12 mb-4">
                                                     <div class="form-group">
                                                         <label>Caption</label>
-                                                        {{ formset.caption }}
+                                                        {{ form.caption }}
                                                     </div>
                                                 </div>
 
                                                 <div class="col-sm-12 mb-4">
                                                     <div class="form-group">
                                                         <label>Caption</label>
-                                                        {{ formset.photo }}
+                                                        {{ form.photo }}
                                                     </div>
                                                 </div>
 
                                                 <div class="col-sm-12 mb-2 mt-2">
                                                     <div class="form-group">
                                                         <button type="submit" class="btn btn-primary float-right">
-                                                            <i class="fa fa-save"></i>
-                                                            {% if 'add' in segment %}
-                                                                Save
-                                                            {% elif 'update' in segment %}
-                                                                Update
-                                                            {% endif %}
+                                                            <i class="fa fa-save"></i> Save
                                                         </button>
                                                         <a href='{% url 'gallery' %}' class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
                                                     </div>

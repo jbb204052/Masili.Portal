@@ -3,11 +3,27 @@ from django.contrib.auth.models import User
 import os
 
 
+def file_path(path):
+    def _func(instance, filename):
+        return os.path.join(path + str(instance.ordinance_no), filename)
+    # return _func
+
+
+def photo_path(path):
+    def _func(instance, filename):
+        return os.path.join(path, str(instance.id) + '.png')
+    # return _func
+
+
 class Purok(models.Model):
     name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.name = self.name.upper()
+        super(Purok, self).save(*args, **kwargs)
 
 
 class BrgyOfficial(models.Model):
@@ -25,6 +41,8 @@ class BrgyOfficial(models.Model):
         ['INACTIVE', 'INACTIVE'],
     )
     status = models.CharField(max_length=10, choices=stat, default='active')
+
+    unique_together = ('fname', 'mname', 'lname', 'ext_name', 'position', 'start_term', 'end_term')
 
     def __str__(self):
         return self.fname + ' ' + self.lname
@@ -88,11 +106,14 @@ class Resident(models.Model):
     phone_no2 = models.CharField(max_length=11, blank=True)
     tel_no = models.CharField(max_length=15, blank=True)
     email = models.EmailField(max_length=50, blank=True)
+    photo = models.ImageField(upload_to=photo_path('residents'), blank=True, default='residents/avatar.png')
+    date_added = models.DateTimeField(auto_now_add=True)
 
-    # Other
-    is_voter = models.BooleanField(default=False)
-    is_household_head = models.BooleanField(default=False)
-
+    stat_1 = (
+        ['ACTIVE', 'ACTIVE'],
+        ['MOVED OUT', 'MOVED OUT'],
+    )
+    status = models.CharField(max_length=10, choices=stat_1, default='ACTIVE')
     def __str__(self):
         return self.fname + ' ' + self.lname
 
@@ -106,10 +127,25 @@ class Resident(models.Model):
         self.address_line1 = self.address_line1.upper()
         if self.phone_no1[0:2] != '+63':
             self.phone_no1 = '+63' + self.phone_no1
-        if self.phone_no2[0:2] != '+63':
-            self.phone_no2 = '+63' + self.phone_no2
+        if self.phone_no2 != '':
+            if self.phone_no2[0:2] != '+63':
+                self.phone_no2 = '+63' + self.phone_no2
         super(Resident, self).save(*args, **kwargs)
 
+
+class EmergencyContact(models.Model):
+    resident = models.ForeignKey(Resident, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    phone_no1 = models.CharField(max_length=11, blank=False, default=None)
+    address = models.CharField(max_length=50, blank=False)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        self.name = self.name.upper()
+        self.address = self.address.upper()
+        super(EmergencyContacts, self).save(*args, **kwargs)
 
 # RECOGNIZED ORGANIZATIONS
 class BrgyOrganization(models.Model):
@@ -136,25 +172,6 @@ class OrgMember(models.Model):
 
     class Meta:
         unique_together = ('org', 'member')
-
-
-class EmergencyContact(models.Model):
-    res = models.ForeignKey(Resident, on_delete=models.CASCADE)
-    fname = models.CharField(max_length=50, blank=False)
-    lname = models.CharField(max_length=50, blank=False)
-    mname = models.CharField(max_length=50, blank=True)
-    ext_name = models.CharField(max_length=5, blank=True)
-    phone_no = models.CharField(max_length=11, blank=False, default=None)
-
-    def __str__(self):
-        return self.fname + ' ' + self.lname
-
-    def save(self, *args, **kwargs):
-        self.fname = self.fname.upper()
-        self.mname = self.mname.upper()
-        self.lname = self.lname.upper()
-        self.ext_name = self.ext_name.upper()
-        super(EmergencyContact, self).save(*args, **kwargs)
 
 
 # BLOTTERS
@@ -248,7 +265,7 @@ class Announcement(models.Model):
     title = models.CharField(max_length=50, blank=False)
     content = models.TextField(blank=False)
     date_posted = models.DateTimeField(auto_now_add=True)
-    posted_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
+    posted_by = models.CharField(max_length=50, blank=False)
     stat = (
         ['SENT', 'SENT'],
         ['PENDING', 'PENDING'],
@@ -261,8 +278,6 @@ class Announcement(models.Model):
 
     def save(self, *args, **kwargs):
         self.title = self.title.upper()
-        user = User.objects.get(username=self.request.user)
-        self.posted_by = user.first_name + ' ' + user.last_name
         super(Announcement, self).save(*args, **kwargs)
 
 
@@ -280,3 +295,25 @@ class Gallery(models.Model):
         verbose_name_plural = 'Gallery'
 
 
+
+class Ordinance(models.Model):
+    ordinance_no = models.CharField(max_length=50, blank=False)
+    title = models.CharField(max_length=255, blank=False)
+    provisions = models.TextField(blank=False)
+    presiding_officer = models.CharField(max_length=50, blank=False)
+    date_posted = models.DateTimeField(auto_now_add=True)
+    posted_by = models.CharField(max_length=50, blank=False)
+    files = models.FileField(upload_to=file_path('ordinances/'), blank=True, default=None)
+    stat = (
+        ['ACTIVE', 'ACTIVE'],
+        ['EXPIRED', 'EXPIRED'],
+    )
+    status = models.CharField(max_length=50, choices=stat, default='ACTIVE')
+    attested_by = models.TextField(blank=True)
+    def __str__(self):
+        return self.ordinance_no
+
+    def save(self, *args, **kwargs):
+        self.ordinance_no = self.ordinance_no.upper()
+        self.title = self.title.upper()
+        super(Ordinance, self).save(*args, **kwargs)

@@ -20,11 +20,13 @@ SECRET_KEY = env('SECRET_KEY', default='S#perS3crEt_007')
 DEBUG = env('DEBUG')
 
 # Assets Management
-ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets') 
+ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets')
 
 # load production server from .env
-ALLOWED_HOSTS        = ['localhost', 'localhost:85', '127.0.0.1',               env('SERVER', default='127.0.0.1'), 'https://0ff0-136-158-16-208.ap.ngrok.io', 'masiliportal.com' ]
-CSRF_TRUSTED_ORIGINS = ['http://localhost:85', 'http://127.0.0.1', 'https://' + env('SERVER', default='127.0.0.1'), 'https://0ff0-136-158-16-208.ap.ngrok.io' ]
+ALLOWED_HOSTS = ['localhost', 'localhost:85', '127.0.0.1', env('SERVER', default='127.0.0.1'),
+                 'https://0ff0-136-158-16-208.ap.ngrok.io', 'masiliportal.com']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:85', 'http://127.0.0.1', 'https://' + env('SERVER', default='127.0.0.1'),
+                        'https://0ff0-136-158-16-208.ap.ngrok.io']
 
 # Application definition
 
@@ -36,14 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.authentication',
-    'apps.home',                                    # Enable the inner home (home)
-    'allauth',                                      # OAuth new
-    'allauth.account',                              # OAuth new
-    'allauth.socialaccount',                        # OAuth new
-    'allauth.socialaccount.providers.google',       # OAuth new
-    'allauth.socialaccount.providers.facebook',     # OAuth new
+    'apps.home',  # Enable the inner home (home)
+    'allauth',  # OAuth new
+    'allauth.account',  # OAuth new
+    'allauth.socialaccount',  # OAuth new
+    'allauth.socialaccount.providers.google',  # OAuth new
+    'allauth.socialaccount.providers.facebook',  # OAuth new
     "sslserver",
-    'axes'    
+    'axes'
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -62,7 +64,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'axes.middleware.AxesMiddleware',
 ]
-
 
 ROOT_URLCONF = 'core.urls'
 LOGIN_REDIRECT_URL = "home"  # Route defined in home/urls.py
@@ -92,15 +93,15 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 if os.environ.get('DB_ENGINE') and os.environ.get('DB_ENGINE') == "mysql":
-    DATABASES = { 
-      'default': {
-        'ENGINE'  : 'django.db.backends.mysql', 
-        'NAME'    : os.getenv('DB_NAME'     , 'appseed_db'),
-        'USER'    : os.getenv('DB_USERNAME' , 'appseed_db_usr'),
-        'PASSWORD': os.getenv('DB_PASS'     , 'pass'),
-        'HOST'    : os.getenv('DB_HOST'     , 'localhost'),
-        'PORT'    : os.getenv('DB_PORT'     , 3306),
-        }, 
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv('DB_NAME', 'appseed_db'),
+            'USER': os.getenv('DB_USERNAME', 'appseed_db_usr'),
+            'PASSWORD': os.getenv('DB_PASS', 'pass'),
+            'HOST': os.getenv('DB_HOST', 'localhost'),
+            'PORT': os.getenv('DB_PORT', 3306),
+        },
     }
 else:
     DATABASES = {
@@ -152,30 +153,28 @@ STATIC_URL = '/static/'
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
     os.path.join(CORE_DIR, 'apps/static'),
-) 
+)
 
 # Media
 MEDIA_ROOT = os.path.join(CORE_DIR, 'apps/static/media')
 MEDIA_URL = 'media/'
 
-
 #############################################################
 # OAuth settings 
 
-GITHUB_ID     = os.getenv('GITHUB_ID', None)
+GITHUB_ID = os.getenv('GITHUB_ID', None)
 GITHUB_SECRET = os.getenv('GITHUB_SECRET', None)
-GITHUB_AUTH   = GITHUB_SECRET is not None and GITHUB_ID is not None
+GITHUB_AUTH = GITHUB_SECRET is not None and GITHUB_ID is not None
 
 AUTHENTICATION_BACKENDS = (
     "core.custom-auth-backend.CustomBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 )
 
-SITE_ID                    = 1 
+SITE_ID = 1
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 SOCIALACCOUNT_PROVIDERS = {}
-
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -188,13 +187,14 @@ EMAIL_HOST_USER = 'barramedajp0724@gmail.com'
 EMAIL_HOST_PASSWORD = 'qbcrdeafgxjtcyix'
 
 # FAKER SETTINGS
-FAKER_LOCALE = None     # settings.LANGUAGE_CODE is loaded
+FAKER_LOCALE = None  # settings.LANGUAGE_CODE is loaded
 FAKER_PROVIDERS = None  # faker.DEFAULT_PROVIDERS is loaded (all)
 
 # AXES SETTINGS
-AXES_FAILURE_LIMIT= 3
+AXES_FAILURE_LIMIT = 3
 AXES_COOLOFF_TIME = timedelta(minutes=3)
 AXES_RESET_COOL_OFF_ON_FAILURE_DURING_LOCKOUT = False
 AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP = True
-AXES_LOCKOUT_TEMPLATE=os.path.join(TEMPLATE_DIR, "accounts/locked_template.html")
+AXES_LOCKOUT_TEMPLATE = os.path.join(TEMPLATE_DIR, "accounts/locked_template.html")
 
+USE_TZ = True

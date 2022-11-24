@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="{% static 'assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/plugins/style.min.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
 {% endblock stylesheets %}
 
 {% block content %}
@@ -40,11 +45,28 @@
                     <div class="main-body">
                         <div class="page-wrapper">
                             <div class="row">
-                                <div class="col-xl-12">
+                                <div class="col-xl-4">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Statistics</h5>
+                                        </div>
+                                        <div class="card-block table-border-style">
+                                            <div class="card order-card" style="background-color: #17a2b8">
+                                                <div class="card-body" style="padding-bottom: 20px">
+                                                    <h4 class="text-white">Total Population</h4>
+                                                    <h1 class="text-end text-white"><i class="fas fa-users float-right"></i><span>{{ count }}</span></h1>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-8">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5>List</h5>
-                                            <a href="{% url 'official_add' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i>Add New Official </a>
+                                            <a href="#" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i>Add New Official </a>
                                         </div>
                                         <div class="card-block table-border-style">
                                             {% for message in messages %}
@@ -59,31 +81,30 @@
                                                     <thead>
                                                     <tr>
                                                         <th>Fullname</th>
-                                                        <th>Position</th>
-                                                        <th>Start of Term</th>
-                                                        <th>End of Term</th>
-                                                        <th>Status</th>
-                                                        <th>Actions</th>
+                                                        <th>Gender</th>
+                                                        <th>Civil Status</th>
+                                                        <th>Birthdate</th>
+                                                        <th>Contact</th>
+                                                        <th>Address</th>
                                                         <th>Add Date</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    {% for official in officials %}
+                                                    {% for resident in residents %}
                                                         <tr>
-                                                            <td><img class="rounded-circle m-r-15" src="{{ official.photo.url }}" style="width: 50px">{{ official.fname }}&nbsp; {{ official.lname }}&nbsp; {{ official.ext_name }}</td>
-                                                            <td>{{ official.position }}</td>
-                                                            <td>{{ official.start_term }}</td>
-                                                            <td>{{ official.end_term }}</td>
+                                                            <td><img class="rounded-circle m-r-15" src="{{ resident.photo.url }}" style="width: 50px">{{ resident.fname }}&nbsp; {{ resident.lname }}&nbsp; {{ official.ext_name }}</td>
+                                                            <td>{{ resident.gender }}</td>
+                                                            <td>{{ resident.civil_status }}</td>
+                                                            <td>{{ resident.bdate }}</td>
+                                                            <td>{{ resident.phone_no1 }}
+                                                                {% if resident.phone_no2 != '' %}<br>{{ resident.phone_no2 }}
+                                                                {% endif %}<br>{{ resident.email }}</td>
+                                                            <td>{{ resident.address_line1 }},&nbsp;{{ resident.purok }}</td>
+                                                            <td>{{ resident.date_added }}</td>
                                                             <td>
-                                                                {% if official.status == 'ACTIVE' %}
-                                                                    <p><i class="fas fa-circle text-c-green f-10"></i>&nbsp;ACTIVE</p>
-                                                                {% else %}
-                                                                    <p><i class="fas fa-circle text-c-red f-10"></i>&nbsp;INACTIVE</p>
-                                                                {% endif %}
-                                                            <td>
-                                                                <a class="btn btn-icon btn-outline-primary" href="{% url 'official_view' official.id %}" title="View"><i class="feather icon-check-circle"></i></a>
+                                                                <a class="btn btn-icon btn-outline-primary" href="{% url 'resident_view' resident.id %}" title="View"><i class="feather icon-check-circle"></i></a>
                                                             </td>
-                                                            <td>{{ official.date_added }}</td>
                                                         </tr>
                                                     {% endfor %}
                                                     </tbody>
@@ -199,5 +220,39 @@
                 $(this).remove();
             });
         }, 3000);
+    </script>
+    <script>
+        var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+        var donutData        = {
+            labels: [
+                {% for purok in puroks %}
+                    '{{ purok.name }}',
+                {% endfor %}
+            ],
+            datasets: [
+                {
+                    data: [
+                        {% for purok in purok_residents %}
+                            '{{ purok }}',
+                        {% endfor %}
+                    ],
+                    backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+                }
+            ]
+        }
+        var donutOptions     = {
+            maintainAspectRatio : false,
+            responsive : true,
+        }
+        var donutChart = new Chart(donutChartCanvas, {
+            type: 'doughnut',
+            data: donutData,
+            options: {donutOptions,
+                title: {
+                    display: true,
+                    text: 'Population per purok'
+                }
+            }
+        })
     </script>
 {% endblock javascripts %}

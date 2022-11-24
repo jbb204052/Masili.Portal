@@ -42,6 +42,16 @@ urlpatterns = [
     path('officials/view/<int:id>/', views.official_view, name='official_view'),
 
 
+    path('user_ui/', views.user_ui, name='user_ui'),
+
+
+    # ORDINANCES
+    path('ordinances/', views.ordinances, name='ordinances'),
+    path('ordinances/add/', views.ordinance_data, name='ordinance_add'),
+    path('ordinances/view/<int:id>/', views.ordinance_view, name='ordinance_view'),
+
     # RESIDENTS
-    path('user_ui/', views.user_ui, name='user_ui')
+    path('residents/', views.residents, name='residents'),
+    # path('residents/add/', views.resident_data, name='resident_add'),
+    path('residents/view/<int:id>/', views.resident_view, name='resident_view'),
 ]

@@ -1,0 +1,119 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %} Ordinance {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">
+                                            Ordinance
+                                        </h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'ordinances' %}">List of Ordinances</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">
+                                            {% if 'add' in segment %}
+                                                Add
+                                            {% else %}
+                                                Update
+                                            {% endif %}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <form class="row" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Ordinance No: <b class="f-18">{{ ordinance.ordinance_no }}</b></h5>
+
+                                            <button type="button" class="btn btn-primary float-right" onclick="printMe('PrintMe')"><i class="fas fa-print"></i> Print</button>
+                                        </div>
+                                        <div class="card-block" id="PrintMe">
+                                            <p style="text-align: center; font-size: 15px;"><img style="float: left;" title="Logo" src="{% static 'media/brgy_logo/calamba.png' %}" alt="Calamba Seal" width="100" height="100"></p>
+                                            <h2 style="text-align: center;"><img style="float: right;" src="{% static 'media/brgy_logo/logo.png' %}" alt="" width="100" height="100"></h2>
+                                            <div class="d-flex justify-content-center" style="text-align: center">
+                                                <p>Republic of the Philippines<br>
+                                                    Province of Laguna<br>
+                                                    City of Calamba<br>
+                                                    Region IV-A<br>
+                                                    -o0o-<br>
+                                                    Barangay Masili<br>
+                                                    <a href="#">barangaymasili@gmail.com</a>
+                                                </p>
+                                            </div>
+                                            <div class="d-flex justify-content-center mt-3" style="text-align: center">
+                                                <br>
+                                                <p><strong style="font-size: 24px">OFFICE OF THE SANGGUNIANG BARANGAY</strong><br><br>
+                                                    <strong style="font-size: 16px">Ordinance Number {{ ordinance.ordinance_no }} Series of {{ year }}</strong><br><br>
+                                                    <strong style="font-size: 16px">"{{ ordinance.title }}"</strong><br><br>
+                                                </p>
+                                            </div>
+                                            <div class="d-flex justify-content-start mt-3">
+                                                <p style="font-size: 14px">{{ ordinance.provisions }}</p>
+                                                </p>
+                                            </div>
+                                            <br><br><br>
+                                            <div class="d-flex justify-content-end" style="width: 400px; float: right; text-align: justify">
+                                                <p class="font-size:12px"><strong>I HEREBY CERTIFY THAT THE FOREGOING ORDINANCE WAS APPROVED BY THE SANGGUNIANG BARANGAY OF MASILI.</strong><br><br><br>
+                                                    <span style="float: right; font-weight: bold">{{ ordinance.presiding_officer }}<br>
+                                                    Presiding Officer</span> <br>
+                                                </p>
+                                            </div>
+                                            <br><br><br><br><br><br><br><br><br>
+                                            <div class="d-flex justify-content-start mt-4">
+                                                <p style="font-size: 14px"><strong>ATTESTED BY:</strong><br><br>
+                                                </p>
+                                                <span class="ml-5">
+                                                    {% for attestor in attest_by %}<span class="m-l-5">{{ attestor }}</span><br><br>
+                                                    {% endfor %}
+                                                </span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+    <script>
+        function printMe(divName){
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+
+        }
+    </script>
+{% endblock javascripts %}

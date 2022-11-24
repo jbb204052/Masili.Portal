@@ -1,0 +1,99 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Resident {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <style>
+        .border-start {
+            border-left: 1px solid #dee2e6!important;
+        }
+    </style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">
+                                            Resident
+                                        </h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'hotlines' %}">List of Officials</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">
+                                            View - {{ resident_id }}
+                                        </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <form class="row" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="col-sm-5">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Resident Information</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row mb-3 align-items-center">
+                                                <div class="col-sm-3 text-center">
+                                                    <img src="{{ resident.photo.url }}" alt="Official Photo" class="img-fluid rounded-circle">
+                                                </div>
+                                                <div class="col-sm-9 border-start">
+                                                    <h3 class="mb-5">{{ resident.fname }}&nbsp;{{ resident.mname }}&nbsp;{{ resident.lname }}&nbsp;{{ resident.ext_name }}</h3>
+                                                    <p class="mb-1">Gender:&nbsp;{{ resident.gender }}</p>
+                                                    <p class="mb-1">Birthdate:&nbsp;{{ resident.bdate}}</p>
+                                                    <p class="mb-1">Religion:&nbsp;{{ resident.religion }}</p>
+                                                    <p class="mb-1">Civil Status:&nbsp;{{ resident.civil_status }}</p>
+                                                    <p class="mb-1">Occupation:&nbsp;{{ resident.civil_status }}</p>
+                                                    <p class="mb-1">Contact:&nbsp;{{ resident.phone_no1 }}
+                                                        {% if resident.phone_no2 != '' %}
+                                                        , {{ resident.phone_no2 }}
+                                                        {% endif %}
+                                                    </p>
+                                                    <p class="mb-1">Email:&nbsp;{{ resident.email }}</p>
+                                                    <p class="mb-1">Address:&nbsp;{{ resident.address_line1 }},&nbsp; {{ resident.purok }}</p>
+
+                                                    <h5 class="mt-4">Emergency Contact</h5>
+                                                    <p class="mb-1"> {{ emergency.name }}</p>
+                                                    <p class="mb-1"> {{ emergency.phone_no1 }}</p>
+                                                    <p class="mb-1"> {{ emergency.address }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 mb-2 mt-2">
+                                                <div class="form-group">
+                                                    <a href="#" class="btn btn-primary float-right">
+                                                        <i class="fa fa-save"></i> Update
+                                                    </a>
+                                                    <a href="{% url 'residents' %}" class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+{% endblock javascripts %}

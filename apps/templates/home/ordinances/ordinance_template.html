@@ -1,0 +1,52 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+    <style>
+        p{
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body id="forPrinting">
+<p style="text-align: center; font-size: 15px;"><img style="float: left;" title="Logo" src="{% static 'media/brgy_logo/calamba.png' %}" alt="Calamba Seal" width="100" height="100"></p>
+<h2 style="text-align: center;"><img style="float: right;" src="{% static 'media/brgy_logo/logo.png' %}" alt="" width="100" height="100"></h2>
+<div class="d-flex justify-content-center" style="text-align: center">
+    <p>Republic of the Philippines<br>
+        Province of Laguna<br>
+        City of Calamba<br>
+        Region IV-A<br>
+        -o0o-<br>
+        Barangay Masili<br>
+        <a href="#">barangaymasili@gmail.com</a>
+    </p>
+</div>
+<div class="d-flex justify-content-center mt-3" style="text-align: center">
+    <br>
+    <p><strong style="font-size: 24px">OFFICE OF THE SANGGUNIANG BARANGAY</strong><br><br>
+        <strong style="font-size: 16px">Ordinance Number {{ ordinance.ordinance_no }} Series of {{ ordinance.year }}</strong><br><br>
+    </p>
+</div>
+<div class="d-flex justify-content-start mt-3">
+    <p style="font-size: 14px">{{ ordinance.content }}</p>
+    </p>
+</div>
+<br><br><br>
+<div class="d-flex justify-content-end" style="width: 400px; float: right; text-align: justify">
+    <p class="font-size:12px"><strong>I HEREBY CERTIFY THAT THE FOREGOING ORDINANCE WAS APPROVED BY THE SANGGUNIANG BARANGAY OF MASILI.</strong><br><br><br>
+        <span style="float: right; font-weight: bold">{{ barangay_secretary }}<br>
+        Barangay Secretary</span> <br>
+    </p>
+</div>
+<br><br><br><br><br><br><br><br><br>
+<div class="d-flex justify-content-start mt-4">
+    <p style="font-size: 14px"><strong>ATTESTED BY:</strong><br><br>
+
+        <span class="ml-5">{{ ordinance.attest }}</span>
+    </p>
+</div>
+
+</body>
+</html>

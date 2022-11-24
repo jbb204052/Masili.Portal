@@ -15,5 +15,5 @@ urlpatterns = [
     # ADD NEW Routes HERE
 
     # Leave `Home.Urls` as last the last line
-    path("", include("apps.home.urls"))
+    path("", include("apps.home.urls")),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

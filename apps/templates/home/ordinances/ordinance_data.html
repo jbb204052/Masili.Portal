@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Announcement {% endblock %}
+{% block title %} Ordinance {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -19,12 +19,12 @@
                                 <div class="col-md-12">
                                     <div class="page-header-title">
                                         <h5 class="m-b-10">
-                                            Organizations
+                                            Ordinance
                                         </h5>
                                     </div>
                                     <ul class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
-                                        <li class="breadcrumb-item"><a href="{% url 'organizations' %}">List of Announcements</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'ordinances' %}">List of Ordinances</a></li>
                                         <li class="breadcrumb-item"><a href="javascript:">
                                             {% if 'add' in segment %}
                                                 Add
@@ -43,7 +43,7 @@
                                 <div class="col-sm-6">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5>Announcement Content</h5>
+                                            <h5>Ordinance No: <b class="f-18">{{ ordinance_no }}</b></h5>
                                         </div>
                                         <div class="card-block">
                                             {% for message in messages %}
@@ -62,26 +62,44 @@
                                                     </div>
                                                 </div>
 
+
                                                 <div class="col-sm-12 mb-4">
                                                     <div class="form-group">
-                                                        <label>Content</label>
-                                                        {{ form.content }}
+                                                        <label>Presiding Officer</label>
+                                                            <select name="presiding" class="form-control">
+                                                                {% for officer in officials %}
+                                                                    <option value="{{ officer.fname }}&nbsp;{{ officer.lname }}">{{ officer.fname }}&nbsp;{{ officer.lname }}</option>
+                                                                {% endfor %}
+                                                            </select>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-sm-12 mb-4">
-                                                    <div class="form-group row">
-                                                        <div class="col-sm-2">
-                                                            <label>Send To:</label>
-                                                        </div>
-                                                        <div class="col-md-10">
-                                                            <select name="recipient" class="form-control">
-                                                                <option value="ALL">ALL</option>
-                                                                {% for org in organization %}
-                                                                    <option value="{{ org.org_name }}">{{ org.org_name }}</option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </div>
+                                                    <div class="form-group">
+                                                        <label>Provisions</label>
+                                                        {{ form.provisions }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-12 mb-4">
+                                                    <div class="form-group">
+                                                        <label>Files/Documents</label>
+                                                        {{ form.files }}
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-sm-12 mb-4">
+                                                    <div class="form-group">
+                                                        <label>Attested By:</label>
+                                                        {{ form.attested_by }}
+                                                        <p class="text-muted">Separate name by comma (,)</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 mb-4">
+                                                    <div class="form-group">
+                                                        <label>Status</label>
+                                                        {{ form.status }}
                                                     </div>
                                                 </div>
 
@@ -95,7 +113,7 @@
                                                                 Resend
                                                             {% endif %}
                                                         </button>
-                                                        <a href='{% url 'announcements' %}' class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
+                                                        <a href='{% url 'ordinances' %}' class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
                                                     </div>
                                                 </div>
                                             </div>

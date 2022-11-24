@@ -10,7 +10,7 @@ client = Client(account_sid, auth_token)
 def send_sms(number, message):
     message = client.messages.create(
         body=message,
-        messaging_service_sid=messaging_service_sid,
+        from_=messaging_service_sid,
         to=number
     )
     print(message.sid)

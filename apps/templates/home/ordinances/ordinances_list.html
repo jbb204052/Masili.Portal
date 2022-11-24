@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 
-{% block title %} Announcements {% endblock %}
+{% block title %} Ordinances {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
@@ -26,11 +26,11 @@
                             <div class="row align-items-center">
                                 <div class="col-md-12">
                                     <div class="page-header-title">
-                                        <h5 class="m-b-10">Announcements</h5>
+                                        <h5 class="m-b-10">Ordinances</h5>
                                     </div>
                                     <ul class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
-                                        <li class="breadcrumb-item"><a href="javascript:">List of Announcements</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">List of Ordinances</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -44,7 +44,7 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <h5>List</h5>
-                                            <a href="{% url 'announcement_add' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i>Post New Announcement</a>
+                                            <a href="{% url 'ordinance_add' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i>Add Ordinance</a>
                                         </div>
                                         <div class="card-block table-border-style">
                                             {% for message in messages %}
@@ -58,26 +58,28 @@
                                                 <table id="example1" class="table table-bordered table-hover">
                                                     <thead>
                                                     <tr>
-                                                        <th>Posted Date</th>
+                                                        <th>Ordinance Number</th>
                                                         <th>Title</th>
-                                                        <th>Message</th>
-                                                        <th>Recipients</th>
-                                                        <th>Author</th>
+                                                        <th>Officer in Charge</th>
+                                                        <th>Date Posted</th>
                                                         <th>Status</th>
-                                                        <th>Actions</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    {% for announcement in announcements %}
+                                                    {% for ordinance in ordinances %}
                                                         <tr>
-                                                            <td>{{ announcement.date_posted }}</td>
-                                                            <td>{{ announcement.title }}</td>
-                                                            <td>{{ announcement.content }}</td>
-                                                            <td>{{ announcement.send_to }}</td>
-                                                            <td>{{ announcement.posted_by }}</td>
-                                                            <td>{{ announcement.status }}</td>
+                                                            <td>{{ ordinance.ordinance_no }}</td>
+                                                            <td>{{ ordinance.title }}</td>
+                                                            <td>{{ ordinance.presiding_officer }}</td>
+                                                            <td>{{ ordinance.date_posted }}</td>
+                                                            <td>{{ ordinance.status }}</td>
                                                             <td>
                                                                 <a class="btn btn-icon btn-outline-primary" href="#" title="View"><i class="feather icon-check-circle"></i></a>
+
+                                                                <a href="{% url 'ordinance_view' ordinance.id %}" class="btn btn-icon btn-primary"  title="View"><i class="feather icon-check-circle"></i></a>
+                                                                {#data-toggle="modal" data-target="#exampleModalCenter"#}
+
                                                             </td>
                                                         </tr>
                                                     {% endfor %}
@@ -99,6 +101,61 @@
 
         </div>
     </section>
+
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="text-align: center; font-size: 15px;"><img style="float: left;" title="Logo" src="{% static 'media/brgy_logo/calamba.png' %}" alt="Calamba Seal" width="100" height="100"></p>
+                    <h2 style="text-align: center;"><img style="float: right;" src="{% static 'media/brgy_logo/logo.png' %}" alt="" width="100" height="100"></h2>
+                    <div class="d-flex justify-content-center" style="text-align: center">
+                        <p>Republic of the Philippines<br>
+                            Province of Laguna<br>
+                            City of Calamba<br>
+                            Region IV-A<br>
+                            -o0o-<br>
+                            Barangay Masili<br>
+                            <a href="#">barangaymasili@gmail.com</a>
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-center mt-3" style="text-align: center">
+                        <br>
+                        <p><strong style="font-size: 24px">OFFICE OF THE SANGGUNIANG BARANGAY</strong><br><br>
+                            <strong style="font-size: 16px">Ordinance Number {{ ordinance.ordinance_no }} Series of {{ ordinance.year }}</strong><br><br>
+                        </p>
+                    </div>
+                    <div class="d-flex justify-content-start mt-3">
+                        <p style="font-size: 14px">{{ ordinance.content }}</p>
+                        </p>
+                    </div>
+                    <br><br><br>
+                    <div class="d-flex justify-content-end" style="width: 400px; float: right; text-align: justify">
+                        <p class="font-size:12px"><strong>I HEREBY CERTIFY THAT THE FOREGOING ORDINANCE WAS APPROVED BY THE SANGGUNIANG BARANGAY OF MASILI.</strong><br><br><br>
+                            <span style="float: right; font-weight: bold">{{ barangay_secretary }}<br>
+        Barangay Secretary</span> <br>
+                        </p>
+                    </div>
+                    <br><br><br><br><br><br><br><br><br>
+                    <div class="d-flex justify-content-start mt-4">
+                        <p style="font-size: 14px"><strong>ATTESTED BY:</strong><br><br>
+
+                            <span class="ml-5">{{ ordinance.attest }}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="printDiv('forPrinting')">Print</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- [ Main Content ] end -->
 {% endblock %}
 
@@ -163,5 +220,25 @@
                 $(this).remove();
             });
         }, 3000);
+
+        $('#exampleModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('whatever')
+            var modal = $(this)
+            modal.find('.modal-title').text('New message to ' + recipient)
+            modal.find('.modal-body input').val(recipient)
+        })
+
+        function printDiv(divName){
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+
+        }
     </script>
 {% endblock javascripts %}

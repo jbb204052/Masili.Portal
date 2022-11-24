@@ -43,6 +43,13 @@
                                             <a href="{% url 'gallery_upload' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i> Upload Photo</a>
                                         </div>
                                         <div class="card-block" bis_skin_checked="1">
+                                            {% for message in messages %}
+                                                {% if 'success' in message.tags %}
+                                                    <p class="alert alert-success" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+                                                {% else %}
+                                                    <p class="alert alert-warning" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+                                                {% endif %}
+                                            {% endfor %}
                                             <div class="row" bis_skin_checked="1">
 
                                                 {% for photo in gallery %}

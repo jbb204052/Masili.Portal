@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from time import sleep
 
 from django import template
@@ -12,13 +13,14 @@ from . import models
 from . import forms
 from . import sms_sender
 
-from django.forms import formset_factory
+from django.forms import formset_factory, modelformset_factory
 
 
 @login_required(login_url="/login/")
 def index(request):
+    population = models.Resident.objects.count()
     officials_count = models.BrgyOfficial.objects.count()
-    context = {'segment': 'index', 'officials_count': officials_count}
+    context = {'segment': 'index', 'officials_count': officials_count, 'population': population}
     if request.user.profile.is_superadmin:
         html_template = loader.get_template('home/index.html')
     else:
@@ -124,11 +126,36 @@ def official_data(request):
     if request.method == 'POST':
         official_form = forms.BrgyOfficialForm(request.POST)
         if official_form.is_valid():
-            official_form.save()
-            messages.success(request, 'Official successfully added!')
-            return HttpResponseRedirect(reverse('officials'))
+            start_term = official_form.cleaned_data['start_term']
+            end_term = official_form.cleaned_data['end_term']
+
+            if start_term.year > end_term.year:
+                messages.error(request, 'Start term must be less than end term!')
+            elif start_term.year > datetime.now().year:
+                messages.error(request, 'Start term must be less than or equal the current year!')
+            else:
+                positions = ['captain', 'kapitan', 'chairman', 'chairwoman']
+                position = official_form.cleaned_data['position'].lower()
+                # check if position contains any of the positions in the list
+                if any(x in position for x in positions):
+                    if models.BrgyOfficial.objects.filter(position__icontains='captain', status='ACTIVE').exists():
+                        messages.error(request, 'There can only have 1 active Barangay Captain!')
+                    else:
+                        try:
+                            official_form.save()
+                            messages.success(request, 'Official successfully added!')
+                            return HttpResponseRedirect(reverse('officials'))
+                        except:
+                            messages.error(request, 'Official already exists!')
+                else:
+                    try:
+                        official_form.save()
+                        messages.success(request, 'Official successfully added!')
+                        return HttpResponseRedirect(reverse('officials'))
+                    except:
+                        messages.error(request, 'Official already exists!')
         else:
-            messages.error(request, 'Official already exists!')
+            messages.error(request, 'Error adding official')
     else:
         official_form = forms.BrgyOfficialForm()
     context = {'segment': {'officials', 'add'}, 'form': official_form}
@@ -136,19 +163,43 @@ def official_data(request):
     return HttpResponse(html_template.render(context, request))
 
 
-def official_edit(request):
-    return None
+def official_edit(request, id=0):
+    official = models.BrgyOfficial.objects.get(id=id)
+    if request.method == 'POST':
+        official_form = forms.BrgyOfficialForm(request.POST, instance=official)
+        if official_form.is_valid():
+            start_term = official_form.cleaned_data['start_term']
+            end_term = official_form.cleaned_data['end_term']
+
+            if start_term.year > end_term.year:
+                messages.error(request, 'Start term must be less than end term!')
+            elif start_term.year > datetime.now().year:
+                messages.error(request, 'Start term must be less than or equal the current year!')
+            else:
+                try:
+                    official_form.save()
+                    messages.success(request, 'Official successfully updated!')
+                    return HttpResponseRedirect(reverse('officials'))
+                except:
+                    messages.error(request, 'Error updating official')
+        else:
+            messages.error(request, 'Error updating official')
+    else:
+        official_form = forms.BrgyOfficialForm(instance=official)
+    context = {'segment': {'officials', 'update'}, 'form': official_form, 'official': official}
+    html_template = loader.get_template('home/officials/official_data.html')
+    return HttpResponse(html_template.render(context, request))
 
 
-def official_view(request):
-    return None
-
-# Residents
-
+def official_view(request, id=0):
+    official = models.BrgyOfficial.objects.get(id=id)
+    context = {'segment': {'officials', 'view'}, 'official': official}
+    html_template = loader.get_template('home/officials/official_view.html')
+    return HttpResponse(html_template.render(context, request))
 
 def user_ui(request):
     gallery = models.Gallery.objects.all()
-    context = {'segment': {'user_ui'}, 'photos':gallery}
+    context = {'segment': {'user_ui'}, 'photos': gallery}
     return render(request, 'user_ui/user_index.html', context)
 
 
@@ -185,11 +236,31 @@ def announcement_data(request):
     if request.method == 'POST':
         announcement_form = forms.AnnouncementForm(request.POST)
         if announcement_form.is_valid():
-            send_to = request.POST['send_to']
+            _data = announcement_form.save(commit=False)
+            send_to = request.POST['recipient']
             print(send_to)
-            announcement_form.save()
-            messages.success(request, 'Announcement successfully added!')
-            sleep(5)
+
+            message = request.POST['content']
+            numbers = None
+            if(send_to == 'ALL'):
+                numbers = models.Resident.objects.values_list('phone_no1', flat=True)
+            else:
+                org_id = models.BrgyOrganization.objects.get(org_name=send_to).id
+                numbers = models.OrgMember.objects.filter(org_id=org_id).values_list('member__phone_no1', flat=True)
+
+            message += '\n\n' + '- Sent by ' + request.user.first_name + ' ' + request.user.last_name + ' via Barangay Masili Portal'
+            if numbers.count() > 0:
+                for number in numbers:
+                    sms_sender.send_sms(number, message)
+                sleep(3)
+                _data.status = 'SENT'
+                messages.success(request, 'Announcement has been delivered!')
+            else:
+                messages.error(request, 'No recipients found!')
+
+            _data.send_to = send_to
+            _data.posted_by = request.user.first_name + ' ' + request.user.last_name
+            _data.save()
             return HttpResponseRedirect(reverse('announcements'))
         else:
             messages.error(request, 'Error adding announcement!')
@@ -208,6 +279,94 @@ def gallery(request):
 
 
 def gallery_upload(request):
-    formset = formset_factory(forms.GalleryForm, extra=5)
-    context = {'segment': 'gallery', 'formset': formset}
+    if request.method == 'POST':
+        gallery_form = forms.GalleryForm(request.POST, request.FILES)
+        if gallery_form.is_valid():
+            gallery_form.save()
+            messages.success(request, 'Photo successfully added!')
+            return HttpResponseRedirect(reverse('gallery'))
+        else:
+            messages.error(request, 'Error adding photo!')
+
+    form = forms.GalleryForm()
+    context = {'segment': 'gallery', 'form': form}
     return render(request, 'home/gallery/upload.html', context)
+
+
+def ordinances(request):
+    ordinances = models.Ordinance.objects.all()
+    context = {'segment': {'ordinances'}, 'ordinances': ordinances}
+    html_template = loader.get_template('home/ordinances/ordinances_list.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def ordinance_data(request):
+    officials = models.BrgyOfficial.objects.all()
+    ordinances = models.Ordinance.objects.all()
+    ordinance_count = ordinances.count()
+    if ordinance_count == 0:
+        ordinance_no = 'ORD-' + str(datetime.now().year) + '-0001'
+    else:
+        last_ordinance = ordinances.last()
+        ordinance_no = last_ordinance.ordinance_no
+        ordinance_no = ordinance_no.split('-')
+        ordinance_no = 'ORD-' + str(datetime.now().year) + '-' + str(int(ordinance_no[2]) + 1).zfill(4)
+
+    if request.method == 'POST':
+        ordinance_form = forms.OrdinanceForm(request.POST, request.FILES)
+        if ordinance_form.is_valid():
+            _data = ordinance_form.save(commit=False)
+            _data.ordinance_no = ordinance_no
+            _data.posted_by = request.user.first_name + ' ' + request.user.last_name
+
+            _presiding = request.POST['presiding']
+            _data.presiding_officer = _presiding
+
+            files = request.FILES.getlist('files')
+            for file in files:
+                _data.files = file
+                _data.save()
+
+            _data.save()
+
+            messages.success(request, 'Ordinance successfully added!')
+            return HttpResponseRedirect(reverse('ordinances'))
+        else:
+            messages.error(request, 'Error adding ordinance!')
+    context = {'segment': {'ordinances', 'add'}, 'form': forms.OrdinanceForm, 'ordinance_no': ordinance_no, 'officials': officials}
+    html_template = loader.get_template('home/ordinances/ordinance_data.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def ordinance_view(request, id=0):
+    ordinance = models.Ordinance.objects.get(id=id)
+    attest_by = ordinance.attested_by.split(',')
+
+    year = ordinance.date_posted.year
+
+    context = {'segment': {'ordinances', 'view'}, 'ordinance': ordinance, 'year': year, 'attest_by': attest_by}
+    html_template = loader.get_template('home/ordinances/ordinance_view.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def residents(request):
+    residents = models.Resident.objects.all()
+    puroks = models.Purok.objects.all()
+
+
+    # get the number or residents per purok
+    purok_residents = []
+    for purok in puroks:
+        purok_residents.append(models.Resident.objects.filter(purok=purok).count())
+    count = residents.count()
+    context = {'segment': {'residents'}, 'residents': residents, 'count': count, 'puroks': puroks, 'purok_residents': purok_residents}
+    html_template = loader.get_template('home/residents/residents_list.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def resident_view(request, id):
+    resident = models.Resident.objects.get(id=id)
+    emergency = models.EmergencyContact.objects.filter(resident=resident)
+    context = {'segment': {'residents', 'view'}, 'resident': resident, 'emergency': emergency}
+    html_template = loader.get_template('home/residents/resident_view.html')
+    return HttpResponse(html_template.render(context, request))

@@ -8,7 +8,6 @@ from apps.authentication.helper import OverwriteStorage
 def photo_path(path):
     def _func(instance, filename):
         return os.path.join(path, str(instance.id) + '.png')
-
     # return _func
 
 

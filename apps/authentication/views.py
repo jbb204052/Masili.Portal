@@ -6,6 +6,9 @@ from django.contrib.auth import authenticate, login
 
 from . import helper
 from .forms import *
+from .models import Profile
+
+
 def login_view(request):
     form = LoginForm(request.POST or None)
 
@@ -44,9 +47,14 @@ def register_user(request):
             else:
                 form.save()
                 user = authenticate(email=email, password=raw_password)
+
+                # save the user to Profile
+                profile = Profile(user=user)
+                profile.is_resident = True
+                profile.save()
+
                 request.session['message'] = 'Registration successful. Redirecting to login page...'
                 request.session['flag'] = 'registration_success'
-
                 return redirect("/redirecting/")
 
                 sleep(3)
