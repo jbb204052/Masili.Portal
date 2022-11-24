@@ -86,25 +86,37 @@ class OrdinanceForm(ModelForm):
         }
 
 
-class Residents(ModelForm):
+class ResidentForm(ModelForm):
     class Meta:
         model = models.Resident
         fields = ['fname', 'lname', 'mname', 'ext_name', 'bdate', 'gender', 'civil_status', 'religion', 'occupation', 'address_line1', 'purok', 'phone_no1', 'phone_no2', 'tel_no', 'email', 'photo']
         widgets = {
-            'fname': TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
-            'lname': TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
-            'mname': TextInput(attrs={'class': 'form-control', 'placeholder': 'Middle Name'}),
-            'ext_name': TextInput(attrs={'class': 'form-control', 'placeholder': 'Ext'}),
+            'fname': TextInput(attrs={'class': 'form-control text_input', 'placeholder': 'First Name'}),
+            'lname': TextInput(attrs={'class': 'form-control text_input', 'placeholder': 'Last Name'}),
+            'mname': TextInput(attrs={'class': 'form-control text_input', 'placeholder': 'Middle Name'}),
+            'ext_name': TextInput(attrs={'class': 'form-control text_input', 'placeholder': 'Ext'}),
             'bdate': DateInput(attrs={'class': 'form-control', 'placeholder': 'Birth Date', 'type': 'date'}),
             'gender': Select(attrs={'class': 'form-control', 'placeholder': 'Gender'}),
             'civil_status': Select(attrs={'class': 'form-control', 'placeholder': 'Civil Status'}),
-            'religion': Select(attrs={'class': 'form-control', 'placeholder': 'Religion'}),
+            'religion': TextInput(attrs={'class': 'form-control', 'placeholder': 'Religion'}),
             'occupation': TextInput(attrs={'class': 'form-control', 'placeholder': 'Occupation'}),
             'address_line1': TextInput(attrs={'class': 'form-control', 'placeholder': 'Address'}),
             'purok': Select(attrs={'class': 'form-control', 'placeholder': 'Purok'}),
             'phone_no1': TextInput(attrs={'class': 'form-control mob_no', 'placeholder': 'Phone Number 1'}),
             'phone_no2': TextInput(attrs={'class': 'form-control mob_no', 'placeholder': 'Phone Number 2'}),
             'tel_no': TextInput(attrs={'class': 'form-control tel_no', 'placeholder': 'Telephone Number'}),
-            'email': TextInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
-            'photo': FileInput(attrs={'class': 'w-25', 'id':'resident_photo_input', 'placeholder': 'Photo' }),
+            'email': EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+            'photo': FileInput(attrs={'class': 'w-25', 'id':'resident_photo_input', 'placeholder': 'Photo', 'display': 'none'}),
+        }
+
+
+class EmergencyContactForm(ModelForm):
+    class Meta:
+        model = models.EmergencyContact
+        fields = ['name', 'relationship', 'phone_no', 'address']
+        widgets = {
+            'name': TextInput(attrs={'class': 'form-control text_input', 'placeholder': 'Name'}),
+            'relationship': TextInput(attrs={'class': 'form-control', 'placeholder': 'Relationship'}),
+            'phone_no': TextInput(attrs={'class': 'form-control mob_no', 'placeholder': 'Phone Number'}),
+            'address': TextInput(attrs={'class': 'form-control', 'placeholder': 'Address'}),
         }

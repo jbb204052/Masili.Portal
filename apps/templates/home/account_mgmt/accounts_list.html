@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 
-{% block title %} Officials {% endblock %}
+{% block title %} Accounts Management {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
@@ -31,11 +31,11 @@
                             <div class="row align-items-center">
                                 <div class="col-md-12">
                                     <div class="page-header-title">
-                                        <h5 class="m-b-10">Officials</h5>
+                                        <h5 class="m-b-10">Accounts</h5>
                                     </div>
                                     <ul class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
-                                        <li class="breadcrumb-item"><a href="javascript:">List of Officials</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">List of Accounts</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -45,28 +45,10 @@
                     <div class="main-body">
                         <div class="page-wrapper">
                             <div class="row">
-                                <div class="col-xl-4">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5>Statistics</h5>
-                                        </div>
-                                        <div class="card-block table-border-style">
-                                            <div class="card order-card" style="background-color: #17a2b8">
-                                                <div class="card-body" style="padding-bottom: 20px">
-                                                    <h4 class="text-white">Total Population</h4>
-                                                    <h1 class="text-end text-white"><i class="fas fa-users float-right"></i><span>{{ count }}</span></h1>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                            <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-8">
+                                <div class="col-xl-12">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5>List</h5>
-                                            <a href="{% url 'resident_add' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i>Add New Resident </a>
                                         </div>
                                         <div class="card-block table-border-style">
                                             {% for message in messages %}
@@ -80,30 +62,30 @@
                                                 <table id="example1" class="table table-bordered table-hover">
                                                     <thead>
                                                     <tr>
+                                                        <th>Email</th>
                                                         <th>Fullname</th>
-                                                        <th>Gender</th>
-                                                        <th>Civil Status</th>
-                                                        <th>Birthdate</th>
-                                                        <th>Contact</th>
-                                                        <th>Address</th>
-                                                        <th>Add Date</th>
+                                                        <th>Account Type</th>
+                                                        <th>Date Created</th>
                                                         <th>Action</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    {% for resident in residents %}
+                                                    {% for account in accounts %}
                                                         <tr>
-                                                            <td><img class="rounded-circle m-r-15" src="{{ resident.photo.url }}" style="width: 50px">{{ resident.fname }}&nbsp; {{ resident.lname }}&nbsp; {{ official.ext_name }}</td>
-                                                            <td>{{ resident.gender }}</td>
-                                                            <td>{{ resident.civil_status }}</td>
-                                                            <td>{{ resident.bdate }}</td>
-                                                            <td>{{ resident.phone_no1 }}
-                                                                {% if resident.phone_no2 != '' %}<br>{{ resident.phone_no2 }}
-                                                                {% endif %}<br>{{ resident.email }}</td>
-                                                            <td>{{ resident.address_line1 }},&nbsp;{{ resident.purok }}</td>
-                                                            <td>{{ resident.date_added }}</td>
+                                                            <td>{{ account.email }}</td>
+                                                            <td>{{ account.first_name }}&nbsp;{{ account.last_name }}</td>
                                                             <td>
-                                                                <a class="btn btn-icon btn-outline-primary" href="{% url 'resident_view' resident.id %}" title="View"><i class="feather icon-check-circle"></i></a>
+                                                                {% if account.profile.is_admin %}
+                                                                    Admin
+                                                                {% elif account.profile.is_superadmin %}
+                                                                    Super Admin
+                                                                {% else %}
+                                                                    Resident Account
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>{{ account.added }}</td>
+                                                            <td>
+                                                                <a class="btn btn-icon btn-outline-primary" href="{% url 'account_update' account.id %}" title="View"><i class="feather icon-check-circle"></i></a>
                                                             </td>
                                                         </tr>
                                                     {% endfor %}

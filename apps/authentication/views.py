@@ -1,8 +1,10 @@
 from time import sleep
 
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.template import loader
 
 from . import helper
 from .forms import *
@@ -48,17 +50,16 @@ def register_user(request):
                 form.save()
                 user = authenticate(email=email, password=raw_password)
 
-                # save the user to Profile
-                profile = Profile(user=user)
+                _user = User.objects.get(email=email)
+
+                profile = Profile(user=_user)
                 profile.is_resident = True
                 profile.save()
 
                 request.session['message'] = 'Registration successful. Redirecting to login page...'
                 request.session['flag'] = 'registration_success'
                 return redirect("/redirecting/")
-
                 sleep(3)
-
                 return redirect("/login/")
                 success = True
         else:
@@ -141,3 +142,38 @@ def new_password(request):
 def redirecting(request):
     context = {'message': request.session['message'], 'flag': request.session['flag']}
     return render(request, "accounts/redirecting_template.html", context)
+
+
+
+def accounts(request):
+    accounts = User.objects.all()
+    context = {'segment': {'accounts'}, 'accounts': accounts}
+    html_template = loader.get_template('home/account_mgmt/accounts_list.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def account_update(request, id):
+    account = User.objects.get(id=id)
+    if request.method == 'POST':
+        _type = request.POST['account_type']
+
+        profile = Profile.objects.get(user=account)
+        if _type == 'ADMIN':
+            profile.is_resident = False
+            profile.is_admin = True
+            profile.is_superadmin = False
+        elif _type == 'SUPERADMIN':
+            profile.is_resident = False
+            profile.is_admin = False
+            profile.is_superadmin = True
+        else:
+            profile.is_resident = True
+            profile.is_admin = False
+            profile.is_superadmin = False
+        profile.save()
+        return redirect('accounts')
+
+
+    context = {'segment': {'accounts', 'update'}, 'account': account}
+    html_template = loader.get_template('home/account_mgmt/account_data.html')
+    return HttpResponse(html_template.render(context, request))

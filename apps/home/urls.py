@@ -28,6 +28,7 @@ urlpatterns = [
     # ORGANIZATIONS
     path('organizations/', views.organizations, name='organizations'),
     path('organizations/add/', views.organization_data, name='organization_add'),
+    path('organizations/edit/<int:id>/', views.organization_edit, name='organization_edit'),
 
 
 
@@ -52,6 +53,8 @@ urlpatterns = [
 
     # RESIDENTS
     path('residents/', views.residents, name='residents'),
-    # path('residents/add/', views.resident_data, name='resident_add'),
+    path('residents/add/', views.resident_data, name='resident_add'),
     path('residents/view/<int:id>/', views.resident_view, name='resident_view'),
+    path('residents/edit/<int:id>/', views.resident_edit, name='resident_edit'),
+
 ]

@@ -1,0 +1,244 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %} Resident {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <!-- Data Tables -->
+    <link rel="stylesheet" href="{% static 'assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/style.min.css' %}">
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <section class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">Resident</h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="j{% url 'residents' %}">List of Residents</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Resident Number : {{ resident_no }}</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            {% for message in messages %}
+                                                {% if 'success' in message.tags %}
+                                                    <p class="alert alert-success" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+                                                {% else %}
+                                                    <p class="alert alert-warning" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <form method="post" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <div class="form-group text-center">
+                                                    <img src="{% static 'media/brgy_officials/default.jpg' %}" class="rounded-circle m-b-5 w-25" id="official_photo_view" style="cursor: pointer">
+                                                    <br>
+                                                    <label class="btn btn-icon btn-glow-light">
+                                                        <i class="fas fa-edit"></i>{{ form.photo }}
+                                                    </label>
+                                                </div>
+
+                                                {#                                                {{ form.as_p }}#}
+                                                <div class="row">
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Lastname</label>
+                                                        {{ form.lname }}
+                                                    </div>
+
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Firstname</label>
+                                                        {{ form.fname }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Middlename</label>
+                                                        {{ form.mname }}
+                                                    </div>
+
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Extension</label>
+                                                        {{ form.ext_name }}
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row">
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Birthdate</label>
+                                                        {{ form.bdate}}
+                                                    </div>
+
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Gender</label>
+                                                        {{ form.gender }}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Civil Status</label>
+                                                        {{ form.civil_status }}
+                                                    </div>
+
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Occupation</label>
+                                                        {{ form.occupation }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-label">Religion</label>
+                                                    {{ form.religion }}
+                                                </div>
+
+                                                <hr>
+                                                <p>Address</p>
+
+                                                <div class="row">
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">House No/Lot/Blk</label>
+                                                        {{ form.address_line1 }}
+                                                    </div>
+
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Purok</label>
+                                                        {{ form.purok }}
+                                                    </div>
+                                                </div>
+
+                                                <hr>
+                                                <p>Contact Information</p>
+
+                                                <div class="row">
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Phone Number</label>
+                                                        {{ form.phone_no1 }}
+                                                    </div>
+
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Alternate Phone No.</label>
+                                                        {{ form.phone_no2 }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Telephone Number</label>
+                                                        {{ form.tel_no }}
+                                                    </div>
+
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Email.</label>
+                                                        {{ form.email }}
+                                                    </div>
+                                                </div>
+
+                                                <hr>
+                                                <p class="mt-4">Emergency Contact Information</p>
+
+                                                <div class="row">
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Full Name</label>
+                                                        {{ emergency_form.name}}
+                                                    </div>
+
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Relationship</label>
+                                                        {{ emergency_form.relationship }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Phone Number</label>
+                                                        {{ emergency_form.phone_no }}
+                                                    </div>
+
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Address</label>
+                                                        {{ emergency_form.address }}
+                                                    </div>
+                                                </div>
+
+                                                <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Save</button>
+                                                <a href="{% url 'officials' %}" class="btn btn-light float-right"><i class="fas fa-arrow-left"></i> Back</a>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- [ Main Content ] end -->
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    {# INPUT MASK #}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/inputmask.js" integrity="sha512-u9G5WcQXGaw9PgODOBfc5X5AjuWWJJKEUtuEfRAUPJf/SJZ40muyH7hOAFTlplwkEG3jC8PKurH/oSzQP975ng==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.js" integrity="sha512-yUwPZS7XBCeFJsjU9IKl/bUCpWNnFv449g6/ieJKudXqqQu3550ZtEnONSiVNOEGu9Xhmz6rzMAtU2I06KEeRQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/bindings/inputmask.binding.js" integrity="sha512-J6WEJE0No+5Qqm9/T93q88yRQjvoAioXG4gzJ+eqZtLi+ZBgimZDkTiLWiljwrwnoQw+xwECQm282RJ6CrJnlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+
+        $('.text_input').focus(function(){
+            $('.text_input').inputmask({
+                regex: "[a-zA-Z ]*",
+                greedy: false,
+                onBeforePaste: function (pastedValue, opts) {
+                    pastedValue = pastedValue.toLowerCase();
+                    return pastedValue.replace("rn", " ");
+                }
+            });
+        });
+
+
+        $('.mob_no').focus(function(){
+            $('.mob_no').inputmask({
+                regex: "[0-9]*",
+                greedy: false,
+                onBeforePaste: function (pastedValue, opts) {
+                    pastedValue = pastedValue.toLowerCase();
+                    return pastedValue.replace("rn", " ");
+                }
+            });
+        });
+
+        document.getElementById('resident_photo_input').onchange = (e) => {
+            document.getElementById('official_photo_view').setAttribute('src', URL.createObjectURL(e.target.files[0]))
+        }
+    </script>
+
+{% endblock %}

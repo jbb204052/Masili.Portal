@@ -110,10 +110,10 @@ class Resident(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
 
     stat_1 = (
-        ['ACTIVE', 'ACTIVE'],
+        ['RESIDING', 'RESIDING'],
         ['MOVED OUT', 'MOVED OUT'],
     )
-    status = models.CharField(max_length=10, choices=stat_1, default='ACTIVE')
+    status = models.CharField(max_length=10, choices=stat_1, default='RESIDING')
     def __str__(self):
         return self.fname + ' ' + self.lname
 
@@ -136,16 +136,18 @@ class Resident(models.Model):
 class EmergencyContact(models.Model):
     resident = models.ForeignKey(Resident, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
-    phone_no1 = models.CharField(max_length=11, blank=False, default=None)
-    address = models.CharField(max_length=50, blank=False)
+    relationship = models.CharField(max_length=50)
+    phone_no = models.CharField(max_length=11, blank=False, default=None)
+    address = models.CharField(max_length=255, blank=False)
 
     def __str__(self):
         return self.name
 
     def save(self, *args, **kwargs):
         self.name = self.name.upper()
+        self.relationship = self.relationship.upper()
         self.address = self.address.upper()
-        super(EmergencyContacts, self).save(*args, **kwargs)
+        super(EmergencyContact, self).save(*args, **kwargs)
 
 # RECOGNIZED ORGANIZATIONS
 class BrgyOrganization(models.Model):

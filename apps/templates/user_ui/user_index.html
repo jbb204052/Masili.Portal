@@ -2,338 +2,529 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Brgy Masili</title>
-        
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="{% static 'media/brgy_logo/logo.png' %}" />
-        <!-- Bootstrap Icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-        <!-- Google fonts-->
-        <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
-        <!-- SimpleLightbox plugin CSS-->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="{% static 'user_static/css/styles.css' %}" rel="stylesheet" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
-    </head>
-    <body id="page-top">
-        <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
-            <div class="container px-4 px-lg-5">
-                <img src="images/logo.png" height="100px" width="100px" alt="">
-                <a class="navbar-brand">Brgy Masili</a>
-                <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    
-                    <ul class="navbar-nav ms-auto my-2 my-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="#page-top" onclick="closeNav()">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#page-top" onclick="openNav()">Services</a></li> 
-                        <li class="nav-item"><a class="nav-link" href="#portfolio" onclick="closeNav()">Portfolio</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#about" onclick="closeNav()">About</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#contact" onclick="closeNav()">Contact</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#Account"onclick="closeNav()">Account</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <!-- Masthead-->
-        <header class="masthead">
-            <div class="container">
-                <!-- Slider main container -->
-                <div class="swiper">
-                    <!-- Additional required wrapper -->
-                    <div class="swiper-wrapper">
-                        <!-- Slides -->
-                        <div class="swiper-slide">
-                            <img src="images/BrgyHall.jpg" alt="">                 
-                            <h2 class="Slidetext">Brgy Hall</h2>                 
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="images/Multipurpose_building.jpg" alt="">
-                            <h2 class="Slidetext">Multipurpose Hall</h2>                           
-                        </div>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Brgy Masili</title>
 
-                        <div class="swiper-slide">
-                            <img src="images/Mga-konsehal.jpg" alt="">                       
-                            <h2 class="Slidetext">Konsehal</h2>                   
-                        </div>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="{% static 'media/brgy_logo/logo.png' %}" />
+    <!-- Bootstrap Icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+    <!-- SimpleLightbox plugin CSS-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="{% static 'user_static/css/styles.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+</head>
+<body id="page-top">
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+    <div class="container px-4 px-lg-5">
+        <img src="{% static 'media/brgy_logo/logo.png' %}" height="100px" width="100px" alt="">
+        <a class="navbar-brand">Brgy Masili</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
 
-                        <div class="swiper-slide">
-                            <img src="images/BrgyOfficial.jpg" alt="">                       
-                            <h2 class="Slidetext">Brgy Officials</h2>                   
-                        </div>
-
-                        <div class="swiper-slide">
-                            <img src="images/SK_Officials.jpg" alt="">
-                            <h2 class="Slidetext">SK Officials</h2>                           
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="images/Kagawad.jpg" alt="">
-                            <h2 class="Slidetext">Kagawad</h2>                           
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="images/health-care.jpg" alt="">
-                            <h2 class="Slidetext">Healt Care Workers</h2>                           
-                        </div>
-                                           
-                    </div>
-                  <!-- If we need pagination -->
-                  <div class="swiper-pagination"></div>
-          
-                  <!-- If we need navigation buttons -->
-                  <div class="swiper-button-prev"></div>
-                  <div class="swiper-button-next"></div>
-          
-                </div>
-            </div>
-        </header>
-        <!-- Services
-        <span onclick="openNav()"></span>-->
-           
-         <div id="myNav" class="overlay">
-            
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> 
-
-                <div id="clearance" class="overlay-content">                  
-                    <a href="#" >BRGY CLEARANCE</a>
-                </div> 
-                <div id="BGpermit" class="overlay-content"> 
-                    <a href="#" >BRGY PERMIT</a>
-                </div>
-                <div id="BDpermit" class="overlay-content">
-                    <a href="#" >BUILDING PERMIT</a>
-                </div>
-                <div id="CT-P-L-P" class="overlay-content">  
-                    <a href="#" >CERTIFICATION-TRANSPORTATION<br>PERMIT-and-LANDING-PERMIT</a>
-                </div> 
-                <div id="Indigency" class="overlay-content">
-                    <a href="#" >INDIGENCY-FOR-FINANCIAL</a>
-                </div>
-                <div id="Di-iisang-tao" class="overlay-content">
-                    <a href="#" >PAGPAPATUNAY-NA-DI-IISANG-TAO</a>
-                </div>
-                <div id="Live-in" class="overlay-content">
-                    <a href="#" >PAGPAPATUNAY-NA-LIVE-IN</a>
-                </div>  
-                
+            <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                <li class="nav-item"><a class="nav-link" href="#page-top" onclick="closeNav()">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#page-top" onclick="openNav()">Services</a></li>
+                <li class="nav-item"><a class="nav-link" href="#portfolio" onclick="closeNav()">Portfolio</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about" onclick="closeNav()">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contact" onclick="closeNav()">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="#Account"onclick="closeNav()">Account</a></li>
+            </ul>
         </div>
-        <!--button id="myBtn">Open Modal</button-->
-        <!-- The Modal -->
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-                
-                <div class="modal-header">                   
-                    <h2>Brgy Clearance</h2>
-                    <span class="close">&times;</span>
-                </div>
+    </div>
+</nav>
+<!-- Masthead-->
+<header class="masthead">
+    <div class="container">
+        <!-- Slider main container -->
+        <div class="swiper">
+            <!-- Additional required wrapper -->
+            <div class="swiper-wrapper">
+                <!-- Slides -->
+                {#                        <div class="swiper-slide">#}
+                {#                            <img src="images/BrgyHall.jpg" alt="">                 #}
+                {#                            <h2 class="Slidetext">Brgy Hall</h2>                 #}
+                {#                        </div>#}
 
-                <div class="modal-body">
-                    <p>Some text in the Modal Body</p>
-                    <p>Some other text...</p>
-                </div>
+                {% for photo in gallery %}
+                    <div class="swiper-slide">
+                        <img src="{{ photo.photo.url }}" alt="{{ photo.caption }}">
+                        <h2 class="Slidetext">{{photo.caption}}</h2>
+                    </div>
+                {% endfor %}
 
-                <div class="modal-footer justify-content-left" >
-                    <h3>Modal Footer</h3>
-                </div>
-            </div> 
+            </div>
+            <!-- If we need pagination -->
+            <div class="swiper-pagination"></div>
+
+            <!-- If we need navigation buttons -->
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+
         </div>
-        
-            
-        <!-- Portfolio-->
-        <div id="portfolio">
-            
-            <div class="container-fluid p-0">
-                <div class="row g-0">
-                    <div class="col-lg-4 col-sm-6">
-                        <a class="portfolio-box" href="images/disinfection.jpg" title="Disinfection">
-                            <img class="img-fluid" src="images/disinfection.jpg" alt="">
-                            <div class="portfolio-box-caption">
-                                <div class="project-name">Disinfection</div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-4 col-sm-6">
-                        <a class="portfolio-box" href="images/BrgyAsenso.jpg" title="Brgy Asenso">
-                            <img class="img-fluid" src="images/BrgyAsenso.jpg" alt="..." />
-                            <div class="portfolio-box-caption">             
-                                <div class="project-name">Brgy Asenso</div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-4 col-sm-6">
-                        <a class="portfolio-box" href="images/Tupad-proj.jpg" title="Tupad Project">
-                            <img class="img-fluid" src="images/Tupad-proj.jpg" alt="..." />
-                            <div class="portfolio-box-caption">
-                                <div class="project-category text-white-50">Category</div>
-                                <div class="project-name">Tupad Project</div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-4 col-sm-6">
-                        <a class="portfolio-box" href="images/Ayuda.jpg" title="Bigay Ayuda">
-                            <img class="img-fluid" src="images/Ayuda.jpg" alt="..." />
-                            <div class="portfolio-box-caption">
-                                <div class="project-name">Bigay Ayuda</div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-4 col-sm-6">
-                        <a class="portfolio-box" href="images/medic.jpg" title="Medical Mission">
-                            <img class="img-fluid" src="images/medic.jpg" alt="..." />
-                            <div class="portfolio-box-caption">
-                                <div class="project-name">Medical Mission</div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-4 col-sm-6">
-                        <a class="portfolio-box" href="images/Vaccine.jpg" title="Covid-Vaccine">
-                            <img class="img-fluid" src="images/Vaccine.jpg" alt="..." />
-                            <div class="portfolio-box-caption p-3">
-                                <div class="project-name">Covid-Vaccine</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+    </div>
+</header>
+<!-- Services
+<span onclick="openNav()"></span>-->
+
+<div id="myNav" class="overlay">
+
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+    <div id="clearance" class="overlay-content">
+        <a href="#" >BRGY CLEARANCE</a>
+    </div>
+    <div id="BGpermit" class="overlay-content">
+        <a href="#" >BRGY PERMIT</a>
+    </div>
+    <div id="BDpermit" class="overlay-content">
+        <a href="#" >BUILDING PERMIT</a>
+    </div>
+    <div id="CT-P-L-P" class="overlay-content">
+        <a href="#" >CERTIFICATION-TRANSPORTATION<br>PERMIT-and-LANDING-PERMIT</a>
+    </div>
+    <div id="Indigency" class="overlay-content">
+        <a href="#" >INDIGENCY-FOR-FINANCIAL</a>
+    </div>
+    <div id="Di-iisang-tao" class="overlay-content">
+        <a href="#" >PAGPAPATUNAY-NA-DI-IISANG-TAO</a>
+    </div>
+    <div id="Live-in" class="overlay-content">
+        <a href="#" >PAGPAPATUNAY-NA-LIVE-IN</a>
+    </div>
+
+</div>
+<!--button id="myBtn">Open Modal</button-->
+<!-- The Modal -->
+id="myModal" class="modal">
+<div class="modal-content">
+
+    <div class="modal-header">
+        <h2>BRGY CLEARANCE</h2>
+        <span class="close">&times;</span>
+    </div>
+
+    <div class="modal-body">
+        <!--h3 class="text-center"><h3-->
+        <div class="user-info">
+            <p>This is to certify that &nbsp;<input type="text" name="Fn" placeholder="Full Name" size="10" />&nbsp;,&nbsp;<input type="text" name="age" placeholder="Age" size="8" />
+                &nbsp;years of age, born on &nbsp;<input type="date" name="bday" />&nbsp;at&nbsp;<input type="text" name="bplace" placeholder="Birthplace" size="10" />&nbsp; , &nbsp;
+                <input type="text" name="stat" placeholder="Status" size="10" />&nbsp; and a<br><br> &nbsp;<input type="text" name="Rstatus" placeholder="Resident status" size="10" />&nbsp;of&nbsp;<input type="text" name="address" placeholder="Address" size="20" />&nbsp;,
+                since <input type="text" name="Rsince" placeholder="Resident scince?" size="10" />&nbsp; has never been charged of any kind of offense and has no pending case before<br><br>of this Barangay either civil or criminal.
+                This is issued upon the request of the above mentioned resident for the following purpose: <br><br>
+
+                <input type="checkbox" id="cb-Local-Emp" name="Local-Employment" value="Local-Employment" />
+                <label for="cb-Local-Emp">Local Employment</label><br>
+
+                <input type="checkbox" id="cb-abroad" name="Abroad" value="Abroad" />
+                <label for="cb-abroad">Abroad</label><br>
+
+                <input type="checkbox" id="cb-meralco" name="MERALCO" value="MERALCO" />
+                <label for="cb-meralco">MERALCO</label><br>
+
+                <input type="checkbox" id="cb-Wate-Dist" name="Water-District" value="Water-District" />
+                <label for="cb-Wate-Dist">Water connection from Calamba Water District</label><br>
+
+                <input type="checkbox" id="cb-loan" name="Loan" value="Local-Employment" />
+                <label for="cb-loan">Loan</label><br>
+
+                <input type="checkbox" id="cb-Bank" name="Bank-Transaction" value="Bank-Transaction" />
+                <label for="cb-Bank">Bank Transaction</label><br>
+
+                <input type="checkbox" id="cb-med-Finance" name="Medical/Financial Assistance" value="Medical/Financial Assistance" />
+                <label for="cb-med-Finance">Medical / Financial Assistance</label><br>
+
+                <input type="checkbox" id="cb-other" name="Other-Purposes" value="Other-Purposes" />
+                <label for="cb-other">Other Purposes Pangkabuhayan ni Rizal </label><br><br><br>
+
+            </p>
+        </div>
+
+    </div>
+    <div class="modal-footer" >
+        <!--span class="btn-submit">SIGN</span--->
+        <span class="btn-submit">SUBMIT</span>
+
+    </div>
+</div>
+</div>
+<!-- The Modal 2 -->
+<div id="myModal2" class="modal">
+    <div class="modal2-content">
+
+        <div class="modal-header">
+            <h2>BRGY PERMIT</h2>
+            <span class="close2">&times;</span>
+        </div>
+
+        <div class="modal-body">
+            <div class="user-info2 text-left">
+                <p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;DATE:&emsp;<input type="date" name="date"/><br>
+                    BUSINESS NAME:<br><input type="text" name="Bn" placeholder="Business Name" size="10"/><br><br>
+                    LOCATION:<br><input type="text" name="Loc" placeholder="Location" size="15"/><br><br>
+                    CLASSIFICATION/NATURE OF BUSINESS:<br><input type="text" name="Nature-of-b" placeholder="CLASSIFICATION" size="15"/><br><br>
+                    NAME OF OWNER/PROPRIETOR:<br><input type="text" name="owner" placeholder="Name of Owner" size="15"/><br><br>
+                    RESIDENCE/CERTIFICATE NO:<br><input type="text" name="cert-no" placeholder="Cert Number" size="15"/><br><br>
+                    DATE ISSUED:<br><input type="date" name="date"/><br><br>
+                    ISSUED AT:<br><input type="text" name="loc-issued" placeholder="Issued Location" size="15"/><br><br>
+                    CAPITAL INVESTMENT:<br><input type="text" name="Cap-Invest" placeholder="Capital Investment" size="15"/><br><br>
+                    GROSS SALES OR RECEIPTS:<br><input type="text" name="G-sales" placeholder="Receipts" size="15"/><br><br>
+                    <!--&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Signature of Applicant:-->
+                </p>
+
+            </div>
+            <div class="user-info2">
+                <p class=>PREVIOUS OR:<br><input type="text" name="Prev-or" placeholder="Prev-OR" size="10"/><br><br>
+                    DATE ISSUED:<br><input type="date" name="date2"/><br><br>
+                    ISSUED AT:<br><input type="text" name="loc-issued2" placeholder="Issued Location" size="15"/><br><br>
+                    AMOUNT COLLECT:<br><input type="text" name="Amount-Col2" placeholder="Amount Collect" size="10"/><br><br>
+                    PAID  O.R. No.:<br><input type="text" name="Paid-or" placeholder="Paid-OR" size="10"/><br><br>
+                    DATE ISSUED:<br><input type="date" name="date3"/><br><br>
+                    ISSUED AT:<br><input type="text" name="loc-issued3" placeholder="Issued Location" size="15"/><br><br>
+                    AMOUNT COLLECTED:<br><input type="text" name="Amount-Col2" placeholder="Amount Collected" size="10"/><br><br><br><br><br><br><br>
+                </p>
             </div>
         </div>
-        <!-- About-->
-        <section class="page-section bg-primary" id="about">
-            <div class="container px-2 px-lg-0">
-                <div class="info text-white mt-0">
-                    <h1>Chairman:</h1>
-                    <p>Eliseo G. Maligaya</p>
-                    
-                    <h1>Councilors:</h1>
-                    <p>Edwin H. De Leon<br>
-                        Christopher M. Apacionado<br>
-                        Solidario M. Apacionado<br>
-                        Mary Grace S. Roldan<br>
-                        Violeta O. Espinosa<br>
-                        Abelardo P. Calimlim Jr.<br>
-                        Cherryl R. Alviar</p>     
-                    <h1>SK Chairman:</h1>
-                    <p>Dale Luther A. Quinia</p>
-                    <h1>SK Councilors:</h1>
-                    <p>Eduard Kyle A. Herbosa<br>
-                        Rinzel Joyce D. Laparan<br>
-                        Jay D. Hamuat<br>
-                        Alaisa A. Oclarino<br>
-                        Jerome A. Trollano<br>
-                        Lyn Mark V. Burac<br>
-                        Ruel M. Apacionado Jr.</p>
-                </div>
-                <div class="row gx-3 gx-lg-0 justify-content-left">
-                    <div class="col-lg-9 text-center">
-                        <h1 class="text-white mt-0">Maikling Kasaysayan:</h1>
-                        <hr class="divider divider-light" />
-                        <p class="text-white-75 mb-4">Ang unang pangalan ng Masili ay “SUMILE” na hinango sa salitng  “SUMILANG” na ang kahulugan ang bagong           silang dahil sa ito ay bagong litaw na pook. 
-                            Ang Sumile ay dating bahagi ng Nayon ng Sucol, ito ay magubat, tubo ang pangunahing pananim at may ilang           puno ng niyog. Humiwalay lamang ito ng mag daos ng sariling pista sa nayon. 
-                            Ayon sa mga taga-Sumile malaki rin naman ang ambag nila sa pista ng Sucol at ngayong sa kanila (Sucol)             naman ginawa ang misa at hiniling nilang sa tabing-dagat ng Sumile naman idaos ang eksibisyon ng mga               musikero. 
-                            Subalit ito ay tinutulang ng mga taga-Sucol kaya’t ng sumunod na pista ay ipinakuha kay Marcos Herbosa             (kaisa-isang anak na lalaki ni Ysidoro) mula sa simbahan ng Sucol ang ibinigay nilang malaking kampana. 
-                            Nag-sarili nalamang sila at pumili na rin ng kanilang taga-Pangulo. 
-                            Ito ay naganap noong taong 1926.</p>
-                        <hr class="divider divider-light" />
-                        <p class="text-white-75 mb-4">Ang sumunod na pinuno ng nayon kay G. Ysidoro Herbosa ay si G. Eugenio Gonzalez, 
-                            Upang magamit ng mga mamamayan ang daang riles ay hiniling ng mga naninirahan sa nayon sa pangunguna ng            Punong Nayon na kung maaari ay mag tayo ng estasyon ng tren sa nayon upang maserbisyuhan ang mga mamamayan          don. 
-                            Noon ay marami-rami na ring tao ang mga naninirahan sa nayon. 
-                            Sa tulong ni Hernan Roldan (pamangkin ni Martina Herbosa) ay pinaunlakan naman ang kahilingan. Nang                itanong kung anong pangalan ng nayon ay may nag sabing “SUMILE” subalit sa hindi malamang dahilan nang              dumating ang karatulang ilalagay sa estasyon ay “MASILI” nakatitik at wala namang nagreklamo. 
-                            Doon nag simulang tawaging “MASILE” ang nasabing nayon na siya na ring tawag magpahanggang ngayon.</p>
-                        <!--a class="btn btn-light btn-xl" href="#services">Get Started!</a-->
-                    </div>
-                </div>
+
+        <div class="modal-footer" >
+            <span class="btn-submit">SUBMIT</span>
+        </div>
+    </div>
+</div>
+<!-- The Modal 3 -->
+<div id="myModal3" class="modal">
+    <div class="modal3-content">
+
+        <div class="modal-header">
+            <h2>BUILDING PERMIT</h2>
+            <span class="close3">&times;</span>
+        </div>
+
+        <div class="modal-body">
+            <div class="user-info">
+                <p>APPLICATION FOR BARANGAY PERMIT CLEARANCE FOR THE<br>
+                    PROPOSED COSTRUCTION OF:<br><input type="text" name="Prev-or" placeholder="Prev-OR" size="10"/><br><br>
+                    WITH TOTAL AREA OF:<br><input type="text" name="t-area" placeholder="Total Area" size="10"/><br><br>
+                    ESTIMATED COST OF:<br><input type="text" name="Est-Cost" placeholder="Estimated Cost" size="10"/><br><br>
+                    LOCATED AT:<br><input type="text" name="loc-at" placeholder="Location" size="15"/><br><br>
+                    NAME OF OWNER:<br><input type="text" name="Fn-Owner" placeholder="Owner Full Name" size="15"/><br><br>
+                    NAME OF CONTRACTOR:<br><input type="text" name="Fn-cotract" placeholder="Contractor Full Name" size="15"/><br><br>
+                    PAID UNDER O.R. NO. :<br><input type="text" name="paid-no" placeholder="Paid OR No" size="10"/><br><br>
+                    DATE ISSUED:<br><input type="date" name="date4"/><br><br>
+                    AMOUNT PAID:<br><input type="text" name="paid-am" placeholder="Paid Amount" size="10"/><br><br>
+                    TO:<br>
+                    Municipal Engineer<br>
+                    &emsp;This office interposes no objection on the above subject provided that Plans, Specifications and other pertinent provisions of the Philippines be complied.
+                </p>
             </div>
-        </section>
-        
-        <!-- Contact-->
-        <section class="page-section" id="contact"> 
-            <div class="container gx-0 gx-lg-0">
-                <div class="map mt-0">
-                    <h1>Masili Location</h1>
-                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7736.407289339509!2d121.19852192503336!3d14.182847512109602!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33bd613926c4267f%3A0x62fd88e8affa6ac1!2sMasili%2C%20Real%2C%20Calamba%2C%20Laguna!5e0!3m2!1sfil!2sph!4v1669042628362!5m2!1sfil!2sph" width="350" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                </div>
-                
-                <div class="contact-con px-4 px-lg-5"></div>
-                    <div class="gx-0 gx-lg-0 justify-content-left">
-                        <div class="col-lg-8 col-xl-6 text-center">
-                            <h2 class="mt-0">BARANGAY MASILI DIRECTORY</h2> 
-                            <p class="text-muted mb-5">MASILI BARANGAY HALL:</p>
-                            <hr class="divider" />
-                            <i class="bi-phone fs-4 mb-1 text-muted"></i>
-                            <p>(049) 502-9459 / 09070785924</p>
-                            <i class="bi-envelope fs-4 mb-1 text-muted"></i>
-                            <p>barangaymasili.calamba@gmail.com</p>
-                        </div>                    
-                    </div>
-                </div>
-                
-                
+        </div>
+
+        <div class="modal-footer" >
+            <span class="btn-submit">SUBMIT</span>
+        </div>
+    </div>
+</div>
+<!-- The Modal 4 -->
+<div id="myModal4" class="modal">
+    <div class="modal4-content">
+
+        <div class="modal-header">
+            <h2>CERTIFICATION-TRANSPORTATION-PERMIT-and-LANDING-PERMIT</h2>
+            <span class="close4">&times;</span>
+        </div>
+
+        <div class="modal-body">
+            <div class="user-info">
+                <p>To Whom It May Concern:<br>This  is  to  certify   that   <br><input type="text" name="Full-name" placeholder="Full Name" size="15"/> , <input type="text" name="age" placeholder="Age" size="8" /> years old,
+                    <input type="text" name="stat" placeholder="Status" size="10" />&nbsp;,  is  a  bonafied resident  of Brgy. Masili ,  Calamba  City, Laguna
+                    This further certifies that the above personally appear before this office securing LANDING PERMIT.
+                    Certification / Permit  is hereby issued upon request of the above as necessary document needed with regards to his business transaction.
+                    Done and given this <input type="date" name="date"/> at the office of the Barangay Chairman.
+                </p>
             </div>
-            
-        </section>
-        <!--Account-->
+        </div>
+
+        <div class="modal-footer" >
+            <span class="btn-submit">SUBMIT</span>
+        </div>
+    </div>
+</div>
+<!-- The Modal 5 -->
+<div id="myModal5" class="modal">
+    <div class="modal5-content">
+
+        <div class="modal-header">
+            <h2>INDIGENCY-FOR-FINANCIAL</h2>
+            <span class="close5">&times;</span>
+        </div>
+
+        <div class="modal-body">
+            <div class="user-info">
+                <p>Bearer of this letter is   Ms./ Mrs./Mr. <input type="text" name="Full-name" placeholder="Full Name" size="15"/> , <input type="text" name="age" placeholder="Age" size="8" />
+                    years old <input type="text" name="stat" placeholder="Status" size="10" /> ,
+                    and a resident of <input type="text" name="address" placeholder="Address" size="20" /> since <input type="text" name="Rsince" placeholder="Resident scince?" size="10" /> up to present.
+                    It is also further certifying that she is not gainfully employed at present and belongs to
+                    Indigent families in our community.
+                    This certification is issued upon the request above named person, for <input type="text" name="purposE" placeholder="Purpose" size="10" />
+                    Issued this <input type="date" name="date"/> at the Office of the Barangay Chairman, Barangay Masili, Calamba City.
+
+                </p>
+            </div>
+        </div>
+
+        <div class="modal-footer" >
+            <span class="btn-submit">SUBMIT</span>
+        </div>
+    </div>
+</div>
+<!-- The Modal 6 -->
+<div id="myModal6" class="modal">
+    <div class="modal6-content">
+
+        <div class="modal-header">
+            <h2>PAGPAPATUNAY-NA-DI-IISANG-TAO</h2>
+            <span class="close6">&times;</span>
+        </div>
+
+        <div class="modal-body">
+            <div class="user-info">
+                <p>Ito ay pagpapatunay na si <input type="text" name="Full-name" placeholder="Full Name" size="15"/>, ay residente ng <input type="text" name="purok" placeholder="Purok" size="20" /> Barangay Masili, Lungsod ng Calamba simula pa nuong<br><br> <input type="text" name="taon" placeholder="taon" size="20" /> hanggang kasalukuyan,
+                    Ito rin ay pagpapatunay na ang <input type="text" name="Full-name2" placeholder="Full Name" size="15"/>, na tinukoy na <input type="text" name="same-name" placeholder="Same Name" size="15"/>, ay<br><br> hindi magkaiba at ito ay iisang tao lamang.
+                    Ang pagpapatunay na ito ay ginawa ayon sa kahilingan ni <input type="text" name="Full-name3" placeholder="Full Name" size="15"/> , upang magamit sa<br><br> pagkuha ng <input type="text" name="purposE" placeholder="Purpose" size="10" />.
+                    Ang pagpapatunay na ito ginawa ngayong <input type="date" name="date"/>, sa Tanggapan ng Punong Barangay, Barangay Masili<br><br>, Lungsod ng Calamba.
+                </p>
+            </div>
+        </div>
+
+        <div class="modal-footer" >
+            <span class="btn-submit">SUBMIT</span>
+        </div>
+    </div>
+</div>
+<!-- The Modal 7 -->
+<div id="myModal7" class="modal">
+    <div class="modal7-content">
+
+        <div class="modal-header">
+            <h2>PAGPAPATUNAY-NA-LIVE-IN</h2>
+            <span class="close7">&times;</span>
+        </div>
+
+        <div class="modal-body">
+            <div class="user-info">
+                <p>Ito ay pagpapatunay na sina  <input type="text" name="Full-name" placeholder="Full Name" size="15"/> at <input type="text" name="partner-name" placeholder="Partner Name" size="15"/>, ay mga  residente ng Barangay Masili, Lungsod ng Calamba, Lalawigan ng Laguna.
+                    Ito rin ay pagpapatunay na ang mga nabanggit na mga pangalan sa itaas ay nagsasama sa iisang bubong (bilang mag-asawa) sapul pa noong taong <input type="text" name="year" placeholder="Year" size="15"/> hanggang kasalukuyan.
+                    Ang pagpapatunay na ito ay ginawa ayon sa kahilingan ng pangalang nasa itaas upang magamit sa anuman at saan mang legal na pamamaraan.
+                    Ginawa ngayong <input type="date" name="date"/>, sa Tanggapan ng Punong Barangay, Barangay Masili, Lungsod ng Calamba.
+                </p>
+            </div>
+        </div>
+
+        <div class="modal-footer" >
+            <span class="btn-submit">SUBMIT</span>
+        </div>
+    </div>
+</div>
 
 
-        <!-- Brgy emergency contacts-->
-        <section class="page-section bg-dark text-white">
-            <div class="container">
-                <div class="logo-end">
-                    <img src="images/logo.png" height="370px" width="400px" alt="Brgy Masili">
-                </div>
-                <h1>Emergency Hotlines</h1>
-                <p>CALAMBA CITY HALL:&emsp;&emsp;&emsp;&emsp;545-6789<br>
-                    <br>EMERGENCY CONTACT NUMBERS:
-                    <br>FIRE DEPARTMENT&emsp;&emsp;&emsp;&emsp;&emsp;545-1695/545-6789(8601)
-                    <br>PNP&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;545-1695/545-6789(8701)
-                    <br>POSO-LDRMMD HOTLINE&emsp;&emsp;0917-148-9813
-                    <br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;545-6789(1036-8025)
-                    <br>LDRRMD&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;545-4119/545-6789(1023-1021)
-                    <br>CITY HEALTH OFFICE&emsp;&emsp;&emsp;&emsp;545-6597/545-6789(8016)<br>
-                    <br>VAW/C-Violence against Women and Children
-                    <br>0909-341-2375
-                </p>                                                           
+<!-- Portfolio-->
+<div id="portfolio">
+
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <div class="col-lg-4 col-sm-6">
+                <a class="portfolio-box" href="images/disinfection.jpg" title="Disinfection">
+                    <img class="img-fluid" src="images/disinfection.jpg" alt="">
+                    <div class="portfolio-box-caption">
+                        <div class="project-name">Disinfection</div>
+                    </div>
+                </a>
             </div>
-        </section>
-        <!-- Footer-->
-        <footer class="bg-light py-5">
-            <div class="container px-4 px-lg-5"><div class="small text-center text-muted">&copy; 2022 - Calamba City,Laguna | Brgy Masili</div></div>
-        </footer>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- SimpleLightbox plugin JS-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="{% static 'user_static/js/scripts.js' %}"></script>
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <!-- * *                               SB Forms JS                               * *-->
-        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
-        <!--Swiper Script-->>
-        <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
-        <script>
-            const swiper = new Swiper('.swiper', {
-              autoplay: {
-                delay: 3000,
-                
-              },
-            loop: true,
-          
-            pagination: {
-              el: '.swiper-pagination',
-              clickable: true,
-            },
-      
-            navigation: {
-              nextEl: '.swiper-button-next',
-              prevEl: '.swiper-button-prev',
-            },
-          
-          });</script>
-    </body>
+            <div class="col-lg-4 col-sm-6">
+                <a class="portfolio-box" href="images/BrgyAsenso.jpg" title="Brgy Asenso">
+                    <img class="img-fluid" src="images/BrgyAsenso.jpg" alt="..." />
+                    <div class="portfolio-box-caption">
+                        <div class="project-name">Brgy Asenso</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-sm-6">
+                <a class="portfolio-box" href="images/Tupad-proj.jpg" title="Tupad Project">
+                    <img class="img-fluid" src="images/Tupad-proj.jpg" alt="..." />
+                    <div class="portfolio-box-caption">
+                        <div class="project-category text-white-50">Category</div>
+                        <div class="project-name">Tupad Project</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-sm-6">
+                <a class="portfolio-box" href="images/Ayuda.jpg" title="Bigay Ayuda">
+                    <img class="img-fluid" src="images/Ayuda.jpg" alt="..." />
+                    <div class="portfolio-box-caption">
+                        <div class="project-name">Bigay Ayuda</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-sm-6">
+                <a class="portfolio-box" href="images/medic.jpg" title="Medical Mission">
+                    <img class="img-fluid" src="images/medic.jpg" alt="..." />
+                    <div class="portfolio-box-caption">
+                        <div class="project-name">Medical Mission</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-sm-6">
+                <a class="portfolio-box" href="images/Vaccine.jpg" title="Covid-Vaccine">
+                    <img class="img-fluid" src="images/Vaccine.jpg" alt="..." />
+                    <div class="portfolio-box-caption p-3">
+                        <div class="project-name">Covid-Vaccine</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- About-->
+<section class="page-section bg-primary" id="about">
+    <div class="container px-2 px-lg-0">
+        <div class="info text-white mt-0">
+            <h1>Chairman:</h1>
+            <p>Eliseo G. Maligaya</p>
+
+            <h1>Councilors:</h1>
+            <p>Edwin H. De Leon<br>
+                Christopher M. Apacionado<br>
+                Solidario M. Apacionado<br>
+                Mary Grace S. Roldan<br>
+                Violeta O. Espinosa<br>
+                Abelardo P. Calimlim Jr.<br>
+                Cherryl R. Alviar</p>
+            <h1>SK Chairman:</h1>
+            <p>Dale Luther A. Quinia</p>
+            <h1>SK Councilors:</h1>
+            <p>Eduard Kyle A. Herbosa<br>
+                Rinzel Joyce D. Laparan<br>
+                Jay D. Hamuat<br>
+                Alaisa A. Oclarino<br>
+                Jerome A. Trollano<br>
+                Lyn Mark V. Burac<br>
+                Ruel M. Apacionado Jr.</p>
+        </div>
+        <div class="row gx-3 gx-lg-0 justify-content-left">
+            <div class="col-lg-9 text-center">
+                <h1 class="text-white mt-0">Maikling Kasaysayan:</h1>
+                <hr class="divider divider-light" />
+                <p class="text-white-75 mb-4">Ang unang pangalan ng Masili ay “SUMILE” na hinango sa salitng  “SUMILANG” na ang kahulugan ang bagong           silang dahil sa ito ay bagong litaw na pook.
+                    Ang Sumile ay dating bahagi ng Nayon ng Sucol, ito ay magubat, tubo ang pangunahing pananim at may ilang           puno ng niyog. Humiwalay lamang ito ng mag daos ng sariling pista sa nayon.
+                    Ayon sa mga taga-Sumile malaki rin naman ang ambag nila sa pista ng Sucol at ngayong sa kanila (Sucol)             naman ginawa ang misa at hiniling nilang sa tabing-dagat ng Sumile naman idaos ang eksibisyon ng mga               musikero.
+                    Subalit ito ay tinutulang ng mga taga-Sucol kaya’t ng sumunod na pista ay ipinakuha kay Marcos Herbosa             (kaisa-isang anak na lalaki ni Ysidoro) mula sa simbahan ng Sucol ang ibinigay nilang malaking kampana.
+                    Nag-sarili nalamang sila at pumili na rin ng kanilang taga-Pangulo.
+                    Ito ay naganap noong taong 1926.</p>
+                <hr class="divider divider-light" />
+                <p class="text-white-75 mb-4">Ang sumunod na pinuno ng nayon kay G. Ysidoro Herbosa ay si G. Eugenio Gonzalez,
+                    Upang magamit ng mga mamamayan ang daang riles ay hiniling ng mga naninirahan sa nayon sa pangunguna ng            Punong Nayon na kung maaari ay mag tayo ng estasyon ng tren sa nayon upang maserbisyuhan ang mga mamamayan          don.
+                    Noon ay marami-rami na ring tao ang mga naninirahan sa nayon.
+                    Sa tulong ni Hernan Roldan (pamangkin ni Martina Herbosa) ay pinaunlakan naman ang kahilingan. Nang                itanong kung anong pangalan ng nayon ay may nag sabing “SUMILE” subalit sa hindi malamang dahilan nang              dumating ang karatulang ilalagay sa estasyon ay “MASILI” nakatitik at wala namang nagreklamo.
+                    Doon nag simulang tawaging “MASILE” ang nasabing nayon na siya na ring tawag magpahanggang ngayon.</p>
+                <!--a class="btn btn-light btn-xl" href="#services">Get Started!</a-->
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact-->
+<section class="page-section" id="contact">
+    <div class="container gx-0 gx-lg-0">
+        <div class="map mt-0">
+            <h1>Masili Location</h1>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7736.407289339509!2d121.19852192503336!3d14.182847512109602!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33bd613926c4267f%3A0x62fd88e8affa6ac1!2sMasili%2C%20Real%2C%20Calamba%2C%20Laguna!5e0!3m2!1sfil!2sph!4v1669042628362!5m2!1sfil!2sph" width="350" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+
+        <div class="contact-con px-4 px-lg-5"></div>
+        <div class="gx-0 gx-lg-0 justify-content-left">
+            <div class="col-lg-8 col-xl-6 text-center">
+                <h2 class="mt-0">BARANGAY MASILI DIRECTORY</h2>
+                <p class="text-muted mb-5">MASILI BARANGAY HALL:</p>
+                <hr class="divider" />
+                <i class="bi-phone fs-4 mb-1 text-muted"></i>
+                <p>(049) 502-9459 / 09070785924</p>
+                <i class="bi-envelope fs-4 mb-1 text-muted"></i>
+                <p>barangaymasili.calamba@gmail.com</p>
+            </div>
+        </div>
+    </div>
+
+
+    </div>
+
+</section>
+<!--Account-->
+
+
+<!-- Brgy emergency contacts-->
+<section class="page-section bg-dark text-white">
+    <div class="container">
+        <div class="logo-end">
+            <img src="images/logo.png" height="370px" width="400px" alt="Brgy Masili">
+        </div>
+        <h1>Emergency Hotlines</h1>
+        <p>CALAMBA CITY HALL:&emsp;&emsp;&emsp;&emsp;545-6789<br>
+            <br>EMERGENCY CONTACT NUMBERS:
+            <br>FIRE DEPARTMENT&emsp;&emsp;&emsp;&emsp;&emsp;545-1695/545-6789(8601)
+            <br>PNP&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;545-1695/545-6789(8701)
+            <br>POSO-LDRMMD HOTLINE&emsp;&emsp;0917-148-9813
+            <br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;545-6789(1036-8025)
+            <br>LDRRMD&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;545-4119/545-6789(1023-1021)
+            <br>CITY HEALTH OFFICE&emsp;&emsp;&emsp;&emsp;545-6597/545-6789(8016)<br>
+            <br>VAW/C-Violence against Women and Children
+            <br>0909-341-2375
+        </p>
+    </div>
+</section>
+<!-- Footer-->
+<footer class="bg-light py-5">
+    <div class="container px-4 px-lg-5"><div class="small text-center text-muted">&copy; 2022 - Calamba City,Laguna | Brgy Masili</div></div>
+</footer>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- SimpleLightbox plugin JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
+<!-- Core theme JS-->
+<script src="{% static 'user_static/js/scripts.js' %}"></script>
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<!-- * *                               SB Forms JS                               * *-->
+<!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+<script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+<!--Swiper Script-->>
+<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+<script>
+    const swiper = new Swiper('.swiper', {
+        autoplay: {
+            delay: 3000,
+
+        },
+        loop: true,
+
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+
+    });</script>
+</body>
 </html>

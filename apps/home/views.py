@@ -4,6 +4,7 @@ from time import sleep
 from django import template
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.db import transaction
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -15,12 +16,15 @@ from . import sms_sender
 
 from django.forms import formset_factory, modelformset_factory
 
+from ..authentication.models import Profile
+
 
 @login_required(login_url="/login/")
 def index(request):
     population = models.Resident.objects.count()
     officials_count = models.BrgyOfficial.objects.count()
-    context = {'segment': 'index', 'officials_count': officials_count, 'population': population}
+    gallery = models.Gallery.objects.all()
+    context = {'segment': 'index', 'officials_count': officials_count, 'population': population, 'gallery': gallery}
     if request.user.profile.is_superadmin:
         html_template = loader.get_template('home/index.html')
     else:
@@ -224,6 +228,20 @@ def organization_data(request):
     return HttpResponse(html_template.render(context, request))
 
 
+def organization_edit(request, id=0):
+    org = models.BrgyOrganization.objects.get(id=id)
+    if request.method == 'POST':
+        org_form = forms.OrganizationForm(request.POST, instance=org)
+        if org_form.is_valid():
+            org_form.save()
+            messages.success(request, 'Organization successfully updated!')
+            return HttpResponseRedirect(reverse('organizations'))
+        else:
+            messages.error(request, 'Error updating organization')
+    context = {'segment': {'org', 'brgy_info', 'update'}, 'form': forms.OrganizationForm(instance=org), 'org': org}
+    html_template = loader.get_template('home/orgs/org_data.html')
+    return HttpResponse(html_template.render(context, request))
+
 def announcements(request):
     announcements = models.Announcement.objects.all()
     context = {'segment': {'announcements'}, 'announcements': announcements}
@@ -367,6 +385,60 @@ def residents(request):
 def resident_view(request, id):
     resident = models.Resident.objects.get(id=id)
     emergency = models.EmergencyContact.objects.filter(resident=resident)
+    print(emergency)
     context = {'segment': {'residents', 'view'}, 'resident': resident, 'emergency': emergency}
     html_template = loader.get_template('home/residents/resident_view.html')
     return HttpResponse(html_template.render(context, request))
+
+
+def resident_data(request):
+    residents = models.Resident.objects.all()
+    resident_count = residents.count()
+    if resident_count == 0:
+        resident_no = 'MASILI-RES-0001'
+    else:
+        last_resident = residents.last()
+        resident_no = last_resident.resident_no
+        resident_no = resident_no.split('-')
+        resident_no = 'MASILI-RES-' + str(int(resident_no[1]) + 1).zfill(4)
+
+    if request.method == 'POST':
+        resident_form = forms.ResidentForm(request.POST, request.FILES)
+        emergency_form = forms.EmergencyContactForm(request.POST)
+        if resident_form.is_valid():
+            _data = resident_form.save(commit=False)
+            _data.resident_no = resident_no
+            resident_form.save()
+
+            _emergency = emergency_form.save(commit=False)
+            _emergency.resident = _data
+            emergency_form.save()
+            messages.success(request, 'Resident successfully added!')
+            return HttpResponseRedirect(reverse('residents'))
+        else:
+            messages.error(request, 'Error adding resident!')
+
+    form = forms.ResidentForm()
+    context = {'segment': {'residents', 'add'}, 'form': form, 'resident_no': resident_no, 'emergency_form': forms.EmergencyContactForm}
+    html_template = loader.get_template('home/residents/resident_data.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def resident_edit(request, id):
+    resident = models.Resident.objects.get(id=id)
+    emergency = models.EmergencyContact.objects.filter(resident=resident)
+    if request.method == 'POST':
+        resident_form = forms.ResidentForm(request.POST, request.FILES, instance=resident)
+        emergency_form = forms.EmergencyContactForm(request.POST, instance=emergency[0])
+        if resident_form.is_valid():
+            resident_form.save()
+            emergency_form.save()
+            messages.success(request, 'Resident successfully updated!')
+            return HttpResponseRedirect(reverse('residents'))
+        else:
+            messages.error(request, 'Error updating resident!')
+
+    context = {'segment': {'residents', 'edit'}, 'form': forms.ResidentForm(instance=resident), 'resident': resident, 'emergency_form': forms.EmergencyContactForm(instance=emergency[0])}
+    html_template = loader.get_template('home/residents/resident_edit.html')
+    return HttpResponse(html_template.render(context, request))
+

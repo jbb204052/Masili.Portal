@@ -4,6 +4,8 @@ Copyright (c) 2019 - present AppSeed.us
 """
 
 from django.urls import path, include
+
+from . import views
 from .views import *
 from django.contrib.auth.views import LogoutView
 
@@ -18,4 +20,8 @@ urlpatterns = [
     path('password_reset/new_password/', new_password, name="new_password"),
 
     path('redirecting/', redirecting, name="redirecting"),
+
+    # Account Management
+    path('accounts_managent/', views.accounts, name='accounts'),
+    path('accounts_managent/update/<int:id>', views.account_update, name='account_update'),
 ]

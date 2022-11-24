@@ -22,7 +22,7 @@ class Profile(models.Model):
     is_admin = models.BooleanField(default=False)
     is_superadmin = models.BooleanField(default=False)
     photo = models.ImageField(upload_to=photo_path('profile_pics'), blank=True, default='profile_pics/default.jpg', storage=OverwriteStorage())
-
+    added = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.user.email
 

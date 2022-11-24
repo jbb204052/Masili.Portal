@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 
-{% block title %} Officials {% endblock %}
+{% block title %} Accounts {% endblock %}
 
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
@@ -26,11 +26,11 @@
                             <div class="row align-items-center">
                                 <div class="col-md-12">
                                     <div class="page-header-title">
-                                        <h5 class="m-b-10">Officials</h5>
+                                        <h5 class="m-b-10">Accounts Management</h5>
                                     </div>
                                     <ul class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
-                                        <li class="breadcrumb-item"><a href="javascript:">List of Officials</a></li>
+                                        <li class="breadcrumb-item"><a href="j{% url 'accounts' %}">List of Accounts</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -43,7 +43,7 @@
                                 <div class="col-lg-5">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5>Official Data</h5>
+                                            <h5>Account : {{ account.email }}</h5>
                                         </div>
                                         <div class="card-body">
                                             {% for message in messages %}
@@ -55,64 +55,20 @@
                                             {% endfor %}
                                             <form method="post">
                                                 {% csrf_token %}
-                                                <div class="form-group text-center">
-                                                    <img src="{% static 'media/brgy_officials/default.jpg' %}" class="rounded-circle m-b-5 w-25" id="official_photo_view" style="cursor: pointer">
-                                                    <br>
-                                                    <label class="btn btn-icon btn-glow-light">
-                                                        <i class="fas fa-edit"></i>{{ form.photo }}
-                                                    </label>
-                                                </div>
 
                                                 <div class="row">
                                                     <div class="form-group col-lg-6">
-                                                        <label class="form-label">Lastname</label>
-                                                        {{ form.lname }}
-                                                    </div>
-
-                                                    <div class="form-group col-lg-6">
-                                                        <label class="form-label">Firstname</label>
-                                                        {{ form.fname }}
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="form-group col-lg-6">
-                                                        <label class="form-label">Middlename</label>
-                                                        {{ form.mname }}
-                                                    </div>
-
-                                                    <div class="form-group col-lg-6">
-                                                        <label class="form-label">Extension</label>
-                                                        {{ form.ext_name }}
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="row">
-                                                    <div class="form-group col-lg-6">
-                                                        <label class="form-label">Position</label>
-                                                        {{ form.position }}
-                                                    </div>
-
-                                                    <div class="form-group col-lg-6">
-                                                        <label class="form-label">Status</label>
-                                                        {{ form.status }}
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="form-group col-lg-6">
-                                                        <label class="form-label">Start of Term</label>
-                                                        {{ form.start_term }}
-                                                    </div>
-
-                                                    <div class="form-group col-lg-6">
-                                                        <label class="form-label">End of Term</label>
-                                                        {{ form.end_term }}
+                                                        <label class="form-label">Account Type</label>
+                                                        <select class="form-control" name="account_type" required>
+                                                            <option value="RESIDENT">RESIDENT</option>
+                                                            <option value="ADMIN">ADMIN</option>
+                                                            <option value="SUPERADMIN">SUPERADMIN</option>
+                                                        </select>
                                                     </div>
                                                 </div>
 
                                                 <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Save</button>
-                                                <a href="{% url 'officials' %}" class="btn btn-light float-right"><i class="fas fa-arrow-left"></i> Back</a>
+                                                <a href="{% url 'accounts' %}" class="btn btn-light float-right"><i class="fas fa-arrow-left"></i> Back</a>
                                             </form>
                                         </div>
                                     </div>
@@ -150,7 +106,19 @@
             });
         });
 
-        document.getElementById('official_photo_input').onchange = (e) => {
+
+        $('.mob_no').focus(function(){
+            $('.mob_no').inputmask({
+                regex: "[0-9]*",
+                greedy: false,
+                onBeforePaste: function (pastedValue, opts) {
+                    pastedValue = pastedValue.toLowerCase();
+                    return pastedValue.replace("rn", " ");
+                }
+            });
+        });
+
+        document.getElementById('resident_photo_input').onchange = (e) => {
             document.getElementById('official_photo_view').setAttribute('src', URL.createObjectURL(e.target.files[0]))
         }
     </script>

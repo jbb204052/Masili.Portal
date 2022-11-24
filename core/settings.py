@@ -1,32 +1,31 @@
 import os, environ
 from datetime import timedelta
-
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, True)
-)
+#
+# env = environ.Env(
+#     # set casting, default value
+#     DEBUG=(bool, True)
+# )
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Take environment variables from .env file
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY', default='S#perS3crEt_007')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+# environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+# #
+# # # SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = env('SECRET_KEY', default='S#perS3crEt_007')
+SECRET_KEY = 'django-insecure-sf(^xkt756svwux(yv5yg8m=_1-dmq%0qn213oq6p225nte6h4'
+#
+# # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
 
 # Assets Management
 ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets')
 
 # load production server from .env
-ALLOWED_HOSTS = ['localhost', 'localhost:85', '127.0.0.1', env('SERVER', default='127.0.0.1'),
-                 'https://0ff0-136-158-16-208.ap.ngrok.io', 'masiliportal.com']
-CSRF_TRUSTED_ORIGINS = ['http://localhost:85', 'http://127.0.0.1', 'https://' + env('SERVER', default='127.0.0.1'),
-                        'https://0ff0-136-158-16-208.ap.ngrok.io']
+ALLOWED_HOSTS = ['localhost', 'localhost:85', '127.0.0.1', 'masiliportal.com',]
+CSRF_TRUSTED_ORIGINS = ['http://localhost:85', 'http://127.0.0.1',]
 
 # Application definition
 

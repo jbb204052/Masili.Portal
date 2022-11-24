@@ -11616,9 +11616,9 @@ header.masthead.container{
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
+
 /* Modal Content ----------------------------------------------------*/
-.modal-content {
-  
+.modal-content { 
   background-color: #fefefe;
   margin: 10%;
   padding: 10;
@@ -11628,16 +11628,79 @@ header.masthead.container{
   animation-name: animatetop;
   animation-duration: 0.4s
 }
+.modal2-content {
+  background-color: #fefefe;
+  margin: 10%;
+  padding: 10;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+.modal3-content {
+  background-color: #fefefe;
+  margin: 10%;
+  padding: 10;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+.modal4-content {
+  background-color: #fefefe;
+  margin: 10%;
+  padding: 10;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}.modal5-content {
+  background-color: #fefefe;
+  margin: 10%;
+  padding: 10;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+.modal6-content {
+  background-color: #fefefe;
+  margin: 10%;
+  padding: 10;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+.modal7-content {
+  background-color: #fefefe;
+  margin: 10%;
+  padding: 10;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+/*==========modal-content-END=============*/
 @keyframes animatetop {
   from {top: -300px; opacity: 0}
   to {top: 0; opacity: 1}
 }
+/*modal-------------------------------------------------------*/
+
 
 .modal-header{
   padding: 2px 16px;
   background-color:rgba(244, 98, 58, 0.9);
   color: white;
 }
+/*--------CLOSE---------*/
 .close {
   float: right;
   font-size: 40px;
@@ -11649,11 +11712,124 @@ header.masthead.container{
   text-decoration: none;
   cursor: pointer;
 }
+/*--------CLOSE2---------*/
+.close2 {
+  float: right;
+  font-size: 40px;
+  font-weight: bold;
+}
+.close2:hover,
+.close2:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+/*--------CLOSE3---------*/
+.close3 {
+  float: right;
+  font-size: 40px;
+  font-weight: bold;
+}
+.close3:hover,
+.close3:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+/*--------CLOSE4---------*/
+.close4 {
+  float: right;
+  font-size: 40px;
+  font-weight: bold;
+}
+.close4:hover,
+.close4:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+/*--------CLOSE5---------*/
+.close5 {
+  float: right;
+  font-size: 40px;
+  font-weight: bold;
+}
+.close5:hover,
+.close5:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+/*--------CLOSE6---------*/
+.close6 {
+  float: right;
+  font-size: 40px;
+  font-weight: bold;
+}
+.close6:hover,
+.close6:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+/*--------CLOSE---------*/
+.close7 {
+  float: right;
+  font-size: 40px;
+  font-weight: bold;
+}
+.close7:hover,
+.close7:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+/*======Close-END=======text-align: left;*/
+.user-info2{
+  width: 50%;
+  float: left;
+  padding: 20px;
+  
+  margin-top: 2.5%;
+  
+  background-color: white;
+  color: black;
+}
+.user-info{
+  text-align: left;
+  margin-top: 2.5%;
+  padding: 2px 16px;
+  background-color: white;
+  color: black;
+}
+.btn-yes {
+  float: right;
+  font-size: 20px;
+  font-weight: bold;
+  
+}
+.btn-yes:hover,
+.btn-yes:focus{
+  color: rgba(244, 98, 58, 0.9);
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn-submit {
+  float: right;
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 70px;
+  margin-right: 80px;
+  
+}
+.btn-submit:hover,
+.btn-submit:focus{
+  color: rgba(244, 98, 58, 0.9);
+  text-decoration: none;
+  cursor: pointer;
+}
 .modal-footer {
   padding: 2px 16px;
   background-color: rgba(244, 98, 58, 0.9);
   color: white;
 }
-
-
-/*modal end-------------------------------------------------------*/

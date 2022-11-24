@@ -43,7 +43,7 @@
                         <div class="page-wrapper">
                             <form class="row" method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
-                                <div class="col-sm-5">
+                                <div class="col-sm-8">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5>Resident Information</h5>
@@ -67,11 +67,13 @@
                                                     </p>
                                                     <p class="mb-1">Email:&nbsp;{{ resident.email }}</p>
                                                     <p class="mb-1">Address:&nbsp;{{ resident.address_line1 }},&nbsp; {{ resident.purok }}</p>
+                                                    <p class="mb-1">Residence Status:&nbsp;{{ resident.status }}</p>
 
-                                                    <h5 class="mt-4">Emergency Contact</h5>
-                                                    <p class="mb-1"> {{ emergency.name }}</p>
-                                                    <p class="mb-1"> {{ emergency.phone_no1 }}</p>
-                                                    <p class="mb-1"> {{ emergency.address }}</p>
+{#                                                    <h5 class="mt-4">Emergency Contact</h5>#}
+{#                                                    <p class="mb-1"> {{ emergency.name }}</p>#}
+{#                                                    <p class="mb-1"> {{ emergency.relationship }}</p>#}
+{#                                                    <p class="mb-1"> {{ emergency.phone_no }}</p>#}
+{#                                                    <p class="mb-1"> {{ emergency.address }}</p>#}
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 mb-2 mt-2">

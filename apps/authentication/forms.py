@@ -1,6 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, SetPasswordForm
 from django.contrib.auth.models import User
+from django.forms import ModelForm
+
+from apps.authentication import models
 
 
 class LoginForm(forms.Form):
@@ -101,3 +104,14 @@ class PasswordResetForm(SetPasswordForm):
                 "class": "form-control"
             }
         ))
+
+
+class ChangeAccountType(ModelForm):
+    class Meta:
+        model = models.Profile
+        fields = ['is_resident', 'is_admin', 'is_superadmin']
+        widgets = {
+            'is_resident': forms.RadioSelect(attrs={'class': 'form-check-input'}),
+            'is_admin': forms.RadioSelect(attrs={'class': 'form-check-input'}),
+            'is_superadmin': forms.RadioSelect(attrs={'class': 'form-check-input'}),
+        }
