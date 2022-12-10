@@ -43,7 +43,8 @@
                                 <div class="col-lg-5">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5>Resident Number : {{ resident_no }}</h5>
+                                            <h5>Resident Number :
+                                                {% if 'edit' in segment %}{{ resident.res_id }}{% else %}{{ resident_no }}{% endif %}</h5>
                                         </div>
                                         <div class="card-body">
                                             {% for message in messages %}
@@ -56,18 +57,19 @@
                                             <form method="post" enctype="multipart/form-data">
                                                 {% csrf_token %}
                                                 <div class="form-group text-center">
-                                                    <img src="{% static 'media/brgy_officials/default.jpg' %}" class="rounded-circle m-b-5 w-25" id="official_photo_view" style="cursor: pointer">
+                                                    <img src="{% if 'edit' in segment %}{{ resident.photo.url }}{% else %}{% static 'media/brgy_officials/default.jpg' %}{% endif %}" class="rounded-circle m-b-5 w-25" id="official_photo_view" style="cursor: pointer">
                                                     <br>
                                                     <label class="btn btn-icon btn-glow-light">
                                                         <i class="fas fa-edit"></i>{{ form.photo }}
                                                     </label>
                                                 </div>
 
-                                                {#                                                {{ form.as_p }}#}
+{#                                                {{ form.as_p }}#}
                                                 <div class="row">
                                                     <div class="form-group col-lg-6">
                                                         <label class="form-label">Lastname</label>
                                                         {{ form.lname }}
+                                                        <span class="text-danger">{{ form.lname.errors }}</span>
                                                     </div>
 
                                                     <div class="form-group col-lg-6">
@@ -111,11 +113,22 @@
                                                         {{ form.occupation }}
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="form-label">Religion</label>
-                                                    {{ form.religion }}
-                                                </div>
 
+                                                <div class="row">
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Religion</label>
+                                                        {{ form.religion }}
+                                                    </div>
+
+                                                    <div class="form-group col-lg-6">
+                                                        <label class="form-label">Resident Since</label>
+                                                        {{ form.resident_since }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-label">Residency Status</label>
+                                                    {{ form.status }}
+                                                </div>
                                                 <hr>
                                                 <p>Address</p>
 
@@ -158,32 +171,33 @@
                                                     </div>
                                                 </div>
 
-                                                <hr>
-                                                <p class="mt-4">Emergency Contact Information</p>
-
-                                                <div class="row">
-                                                    <div class="form-group col-lg-6">
-                                                        <label class="form-label">Full Name</label>
-                                                        {{ emergency_form.name}}
-                                                    </div>
-
-                                                    <div class="form-group col-lg-6">
-                                                        <label class="form-label">Relationship</label>
-                                                        {{ emergency_form.relationship }}
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="form-group col-lg-6">
-                                                        <label class="form-label">Phone Number</label>
-                                                        {{ emergency_form.phone_no }}
-                                                    </div>
-
-                                                    <div class="form-group col-lg-6">
-                                                        <label class="form-label">Address</label>
-                                                        {{ emergency_form.address }}
-                                                    </div>
-                                                </div>
+                                                {##}
+                                                {#                                                <hr>#}
+                                                {#                                                <p class="mt-4">Emergency Contact Information</p>#}
+                                                {##}
+                                                {#                                                <div class="row">#}
+                                                {#                                                    <div class="form-group col-lg-6">#}
+                                                {#                                                        <label class="form-label">Full Name</label>#}
+                                                {#                                                        {{ emergency_form.name}}#}
+                                                {#                                                    </div>#}
+                                                {##}
+                                                {#                                                    <div class="form-group col-lg-6">#}
+                                                {#                                                        <label class="form-label">Relationship</label>#}
+                                                {#                                                        {{ emergency_form.relationship }}#}
+                                                {#                                                    </div>#}
+                                                {#                                                </div>#}
+                                                {##}
+                                                {#                                                <div class="row">#}
+                                                {#                                                    <div class="form-group col-lg-6">#}
+                                                {#                                                        <label class="form-label">Phone Number</label>#}
+                                                {#                                                        {{ emergency_form.phone_no }}#}
+                                                {#                                                    </div>#}
+                                                {##}
+                                                {#                                                    <div class="form-group col-lg-6">#}
+                                                {#                                                        <label class="form-label">Address</label>#}
+                                                {#                                                        {{ emergency_form.address }}#}
+                                                {#                                                    </div>#}
+                                                {#                                                </div>#}
 
                                                 <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Save</button>
                                                 <a href="{% url 'officials' %}" class="btn btn-light float-right"><i class="fas fa-arrow-left"></i> Back</a>

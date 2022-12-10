@@ -1,0 +1,34 @@
+{% load static %}
+
+<!-- Navbar Start -->
+<nav class="navbar navbar-expand-lg bg-white navbar-light shadow-sm py-3 py-lg-0 px-3 px-lg-0">
+    <a href="{% url 'user_ui' %}" class="navbar-brand ms-lg-5">
+        <h1 class="display-6 m-0 text-primary">
+            <img src="{% static 'media/brgy_logo/logo.png' %}" style="height: 50px; margin-right: 20px">Masili Online Portal</h1>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav ms-auto py-0">
+            <a href="/" class="nav-item nav-link {% if 'user_ui' in segment %} active {% endif %}">Home</a>
+            <a href="{% url 'about' %}" class="nav-item nav-link {% if 'about' in segment %} active {% endif %}">About</a>
+            <a href="#" class="nav-item nav-link">Service</a>
+            {% if request.user.is_authenticated %}
+                <div class="nav-item dropdown" style="margin-right: 30px">
+{#                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account</a>#}
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><img class="rounded-circle" src="{{ request.user.profile.photo.url }}" style="height: 30px">&nbsp; &nbsp;{{ request.user.first_name.title }}&nbsp;{{ request.user.last_name.title }}</a>
+
+                    <div class="dropdown-menu m-0" style="margin-right: 10em">
+                        <a href="#" class="dropdown-item">Profile</a>
+                        <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
+                    </div>
+                </div>
+            {% else %}
+                <a href="{% url 'login' %}" class="nav-item nav-link" style="margin-right: 30px">Login</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+<!-- Navbar End -->
+

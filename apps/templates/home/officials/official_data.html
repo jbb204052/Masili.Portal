@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/plugins/style.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/datepicker-bs5.min.css' %}">
 {% endblock stylesheets %}
 
 {% block content %}
@@ -40,7 +41,7 @@
                     <div class="main-body">
                         <div class="page-wrapper">
                             <div class="row">
-                                <div class="col-lg-5">
+                                <div class="col-xl-5">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5>Official Data</h5>
@@ -55,35 +56,22 @@
                                             {% endfor %}
                                             <form method="post">
                                                 {% csrf_token %}
-                                                <div class="form-group text-center">
-                                                    <img src="{% static 'media/brgy_officials/default.jpg' %}" class="rounded-circle m-b-5 w-25" id="official_photo_view" style="cursor: pointer">
-                                                    <br>
-                                                    <label class="btn btn-icon btn-glow-light">
-                                                        <i class="fas fa-edit"></i>{{ form.photo }}
-                                                    </label>
-                                                </div>
-
+{#                                                <div class=" rm-group text-center">#}
+{#                                                    <img src="{% static 'media/brgy_officials/default.jpg' %}" class="rounded-circle m-b-5 w-25" id="official_photo_view" style="cursor: pointer">#}
+{#                                                    <br>#}
+{#                                                    <label class="btn btn-icon btn-glow-light">#}
+{#                                                        <i class="fas fa-edit"></i>{{ form.photo }}#}
+{#                                                    </label>#}
+{#                                                </div>#}
                                                 <div class="row">
-                                                    <div class="form-group col-lg-6">
-                                                        <label class="form-label">Lastname</label>
-                                                        {{ form.lname }}
-                                                    </div>
-
-                                                    <div class="form-group col-lg-6">
-                                                        <label class="form-label">Firstname</label>
-                                                        {{ form.fname }}
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="form-group col-lg-6">
-                                                        <label class="form-label">Middlename</label>
-                                                        {{ form.mname }}
-                                                    </div>
-
-                                                    <div class="form-group col-lg-6">
-                                                        <label class="form-label">Extension</label>
-                                                        {{ form.ext_name }}
+                                                    <div class="form-group col-lg-12">
+                                                        <label for="first_name">Fullname</label>
+                                                        <input class="form-control" type="text" list="officials" id="fullname" name="fullname" placeholder="Fullname" required value="{{ official.fullname }}">
+                                                        <datalist id="officials">
+                                                            {% for resident in residents %}
+                                                                <option value="{{ resident }}"></option>
+                                                            {% endfor %}
+                                                        </datalist>
                                                     </div>
                                                 </div>
 
@@ -101,8 +89,8 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="form-group col-lg-6">
-                                                        <label class="form-label">Start of Term</label>
-                                                        {{ form.start_term }}
+                                                        <label class="form-label">Date Appointed</label>
+                                                        {{ form.date_appointed }}
                                                     </div>
 
                                                     <div class="form-group col-lg-6">
@@ -136,7 +124,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/inputmask.js" integrity="sha512-u9G5WcQXGaw9PgODOBfc5X5AjuWWJJKEUtuEfRAUPJf/SJZ40muyH7hOAFTlplwkEG3jC8PKurH/oSzQP975ng==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.js" integrity="sha512-yUwPZS7XBCeFJsjU9IKl/bUCpWNnFv449g6/ieJKudXqqQu3550ZtEnONSiVNOEGu9Xhmz6rzMAtU2I06KEeRQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/bindings/inputmask.binding.js" integrity="sha512-J6WEJE0No+5Qqm9/T93q88yRQjvoAioXG4gzJ+eqZtLi+ZBgimZDkTiLWiljwrwnoQw+xwECQm282RJ6CrJnlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+    <script src="{% static 'assets/js/datepicker-full.min.js' %}"></script>
+    <script src="{% static 'assets/js/ac-datepicker.js' %}"></script>
     <script>
 
         $('.text_input').focus(function(){

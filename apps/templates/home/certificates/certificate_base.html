@@ -1,0 +1,107 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %} Certificates {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://use.typekit.net/oew1lfj.css">
+    <link href='https://fonts.googleapis.com/css?family=EB Garamond' rel='stylesheet'>
+
+    <style>
+        #PrintMe{
+            font-family: 'EB Garamond';
+            color: black;
+            margin: 0 auto;
+            line-height: 2;
+        }
+        #PrintMe h5, h4, h3{
+            font-weight: bold;
+            line-height: normal;
+        }
+        #PrintMe p{
+            font-size: 1.25em;
+        }
+    </style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">
+                                            {{ type_of_certificate }}
+                                        </h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'certificates' %}">List Certificates</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">View</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <form class="row" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="col-xl-8">
+                                    <div class="card">
+                                        <div class="card-header mb-lg-5">
+                                            <h5>{{ type_of_certificate }}</h5>
+                                            <a href="#" class="btn btn-primary float-right" onclick="printMe('PrintMe')"><i class="fas fa-print"></i> Print</a>
+                                        </div>
+                                        <div class="card-body col-lg-10" id="PrintMe">
+                                            <span>
+                                                <img style="float: right;" src="{% static 'media/brgy_logo/calamba.png' %}" width="90px" height="90px">
+                                                <img style="float: left" src="{% static 'media/brgy_logo/logo.png' %}" width="90px" height="90px">
+                                            </span>
+                                            <h4 style="text-align: center;">
+                                                Republic of the Philippines<br>
+                                                Province of Laguna<br>
+                                                City of Calamba<br>
+                                                BARANGAY MASILI<br>
+                                                <span style="color: red; font-size: 16px">049-502-9459</span>
+                                            </h4>
+                                            <br>
+                                            {% block certificate_content %}
+                                            {% endblock %}
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+    <script>
+        function printMe(divName){
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+
+        }
+    </script>
+{% endblock javascripts %}

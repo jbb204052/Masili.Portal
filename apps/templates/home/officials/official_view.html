@@ -1,5 +1,5 @@
 {% extends "layouts/base.html" %}
-
+{% load static %}
 {% block title %} Officials {% endblock %}
 
 <!-- Specific CSS goes HERE -->
@@ -9,6 +9,8 @@
             border-left: 1px solid #dee2e6!important;
         }
     </style>
+    <link href="{% static 'assets/css/timeline.css' %}" rel="stylesheet">
+
 {% endblock stylesheets %}
 
 {% block content %}
@@ -32,7 +34,7 @@
                                         <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
                                         <li class="breadcrumb-item"><a href="{% url 'hotlines' %}">List of Officials</a></li>
                                         <li class="breadcrumb-item"><a href="javascript:">
-                                            View - {{ official_name }}
+                                            View - {{ official.fullname}}
                                         </a></li>
                                     </ul>
                                 </div>
@@ -43,7 +45,7 @@
                         <div class="page-wrapper">
                             <form class="row" method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
-                                <div class="col-sm-5">
+                                <div class="col-xl-7">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5>Official Information</h5>
@@ -51,12 +53,12 @@
                                         <div class="card-body">
                                             <div class="row mb-3 align-items-center">
                                                 <div class="col-sm-3 text-center">
-                                                    <img src="{{ official.photo.url }}" alt="Official Photo" class="img-fluid rounded-circle">
+                                                    <img src="{{ official.fullname.photo.url }}" alt="Official Photo" class="img-fluid rounded-circle">
                                                 </div>
                                                 <div class="col-sm-9 border-start">
-                                                    <h3 class="mb-5">{{ official.fname }}&nbsp;{{ official.mname }}&nbsp;{{ official.lname }}&nbsp;{{ official.ext_name }}</h3>
+                                                    <h3 class="mb-4">{{ official.fullname }}</h3>
                                                     <p class="mb-1">Position:&nbsp;{{ official.position }}</p>
-                                                    <p class="mb-1">Start Term:&nbsp;{{ official.start_term}}</p>
+                                                    <p class="mb-1">Start Term:&nbsp;{{ official.date_appointed}}</p>
                                                     <p class="mb-1">End Term:&nbsp;{{ official.end_term }}</p>
                                                     <p class="mb-1">
                                                         {% if official.status == 'ACTIVE' %}
@@ -65,15 +67,43 @@
                                                             <p>Status:&nbsp;<i class="fas fa-circle text-c-red f-10"></i>&nbsp;INACTIVE</p>
                                                         {% endif %}
                                                     </p>
+                                                    <hr>
+                                                    <p class="mb-1">Address:&nbsp;{{ official.fullname.purok }}, {{ official.fullname.address_line1 }}</p>
+                                                    <p class="mb-1">Contact No:&nbsp;{{ official.fullname.phone_no1 }} | {{ official.fullname.phone_no1 }}</p>
+                                                    <p class="mb-1">Email: {{ official.fullname.email }}</p>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 mb-2 mt-2">
                                                 <div class="form-group">
-                                                    <a href="{% url 'official_edit' official.id %}" class="btn btn-primary float-right">
+                                                    <a href="{% url 'official_update' official.id %}" class="btn btn-primary float-right">
                                                         <i class="fa fa-save"></i> Update
                                                     </a>
                                                     <a href="{% url 'officials' %}" class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-5">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Official History</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div id="content">
+                                                <ul class="timeline">
+                                                    {% for record in history %}
+                                                        <li class="event">
+                                                            <a href="{% url 'official_view' record.id %}"><h3>{{ record.date_appointed }} - {{ record.end_term }}</h3></a>
+                                                            <p><i class="fas fa-suitcase mr-2"></i> {{ record.position }}</p>
+                                                            <p>
+                                                                {% if record.status == 'ACTIVE' %}
+                                                                    <p><i class="fas fa-circle text-c-green f-10"></i>&nbsp;ACTIVE</p>
+                                                                {% endif %}
+                                                            </p>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>

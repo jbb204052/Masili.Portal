@@ -44,7 +44,9 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <h5>List</h5>
+                                            {% if request.user.profile.account_type == 'CHAIRMAN' or request.user.profile.account_type == 'SECRETARY' %}
                                             <a href="{% url 'ordinance_add' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i>Add Ordinance</a>
+                                            {% endif %}
                                         </div>
                                         <div class="card-block table-border-style">
                                             {% for message in messages %}
@@ -75,7 +77,7 @@
                                                             <td>{{ ordinance.date_posted }}</td>
                                                             <td>{{ ordinance.status }}</td>
                                                             <td>
-                                                                <a class="btn btn-icon btn-outline-primary" href="#" title="View"><i class="feather icon-check-circle"></i></a>
+                                                                <a class="btn btn-icon btn-outline-primary" href="{% url 'ordinance_edit' ordinance.id %}" title="View"><i class="fas fa-pencil-alt"></i></a>
 
                                                                 <a href="{% url 'ordinance_view' ordinance.id %}" class="btn btn-icon btn-primary"  title="View"><i class="feather icon-check-circle"></i></a>
                                                                 {#data-toggle="modal" data-target="#exampleModalCenter"#}

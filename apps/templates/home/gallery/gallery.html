@@ -56,7 +56,7 @@
                                                     <div class="col-lg-4 col-sm-6" bis_skin_checked="1">
                                                         <div class="thumbnail mb-4" bis_skin_checked="1">
                                                             <div class="thumb" bis_skin_checked="1">
-                                                                <a data-lightbox="{{ photo.photo.url }}"><img src="{{ photo.photo.url }}" class="img-fluid img-thumbnail m-b-10" alt=""></a>
+                                                                <a data-lightbox="{{ photo.photo.url }}"><img style="height: 350px; width: 650px; object-fit: cover" src="{{ photo.photo.url }}" class="img-fluid img-thumbnail m-b-10" alt=""></a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -114,5 +114,13 @@
                 }
             }
         }
+    </script>
+
+    <script>
+        window.setTimeout(function() {
+            $(".alert").fadeTo(300, 0).slideUp(300, function(){
+                $(this).remove();
+            });
+        }, 3000);
     </script>
 {% endblock javascripts %}

@@ -75,27 +75,40 @@
                                                             <label>Send To:</label>
                                                         </div>
                                                         <div class="col-md-10">
-                                                            <select name="recipient" class="form-control">
-                                                                <option value="ALL">ALL</option>
-                                                                {% for org in organization %}
-                                                                    <option value="{{ org.org_name }}">{{ org.org_name }}</option>
-                                                                {% endfor %}
-                                                            </select>
+                                                            {% if 'for_approval' in segment %}
+                                                                <input class="form-control" type="text" readonly value="{{ announcement.send_to }}">
+                                                            {% else %}
+                                                                <select name="recipient" class="form-control">
+                                                                    <option value="ALL">ALL</option>
+                                                                    {% for org in organization %}
+                                                                        <option value="{{ org.org_name }}">{{ org.org_name }}</option>
+                                                                    {% endfor %}
+                                                                    {% for purok in puroks %}
+                                                                        <option value="{{ purok.name }}">{{ purok.name }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            {% endif %}
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="col-sm-12 mb-2 mt-2">
                                                     <div class="form-group">
-                                                        <button type="submit" class="btn btn-primary float-right">
-                                                            <i class="fa fa-save"></i>
-                                                            {% if 'add' in segment %}
-                                                                Send
-                                                            {% elif 'update' in segment %}
-                                                                Resend
-                                                            {% endif %}
-                                                        </button>
-                                                        <a href='{% url 'announcements' %}' class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
+                                                        {% if request.user.profile.account_type == 'CHAIRMAN' and 'for_approval' in segment %}
+                                                            <a href="{% url 'announcement_approve' announcement.id %}" class="btn btn-primary text-white float-right"><i class="feather icon-thumbs-up"></i> Approve</a>
+                                                            <a href='{% url 'announcements' opt='pending' %}' class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
+                                                        {% else %}
+                                                            <button type="submit" class="btn btn-primary float-right">
+                                                                <i class="fa fa-save"></i>
+                                                                {% if 'add' in segment %}
+                                                                    Save
+                                                                {% else %}
+                                                                    Update
+                                                                {% endif %}
+                                                            </button>
+                                                            <a href='{% url 'announcements' opt='all' %}' class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
+
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                             </div>

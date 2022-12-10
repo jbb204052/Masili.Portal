@@ -1,0 +1,139 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %} Sessions {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://use.typekit.net/oew1lfj.css">
+    <link href='https://fonts.googleapis.com/css?family=EB Garamond' rel='stylesheet'>
+
+    <style>
+        #PrintMe {
+            font-family: 'EB Garamond';
+            color: black;
+            line-height: 1.5;
+            margin: 0 auto;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+    </style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">
+                                            Barangay Session
+                                        </h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'brgy_sessions' %}">List of Session</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">Session - {{ session.session_no }}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <form class="row" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-header mb-lg-5">
+                                            <h5>Session No: <b class="f-18">{{ session.session_no }}</b></h5>
+
+                                            <button type="button" class="btn btn-primary float-right" onclick="printMe('PrintMe')"><i class="fas fa-print"></i> Print</button>
+                                        </div>
+                                        <div class="card-block" id="PrintMe">
+                                            <img style="float: left;" title="Logo" src="{% static 'media/brgy_logo/calamba.png' %}" alt="Calamba Seal" width="100" height="100">
+                                            <img style="float: right;" src="{% static 'media/brgy_logo/logo.png' %}" alt="" width="100" height="100">
+                                            <div class="d-flex justify-content-center" style="text-align: center">
+                                                <p style="font-weight: bold; font-size: 18px">Republic of the Philippines<br>
+                                                    City of Calamba<br>
+                                                    Province of Laguna<br>
+                                                    <span style="font-size: 18px">Barangay Masili</span><br>
+                                                    <span style="color: red"> 049-502-9459</span>
+                                                </p>
+                                            </div>
+                                            <div class="d-flex justify-content-center mt-3" style="text-align: center">
+                                                <b>
+                                                    <h5><b>OFFICE OF THE SANGGUNIANG BARANGAY</b></h5>
+                                                    <h5>MINUTES OF THE REGULAR SESSION OF THE SANGGUNIANG BARANGAY
+                                                        <br>HELD ON {{ session_date }} AT {{ session_time }},
+                                                        <br>AT THE MASILI BARANGAY HALL, CALAMBA CITY, LAGUNA</h5>
+                                                    <br>
+                                                </b>
+                                            </div>
+                                            <div class="mt-3">
+                                                <h4><b>PRESENT:</b></h4>
+                                                <table class="table ml-5">
+                                                    <tbody>
+                                                    {% for official in officials %}
+                                                        <tr>
+                                                            <td style="width: 30px"></td>
+                                                            <td>{{ official.fname }} {{ official.lname }}</td>
+                                                            <td>-------------</td>
+                                                            <td>{{ official.position }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="d-flex justify-content-center mt-3" style="text-align: center">
+                                                <b>
+                                                    <h3><b>MINUTES OF THE SESSION</b></h3>                                                </b>
+                                            </div>
+                                            <div class="mt-3">
+                                                {{ session.minutes_of_meeting|safe }}
+                                            </div>
+                                            <br><br><br>
+{#                                            <div class="justify-content-end float-right mb-3" style="text-align: justify">#}
+{#                                                <p class="font-size:12px">I HEREBY CERTIFY THAT THE FOREGOING ORDINANCE WAS APPROVED BY THE SANGGUNIANG BARANGAY OF MASILI.</p>#}
+{#                                            </div>#}
+                                            <div class="justify-content-center mt-5" style="float: right; text-align: center">
+                                                <p>{{ secretary.fname }} {{ secretary.lname }}<br>
+                                                    BARANGAY SECRETARY</p> <br>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+    <script>
+        function printMe(divName){
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+
+        }
+    </script>
+{% endblock javascripts %}

@@ -22,6 +22,8 @@ urlpatterns = [
     path('redirecting/', redirecting, name="redirecting"),
 
     # Account Management
-    path('accounts_managent/', views.accounts, name='accounts'),
-    path('accounts_managent/update/<int:id>', views.account_update, name='account_update'),
+    path('accounts_management/', views.accounts, name='accounts'),
+    path('accounts_management/update/<int:id>', views.account_update, name='account_update'),
+    path('accounts_management/pending_approval/', views.account_forApproval, name='account_approval'),
+    path('accounts_management/pending_approval/approve/<int:id>', views.approve_credentials, name='approve_account')
 ]

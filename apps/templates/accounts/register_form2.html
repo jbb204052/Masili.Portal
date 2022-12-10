@@ -30,16 +30,33 @@
                     <br />
                     <br />
 
-                    <!-- Hide the form on success -->
                     {% if success %}
 
-                        <a href="{% url 'login' %}" class="btn btn-primary shadow-2 mb-4">Sign IN</a>
+                        <a href="{% url 'login' %}" class="btn btn-primary shadow-2 mb-4">Sign In</a>
 
                     {% else %}
 
                         <form role="form" method="post" action="">
 
                             {% csrf_token %}
+
+                            <div class="input-group mb-3">
+                                {{ form.email }}
+                            </div>
+                            <span class="text-error">{{ form.email.errors }}</span>
+
+                            <div class="input-group mb-4">
+                                {{ form.password1 }}
+                            </div>
+                            <span class="text-error">{{ form.password1.errors }}</span>
+
+                            <div class="input-group mb-4">
+                                {{ form.password2 }}
+                            </div>
+
+                            <hr>
+                            <h6>Personal Information</h6>
+                            <span class="text-error">{{ form.password2.errors }}</span>
 
                             <div class="input-group mb-4">
                                 {{ form.first_name }}

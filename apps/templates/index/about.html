@@ -1,0 +1,163 @@
+{% extends 'index/base.html' %}
+{% load static %}
+
+
+{% block content %}
+    <!-- Hero Start -->
+    <div class="container-fluid bg-primary p-5 hero-header mb-5">
+        <div class="row py-5">
+            <div class="col-12 text-center">
+                <h1 class="display-1 text-white animated zoomIn">About Us</h1>
+                <a href="{% url 'user_ui' %}" class="h4 text-white">Home</a>
+                <i class="far fa-circle text-white px-2"></i>
+                <a href="" class="h4 text-white">About</a>
+            </div>
+        </div>
+    </div>
+    <!-- Hero End -->
+
+
+    <!-- About Start -->
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="row gx-5">
+                <div class="col-lg-5 mb-5 mb-lg-0" style="min-height: 500px;">
+                    <div class="position-relative h-75">
+                        <img class="position-absolute w-100 h-75 rounded wow zoomIn" data-wow-delay="0.3s" src="{% static 'media/brgy_logo/logo.png' %}" style="object-fit: contain;">
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="mb-4">
+                        <h5 class="text-primary text-uppercase" style="letter-spacing: 5px;">About Us</h5>
+                        <h1 class="display-5 mb-0">Barangay Masili</h1>
+                    </div>
+                    <h4 class="text-body fst-italic mb-4">Kasaysayan ng Barangay</h4>
+                    {#                    <p class="mb-4" style="line-height: 1.5">Ang unang pangalan ng Masili ay <b>“SUMILE”</b> na hinango sa salitang <b>“SUMILANG”</b> na ang kahulugan ang bagong silang dahil sa ito ay bagong litaw na pook. Ang Sumile ay dating bahagi ng Nayon ng Sucol, ito ay magubat, tubo ang pangunahing pananim at may ilang puno ng niyog. Humiwalay lamang ito ng mag daos ng sariling pista sa nayon. Ayon sa mga taga-Sumile malaki rin naman ang ambag nila sa pista ng Sucol at ngayong sa kanila (Sucol) naman ginawa ang misa at hiniling nilang sa tabing-dagat ng Sumile naman idaos ang eksibisyon ng mga musikero. Subalit ito ay tinutulang ng mga taga-Sucol kaya’t ng sumunod na pista ay ipinakuha kay Marcos Herbosa (kaisa-isang anak na lalaki ni Ysidoro) mula sa simbahan ng Sucol ang ibinigay nilang malaking kampana. Nag-sarili nalamang sila at pumili na rin ng kanilang taga-Pangulo. Ito ay naganap noong taong 1926.#}
+                    {#                        Ang sumunod na pinuno ng nayon kay G. Ysidoro Herbosa ay si G. Eugenio Gonzalez, Upang magamit ng mga mamamayan ang daang riles ay hiniling ng mga naninirahan sa nayon sa pangunguna ng Punong Nayon na kung maaari ay mag tayo ng estasyon ng tren sa nayon upang maserbisyuhan ang mga mamamayan don. Noon ay marami-rami na ring tao ang mga naninirahan sa nayon. Sa tulong ni Hernan Roldan (pamangkin ni Martina Herbosa) ay pinaunlakan naman ang kahilingan. Nang itanong kung anong pangalan ng nayon ay may nag sabing “SUMILE” subalit sa hindi malamang dahilan nang dumating ang karatulang ilalagay sa estasyon ay “MASILI” nakatitik at wala namang nagreklamo. Doon nag simulang tawaging “MASILE” ang nasabing nayon na siya na ring tawag magpahanggang ngayon.#}
+                    {#                    </p>#}
+                    <p class="mb-4" style="line-height: 1.5">
+                        Ang unang pangalan ng Masili ay <b>"Sumile"</b> na hinango sa salitang <b>"Sumilang"</b> na ang kahulugan ay bagong silang dahil sa ito ay bagong litaw na pook.
+                        Ang Sumile ay dating bahagi ng Nayon sa Sucol, ito ay magubat, tubo ang pangunahing pananim at may ilang puno ng niyog. Humiwalay lamang ito nang magdaos ng sariling pista sa nayon.
+                        Ayon sa taga-Sumile, malaki rin naman ang ambag nila sa pista ng Sucol at ngayong sa kanila (Sucol) naman ginawa ang misa, ay hiniling nilang sa tabing dagat ng Sumile naman idaos and eksibisyon ng mga musikero.
+                        Ito ay tinutulan ng mga taga-Sucol kaya't nang sumunod na pista ay ipinakuha kay Marcos Herbosa (kaisa-isang anak na lalaki ni Ysidoro) mula sa simbahan ng Sucol ang ibinigay nilang malaking Kampana.
+                        Nagsarili na lamang sila at pumili na rin ng kanilang taga-pangulo. Ito ay naganap noong taong <b>1926</b>.
+                    </p>
+
+
+                    {#                    <div class="row g-3">#}
+                    {#                        <div class="col-sm-6 wow zoomIn" data-wow-delay="0.6s">#}
+                    {#                            <div class="bg-primary d-flex flex-column justify-content-center text-center border-bottom border-5 border-secondary rounded p-3" style="height: 200px;">#}
+                    {#                                <i class="fa fa-star fa-4x text-white mb-4"></i>#}
+                    {#                                <h4 class="text-white mb-0">15 Years Experience</h4>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {#                        <div class="col-sm-6 wow zoomIn" data-wow-delay="0.9s">#}
+                    {#                            <div class="bg-secondary d-flex flex-column justify-content-center text-center border-bottom border-5 border-primary rounded p-3" style="height: 200px;">#}
+                    {#                                <i class="fa fa-award fa-4x text-white mb-4"></i>#}
+                    {#                                <h4 class="text-white mb-0">Award Winning</h4>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {#                    </div>#}
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container mt-3" >
+            <div class="row gx-5">
+
+                <div class="col-lg-7">
+                    <h4 class="text-body fst-italic mb-4">Geographic Features</h4>
+                    <p class="mb-4" style="line-height: 1.5">
+                        Ang Barangay Masili ay isa sa limamput apat na barangay sa Lungsod ng Calamba. Ito ay napapagitnaan ng Barangay Tadlac, Los Baños, Laguna sa Hilagang Silangan,
+                        sa Timog ay Barangay Bagong Kalsada, sa Kanluran ay Barangay Sucol, at sa hilaga nito ay lawa ng Laguna. Ang barangay Masili ay binubuo ng <b>anim (6)</b> na Purok.
+                        May 6.95 km ang layo nito sa Poblacion ng Los Baños at walong (8) kilometro naman ang layo sa Lungsod ng Calamba.
+                    </p>
+                    <table class="table table-borderless" style=" border: 1px solid #0d6efd; margin: 1em">
+                        <tbody>
+                        <tr>
+                            <td><b>Land Area</b></td>
+                            <td>:</td>
+                            <td>32.1 Hectares</td>
+                        </tr>
+                        <tr>
+                            <td><b>Boundaries</b></td>
+                            <td></td><td></td>
+                        </tr>
+                        <tr>
+                            <td class="ml-5">West</td>
+                            <td>:</td>
+                            <td>Sucol</td>
+                        </tr>
+                        <tr>
+                            <td class="ml-5">East</td>
+                            <td>:</td>
+                            <td>Los Baños</td>
+                        </tr>
+                        <tr>
+                            <td class="ml-5">South</td>
+                            <td>:</td>
+                            <td>Sucol</td>
+                        </tr>
+                        <tr>
+                            <td class="ml-5">North</td>
+                            <td>:</td>
+                            <td>Laguna de Bay</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="col-lg-5 mb-5 mb-lg-0">
+                    <div class="position-relative h-100">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3868.203821636231!2d121.20071061538856!3d14.182837140069653!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33bd613926c4267f%3A0x62fd88e8affa6ac1!2sMasili%2C%20Real%2C%20Calamba%2C%20Laguna!5e0!3m2!1sen!2sph!4v1670329213251!5m2!1sen!2sph" width="600" height="450" style="border:solid 1px #0d6efd;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="container">
+                <div class="text-center mx-auto mb-5" style="max-width: 600px;">
+                    <h5 class="text-primary text-uppercase" style="letter-spacing: 5px;">Meet and Greet</h5>
+                    <h1 class="display-5 mb-0">Our Barangay Officials</h1>
+                </div>
+                <div class="row g-5">
+                    <div class="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
+                        <div class="position-relative rounded-top">
+                            <img class="img-fluid rounded-top w-100" src="{% if chairman.photo %} {{ chairman.photo.url }} {% else %} {% static 'media/brgy_officials/default.jpg' %} {% endif %}" alt="">
+                            <div class="position-absolute bottom-0 end-0 d-flex flex-column bg-white p-1" style="margin-right: -25px;">
+                            </div>
+                        </div>
+                        <div class="bg-primary text-center rounded-bottom p-4">
+                            <h3 class="text-white">{{ chairman }}</h3>
+                            <p class="text-white m-0">Barangay Chairman</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 wow slideInUp" data-wow-delay="0.6s">
+                        <div class="bg-primary text-center rounded-bottom p-4">
+                            <h3 class="text-white">Barangay Councilors</h3>
+                        </div>
+                        <div class="position-relative">
+                            <table class="table table-borderless">
+                                <tbody>
+                                {% for councilor in councilors %}
+                                    <tr>
+                                        <td><img class="img-fluid rounded-circle w-25" src="{{ councilor.photo.url }}"></td>
+                                        <td>{{ councilor.fname }} {{ councilor.lname }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- About End -->
+
+{% endblock %}

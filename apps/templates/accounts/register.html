@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %} Registration {% endblock %}
 
-{% block content %}   
+{% block content %}
 
     <div class="auth-wrapper">
         <div class="auth-content">
@@ -38,39 +38,53 @@
 
                         <form role="form" method="post" action="">
 
-                            {% csrf_token %}                    
+                            {% csrf_token %}
 
-                            <div class="input-group mb-3">
-                                {{ form.email }}
+                            <div id="form_tab">
+                                <div class="input-group mb-3">
+                                    {{ form.email }}
+                                </div>
+                                <span class="text-error">{{ form.email.errors }}</span>
+
+                                <div class="input-group mb-4">
+                                    {{ form.password1 }}
+                                </div>
+                                <span class="text-error">{{ form.password1.errors }}</span>
+
+                                <div class="input-group mb-4">
+                                    {{ form.password2 }}
+                                </div>
+
+{#                                <button type="button" class="btn btn-primary mb-4" onclick="hideForm()">Next</button>#}
                             </div>
-                            <span class="text-error">{{ form.email.errors }}</span>
 
-                            <div class="input-group mb-4">
-                                {{ form.password1 }}
+                            <div class="form_tab">
+                                <h6>Personal Information</h6>
+                                <span class="text-error">{{ form.password2.errors }}</span>
+
+                                <div class="input-group mb-4">
+                                    {{ form.first_name }}
+                                </div>
+                                <span class="text-error">{{ form.first_name.errors }}</span>
+
+                                <div class="input-group mb-4">
+                                    {{ form.last_name }}
+                                </div>
+                                <span class="text-error">{{ form.last_name.errors }}</span>
+
+
+                                <div class="input-group mb-4">
+                                    <input class="form-control" type="text" name="bdate" placeholder="Birthdate" onfocus="(this.type='date')" onblur="(this.type='text')" required>
+                                </div>
+
+                                <button type="submit" name="register" class="btn btn-primary shadow-2 mb-4">Register</button>
+
                             </div>
-                            <span class="text-error">{{ form.password1.errors }}</span>
-
-                            <div class="input-group mb-4">
-                                {{ form.password2 }}
-                            </div>
-                            <span class="text-error">{{ form.password2.errors }}</span>
-
-                            <div class="input-group mb-4">
-                                {{ form.first_name }}
-                            </div>
-                            <span class="text-error">{{ form.first_name.errors }}</span>
-
-                            <div class="input-group mb-4">
-                                {{ form.last_name }}
-                            </div>
-                            <span class="text-error">{{ form.last_name.errors }}</span>
-
-                            <button type="submit" name="register" class="btn btn-primary shadow-2 mb-4">Register</button>
 
                         </form>
 
                         <p class="mb-0 text-muted">Already have an account? <a href="{% url 'login' %}" >Sign in</a></p>
-                    
+
                     {% endif %}
 
                 </div>
@@ -79,3 +93,12 @@
     </div>
 
 {% endblock content %}
+
+{% block javascripts %}
+    <script>
+    function hideForm(){
+        document.getElementById("form1").style.display = "none";
+        document.getElementsByClassName("form2").style.display = "block";
+    }
+    </script>
+{% endblock %}

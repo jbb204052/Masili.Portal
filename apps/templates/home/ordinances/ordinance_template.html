@@ -4,15 +4,21 @@
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=EB Garamond' rel='stylesheet'>
+
     <style>
-        p{
+        #forPrinting{
+            font-family: 'EB Garamond';
             font-size: 12px;
         }
     </style>
 </head>
 <body id="forPrinting">
-<p style="text-align: center; font-size: 15px;"><img style="float: left;" title="Logo" src="{% static 'media/brgy_logo/calamba.png' %}" alt="Calamba Seal" width="100" height="100"></p>
-<h2 style="text-align: center;"><img style="float: right;" src="{% static 'media/brgy_logo/logo.png' %}" alt="" width="100" height="100"></h2>
+<div class="row">
+
+</div>
+<img style="float: left;" title="Logo" src="{% static 'media/brgy_logo/calamba.png' %}" alt="Calamba Seal" width="100" height="100">
+<img style="float: right;" src="{% static 'media/brgy_logo/logo.png' %}" alt="" width="100" height="100">
 <div class="d-flex justify-content-center" style="text-align: center">
     <p>Republic of the Philippines<br>
         Province of Laguna<br>

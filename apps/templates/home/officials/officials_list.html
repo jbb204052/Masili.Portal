@@ -44,7 +44,9 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <h5>List</h5>
-                                            <a href="{% url 'official_add' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i>Add New Official </a>
+                                            {% if request.user.profile.account_type == 'CHAIRMAN' %}
+                                                <a href="{% url 'official_add' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i>Add New Official </a>
+                                            {% endif %}
                                         </div>
                                         <div class="card-block table-border-style">
                                             {% for message in messages %}
@@ -60,19 +62,19 @@
                                                     <tr>
                                                         <th>Fullname</th>
                                                         <th>Position</th>
-                                                        <th>Start of Term</th>
+                                                        <th>Date Appointed</th>
                                                         <th>End of Term</th>
                                                         <th>Status</th>
                                                         <th>Actions</th>
-                                                        <th>Add Date</th>
+                                                        <th>Date Added</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
                                                     {% for official in officials %}
                                                         <tr>
-                                                            <td><img class="rounded-circle m-r-15" src="{{ official.photo.url }}" style="width: 50px">{{ official.fname }}&nbsp; {{ official.lname }}&nbsp; {{ official.ext_name }}</td>
+                                                            <td><img class="rounded-circle m-r-15" src="{{ official.fullname.photo.url }}" style="width: 50px">{{ official.fullname.fullname }}</td>
                                                             <td>{{ official.position }}</td>
-                                                            <td>{{ official.start_term }}</td>
+                                                            <td>{{ official.date_appointed }}</td>
                                                             <td>{{ official.end_term }}</td>
                                                             <td>
                                                                 {% if official.status == 'ACTIVE' %}
@@ -125,7 +127,7 @@
     <script>
         $(function () {
             $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false, "paging": true, 'order':[6, 'desc'],
+                "responsive": true, "lengthChange": false, "autoWidth": false, "paging": true, 'order': [[ 6, "desc" ]],
                 buttons:[{
                     extend: 'collection',
                     text: 'Export',
@@ -170,6 +172,18 @@
                             }
                         },
                             {
+                                text: 'Barangay Officials',
+                                action: function (e, dt, node, config) {
+                                    dt.columns(1).search('BARANGAY').draw();
+                                }
+                            },
+                            {
+                                text: 'SK Officials',
+                                action: function (e, dt, node, config) {
+                                    dt.columns(1).search('SK').draw();
+                                }
+                            },
+                            {
                                 text: 'Active Officials',
                                 action: function (e, dt, node, config) {
                                     var searchTerm = 'Active',
@@ -187,7 +201,7 @@
                     }
                 ],
                 columnDefs:[
-                    {'visible': false, 'targets': 6}
+                    {'visible': false, 'targets': [6]}
                 ]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });

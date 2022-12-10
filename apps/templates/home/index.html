@@ -40,7 +40,7 @@
                                     <div class="card order-card" style="background-color: #28A72C">
                                         <div class="card-body" style="padding-bottom: 20px">
                                             <h4 class="text-white">Barangay Officials</h4>
-                                            <h1 class="text-end text-white"><i class="fas fa-user-tie float-right"></i><span>{{ officials_count }}</span></h1>
+                                            <h1 class="text-end text-white"><i class="fas fa-user-tie float-right"></i><span>{{ officials }}</span></h1>
                                             <hr style="border:1px solid white">
                                             <a href="{% url 'officials' %}"><h5 class="text-white m-b-0 text-center">More info <i class="fas fa-arrow-circle-right m-l-5"></i> </h5></a>
                                         </div>
@@ -51,7 +51,7 @@
                                     <div class="card order-card" style="background-color: #fcc120">
                                         <div class="card-body" style="padding-bottom: 20px">
                                             <h4 class="text-white">Pending Certificates</h4>
-                                            <h1 class="text-end text-white"><i class="fas fa-file-alt float-right"></i><span>0000</span></h1>
+                                            <h1 class="text-end text-white"><i class="fas fa-file-alt float-right"></i><span>{{ pending_certificates }}</span></h1>
                                             <hr style="border:1px solid white">
                                             <a href="#"><h5 class="text-white m-b-0 text-center">More info <i class="fas fa-arrow-circle-right m-l-5"></i> </h5></a>
                                         </div>
@@ -69,8 +69,8 @@
                                     </div>
                                 </div>
 
-                                <div class="col-xl-12">
-                                <!--<div class="col-sm-8 mb-4">-->
+                                <div class="col-xl-5">
+
                                     <div class="card">
                                         <div class="card-header">
                                             <h5>Statistic</h5>
@@ -78,11 +78,6 @@
                                         </div>
                                         <div class="card-block">
                                             <div class="row">
-                                                <!--Testing for user-->
-                                                
-                                               
-                                            
-                                                <!--Testing for user end-->
                                                 <div class="col-sm-5 mb-4">
                                                     <div class="form-group">
                                                         <canvas id="population_per_gender" style="width: 100%"></canvas>
@@ -115,80 +110,4 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 
-    <script>
-        Chart.register(ChartDataLabels)
-        var options = {
-            type: 'pie',
-            data: {
-                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    borderWidth: 1
-                },
-                    {
-                        label: '# of Points',
-                        data: [7, 11, 5, 8, 3, 7],
-                        borderWidth: 1
-                    }
-                ]
-            },
-            options: {}
-        }
-
-        var ctx = document.getElementById('population_by_gender').getContext('2d');
-        new Chart(ctx, options);
-    </script>
-
-    {#    <script>#}
-    {#        var xValues = ['Male', 'Female'];#}
-    {#        var yValues = [10,20];#}
-    {#        var barColors = [#}
-    {#            "#b91d47",#}
-    {#            "#00aba9",#}
-    {#        ];#}
-    {##}
-    {#        new Chart("population_per_gender", {#}
-    {#            type: "doughnut",#}
-    {#            data: {#}
-    {#                labels: xValues,#}
-    {#                datasets: [{#}
-    {#                    backgroundColor: barColors,#}
-    {#                    data: yValues#}
-    {#                }]#}
-    {#            },#}
-    {#            options: {#}
-    {#                title: {#}
-    {#                    display: true,#}
-    {#                    text: "Population By Gender"#}
-    {#                }#}
-    {#            }#}
-    {#        });#}
-    {#    </script>#}
-    {#    <script>#}
-    {#        var xValues = ['Purok 1', 'Purok 2'#}
-    {#        ];#}
-    {#        var yValues = [100, 150;#}
-    {#        var barColors = [#}
-    {#            "#b91d47",#}
-    {#            "#00aba9",#}
-    {#        ];#}
-    {##}
-    {#        new Chart("population_per_purok", {#}
-    {#            type: "doughnut",#}
-    {#            data: {#}
-    {#                labels: xValues,#}
-    {#                datasets: [{#}
-    {#                    backgroundColor: barColors,#}
-    {#                    data: yValues#}
-    {#                }]#}
-    {#            },#}
-    {#            options: {#}
-    {#                title: {#}
-    {#                    display: true,#}
-    {#                    text: "Population By Purok"#}
-    {#                }#}
-    {#            }#}
-    {#        });#}
-    {#    </script>#}
 {% endblock javascripts %}

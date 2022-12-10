@@ -7079,8 +7079,8 @@ select.form-control-lg:not([size]):not([multiple]) {
 }
 .checkbox.checkbox-fill input[type=checkbox] + .cr:after {
   content: "";
-  width: 22.5px;
-  height: 22.5px;
+  width: 20px;
+  height: 20px;
   display: inline-block;
   margin-right: 10px;
   border: 2px solid #e9eaec;

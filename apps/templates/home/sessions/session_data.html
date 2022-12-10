@@ -1,0 +1,172 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Session {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    {{ form.media }}
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">
+                                            Barangay Session
+                                        </h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'brgy_sessions' %}">List of Sessions</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">New Session</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <form class="row" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Session No: <b class="f-18">{{ session_no }}</b></h5>
+                                        </div>
+                                        <div class="card-block">
+                                            {% for message in messages %}
+                                                {% if 'success' in message.tags %}
+                                                    <p class="alert alert-success" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+                                                {% else %}
+                                                    <p class="alert alert-warning" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <div class="row">
+
+                                                <div class="col-sm-4 mb-4">
+                                                    <div class="form-group">
+                                                        <label>Session Date</label>
+                                                        {{ form.session_date }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-4 mb-4">
+                                                    <div class="form-group">
+                                                        <label>Start Time</label>
+                                                        {{ form.session_start }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-4 mb-4">
+                                                    <div class="form-group">
+                                                        <label>End Time</label>
+                                                        {{ form.session_end }}
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <hr>
+
+                                                <div class="col-sm-12 mb-0">
+                                                    <div class="form-group">
+                                                        <label>Attendees</label>
+                                                        {{ form.attendees }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-12 mb-4">
+                                                    <div class="row">
+                                                        {% for official in officials %}
+                                                            <div class="col-sm-4">
+                                                                <div class="form-group">
+                                                                    <div class="checkbox checkbox-info checkbox-fill d-inline">
+                                                                        <input type="checkbox" name="attendees_checkbox" id="{{ official.id }}">
+                                                                        <label for="{{ official.id }}" class="cr">{{ official.fullname }}</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-12 mb-4">
+                                                    <div class="form-group">
+                                                        <label>Other Attendees</label>
+                                                        {{ form.other_attendees }}
+                                                        <small>Separate name by comma (,)</small>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-12 mb-4">
+                                                    <div class="form-group">
+                                                        <label>Agenda</label>
+                                                        {{ form.agenda }}
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-sm-12 mb-4">
+                                                    <div class="form-group">
+                                                        <label>Minutes of the Meeting</label>
+                                                        {{ form.minutes_of_meeting }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-12 mb-2 mt-2">
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-primary float-right">
+                                                            <i class="fa fa-save"></i>Save
+                                                        </button>
+                                                        <a href='{% url 'brgy_sessions' %}' class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+    <script>
+        $('input[name="attendees_checkbox"]').on('change', function() {
+            var attendees = $('input[id="attendees"]').val();
+            if (this.checked) {
+                if (attendees == '') {
+                    $('input[id="attendees"]').val(this.id);
+                } else {
+                    $('input[id="attendees"]').val(attendees + ',' + this.id);
+                }
+            } else {
+                var new_attendees = attendees.replace(this.id, '');
+                $('input[id="attendees"]').val(new_attendees);
+            }
+        });
+
+
+    tinymce.init({
+        height: "400",
+        selector: 'textarea',
+        content_style: 'body { font-family: "Open Sans", sans-serif }',
+        menubar: false,
+        toolbar: 'undo redo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | image | table',
+        plugins: 'image lists table',
+    });
+
+    </script>
+{% endblock javascripts %}

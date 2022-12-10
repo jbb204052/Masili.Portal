@@ -21,10 +21,19 @@
                     <a href="/" class="nav-link "><span class="pcoded-micon"><i class="fas fa-tachometer-alt"></i></span><span
                             class="pcoded-mtext">Dashboard</span></a>
                 </li>
-                <li class="nav-item {% if 'accounts' in segment %} active {% endif %}">
-                    <a href="{% url 'accounts' %}" class="nav-link "><span class="pcoded-micon"><i class="fas fa-lock"></i></span><span
-                            class="pcoded-mtext">Account Management</span></a>
-                </li>
+
+
+                {% if request.user.profile.account_type == "CHAIRMAN" %}
+                    <li class="nav-item pcoded-hasmenu {% if 'accounts' in segment %} active pcoded-trigger {% endif %}">
+                        <a href="#" class="nav-link"><span class="pcoded-micon"><i class="fas fa-lock"></i></span><span
+                                class="pcoded-mtext">Account Management</span></a>
+                        <ul class="pcoded-submenu">
+                            <li class="{% if 'acc_forApproval' in segment %} active {% endif %}"><a href="{% url 'account_approval' %}" class="">For Approval</a></li>
+                            <li class="{% if 'account_type' in segment %} active {% endif %}"><a href="{% url 'accounts' %}" class="">Approved Accounts</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+
                 <li class="nav-item pcoded-hasmenu {% if 'brgy_info' in segment %} active pcoded-trigger {% endif %}">
                     <a href="javascript:" class="nav-link "><span class="pcoded-micon"><i class="fas fa-info"></i></span><span
                             class="pcoded-mtext">Barangay Information</span></a>
@@ -34,13 +43,12 @@
                     </ul>
                 </li>
 
-                {% if request.user.profile.is_superadmin %}
+                {% if request.user.profile.account_type == 'CHAIRMAN' %}
                     <li class="nav-item {% if 'blotters' in segment %} active {% endif %}">
-                        <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-gavel"></i></span><span
+                        <a href="{% url 'blotters' %}" class="nav-link "><span class="pcoded-micon"><i class="fas fa-gavel"></i></span><span
                                 class="pcoded-mtext">Blotters</span></a>
                     </li>
                 {% endif %}
-
                 <li class="nav-item {% if 'officials' in segment %} active {% endif %}">
                     <a href="{% url 'officials' %}" class="nav-link "><span class="pcoded-micon"><i class="fas fa-user-tie"></i></span><span
                             class="pcoded-mtext">Officials</span></a>
@@ -61,12 +69,12 @@
                 </li>
 
                 <li class="nav-item {% if 'sessions' in segment %} active {% endif %}">
-                    <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-book-open"></i></span><span
+                    <a href="{% url 'brgy_sessions' %}" class="nav-link "><span class="pcoded-micon"><i class="fas fa-book-open"></i></span><span
                             class="pcoded-mtext">Sessions</span></a>
                 </li>
 
-                <li class="nav-item {% if 'certificates' in segment %} active {% endif %}">
-                    <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-file"></i></span><span
+                <li class="nav-item{% if 'certificates' in segment %} active{% endif %}">
+                    <a href="{% url 'certificates' %}" class="nav-link "><span class="pcoded-micon"><i class="fas fa-file"></i></span><span
                             class="pcoded-mtext">Certificates</span></a>
                 </li>
 
@@ -83,11 +91,23 @@
                 <li class="nav-item pcoded-menu-caption">
                     <label>Others</label>
                 </li>
+                {% if request.user.profile.account_type == 'CHAIRMAN' %}
+                    <li class="nav-item pcoded-hasmenu {% if 'announcements' in segment %} pcoded-trigger active {% endif %}">
+                        <a href="#" class="nav-link "><span class="pcoded-micon"><i class="fas fa-bullhorn"></i></span><span
+                                class="pcoded-mtext">Announcements</span></a>
+                        <ul class="pcoded-submenu">
+                            <li class="{% if 'pending' in segment %} active {% endif %}"><a href="{% url 'announcements' opt='pending' %}" class="">For Approval</a></li>
+                            <li class="{% if 'all' in segment %} active {% endif %}"><a href="{% url 'announcements' opt='all' %}" class="">All Announcement</a></li>
+                        </ul>
+                    </li>
+                {% elif request.user.profile.account_type == 'SECRETARY' %}
+                    <li class="nav-item {% if 'announcements' in segment %} active {% endif %}">
+                        <a href="{% url 'announcements' opt='all' %}" class="nav-link "><span class="pcoded-micon"><i class="fas fa-bullhorn"></i></span><span
+                                class="pcoded-mtext">Announcements</span></a>
+                    </li>
+                {% endif %}
 
-                <li class="nav-item {% if 'announcements' in segment %} active {% endif %}">
-                    <a href="{% url 'announcements' %}" class="nav-link "><span class="pcoded-micon"><i class="fas fa-bullhorn"></i></span><span
-                            class="pcoded-mtext">Announcements</span></a>
-                </li>
+
 
                 <li class="nav-item {% if 'gallery' in segment %} active {% endif %}">
                     <a href="{% url 'gallery' %}" class="nav-link "><span class="pcoded-micon"><i class="fas fa-images"></i></span><span

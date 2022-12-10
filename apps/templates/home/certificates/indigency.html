@@ -1,0 +1,31 @@
+{% extends 'home/certificates/certificate_base.html' %}
+
+{% block certificate_content %}
+    <h4 style="text-align: center">
+        OFFICE OF THE BARANGAY CHAIRMAN
+        <hr class="my-1">
+        CERTIFICATE OF INDIGENCY
+    </h4>
+    <br>
+    <h5>TO WHOM IT MAY CONCERN:</h5>
+    <p></p>
+    <p style="text-indent: 2em">Bearer of this letter is <b>
+        {% if resident.gender == 'MALE' %}Mr.
+            {% elif resident.gender == 'FEMALE' and resident.civil_status == 'MARRIED' %} Mrs.
+            {% else %}Ms.
+        {% endif %}
+        {{ certificate.full_name }}</b>, <b>{{ age }}</b>,  <b>{{ resident.civil_status }}</b>, and a resident of <b>{{ resident.purok }}</b> Barangay Masili, Calamba City since <b>{{ resident.resident_since.year }}</b> up to present.</p>
+    <p style="text-indent: 2em">It is also further certifying that
+        {% if resident.gender == 'MALE' %}he
+            {% else %}she
+        {% endif %}is {% if resident.occupation != 'NONE' %} currently employed as {{ resident.occupation }} {% else %}  not gainfully employed  {% endif %} at present and belongs to the Indigent families in our community.</p><p></p>
+    <p style="text-indent: 2em">This certification is issued upon the request of
+        {% if is_samePerson %} the above-named person
+        {% else %} {{ certificate.requestor }} {% endif %}
+        for {{ certificate.purpose }} purposes.</p>
+    <br><br>
+    <p class="15" align="justify">Certified:</p>
+    <p class="15" align="justify">&nbsp;</p>
+    <p class="15" align="justify" style="font-weight: bold"><em><u>HON. {{ chairman }}</u></em></p>
+    <p class="15" align="justify" style="line-height: 0"><strong>Barangay Chairman, Masili</strong></p>
+{% endblock %}

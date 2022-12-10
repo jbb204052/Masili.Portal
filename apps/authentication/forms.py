@@ -61,7 +61,6 @@ class SignUpForm(UserCreationForm):
             }
         ))
 
-
     class Meta:
         model = User
         fields = ('email', 'password1', 'password2', 'first_name', 'last_name')
@@ -106,12 +105,10 @@ class PasswordResetForm(SetPasswordForm):
         ))
 
 
-class ChangeAccountType(ModelForm):
+class AccountForm(ModelForm):
     class Meta:
         model = models.Profile
-        fields = ['is_resident', 'is_admin', 'is_superadmin']
+        fields = ['account_type']
         widgets = {
-            'is_resident': forms.RadioSelect(attrs={'class': 'form-check-input'}),
-            'is_admin': forms.RadioSelect(attrs={'class': 'form-check-input'}),
-            'is_superadmin': forms.RadioSelect(attrs={'class': 'form-check-input'}),
+            'account_type': forms.Select(attrs={'class': 'form-control', 'name': 'account_type'})
         }

@@ -1,0 +1,143 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Masili Online Portal</title>
+	<script src="{% static 'assets/js/html5shiv.js' %}"></script>
+	<script src="{% static 'assets/js/respond.min.js' %}"></script>
+    <script src="{% static 'assets/js/user.js' %}"></script>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Favicon icon -->
+    <link rel="icon" href="{% static 'media/brgy_logo/logo.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'assets/css/animate.css' %}">
+    <!-- font css -->
+    <link rel="stylesheet" href="{% static 'assets/fonts/feather/css/feather.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fonts/fontawesome/css/fontawesome-all.min.css' %}">
+
+    <!-- vendor css -->
+{#    <link rel="stylesheet" href="https://appsrv1-147a1.kxcdn.com/django-datta-able-enh/css/style.css" id="main-style-link">#}
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" id="main-style-link">
+{#    <link rel="stylesheet" href="https://appsrv1-147a1.kxcdn.com/django-datta-able-enh/css/customizer.css">#}
+
+    <link rel="stylesheet" href="{% static 'assets/css/landing.css' %}">
+</head>
+
+<body>
+    <!-- [ Nav ] start -->
+    <nav class="navbar navbar-expand-lg navbar-dark default">
+        <div class="container">
+            <a class="navbar-brand bg-transparent mr-10" href="#">
+                <img style="height: 40px" src="{% static 'media/brgy_logo/logo.png' %}" alt="logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+                aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div style="float:right" class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#services">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#services">Services</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'portfolio' %}">Portfolio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#layouts">About Us</a>
+                    </li>
+
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#">Account</a>
+                    </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Login</a>
+
+                        </li>
+                    {% endif %}
+
+                </ul>
+{#                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">#}
+{#                    <li class="nav-item">#}
+{#                        <a class="btn btn-primary my-1 me-2" target="_blank" href="https://appseed.us/product/datta-able-pro/">Buy now</a>#}
+{#                    </li>#}
+{#                    <li class="nav-item">#}
+{#                        <a class="btn btn-secondary my-1" href="#">Demo</a>#}
+{#                    </li>#}
+{#                </ul>#}
+            </div>
+        </div>
+    </nav>
+    <!-- [ Nav ] end -->
+    <section id="portfolio">
+            
+        <div class="container-fluid p-0">
+            <div class="row g-0">
+                <div class="col-lg-4 col-sm-6">
+                    <a class="portfolio-box" href="gallery/disinfection.jpg" title="Disinfection">
+                        <img class="img-fluid" src="gallery/disinfection.jpg" alt="">
+                        <div class="portfolio-box-caption">
+                            <div class="project-name">Disinfection</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <a class="portfolio-box" href="gallery/BrgyAsenso.jpg" title="Brgy Asenso">
+                        <img class="img-fluid" src="gallery/BrgyAsenso.jpg" alt="..." />
+                        <div class="portfolio-box-caption">             
+                            <div class="project-name">Brgy Asenso</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <a class="portfolio-box" href="gallery/Tupad-proj.jpg" title="Tupad Project">
+                        <img class="img-fluid" src="gallery/Tupad-proj.jpg" alt="..." />
+                        <div class="portfolio-box-caption">
+                            <div class="project-category text-white-50">Category</div>
+                            <div class="project-name">Tupad Project</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <a class="portfolio-box" href="gallery/Ayuda.jpg" title="Bigay Ayuda">
+                        <img class="img-fluid" src="gallery/Ayuda.jpg" alt="..." />
+                        <div class="portfolio-box-caption">
+                            <div class="project-name">Bigay Ayuda</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <a class="portfolio-box" href="gallery/medic.jpg" title="Medical Mission">
+                        <img class="img-fluid" src="gallery/medic.jpg" alt="..." />
+                        <div class="portfolio-box-caption">
+                            <div class="project-name">Medical Mission</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <a class="portfolio-box" href="gallery/Vaccine.jpg" title="Covid-Vaccine">
+                        <img class="img-fluid" src="gallery/Vaccine.jpg" alt="..." />
+                        <div class="portfolio-box-caption p-3">
+                            <div class="project-name">Covid-Vaccine</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+<footer class="bg-light py-5">
+    <div class="container px-4 px-lg-5"><div class="small text-center text-muted">&copy; 2022 - Calamba City,Laguna | Brgy Masili</div></div>
+</footer>
+</html>

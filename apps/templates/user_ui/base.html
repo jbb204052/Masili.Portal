@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        Masili Portal -
+        {% block title %}
+        {% endblock %}
+    </title>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Favicon icon -->
+    <link rel="icon" href="{% static 'media/brgy_logo/logo.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'assets/plugins/animation/css/animate.min.css' %}">
+    <!-- font css -->
+    <link rel="stylesheet" href="{% static 'assets/fonts/feather/css/feather.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/fonts/fontawesome/css/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" href="https://appsrv1-147a1.kxcdn.com/django-datta-able-enh/fonts/material.css">
+    <!-- vendor css -->
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" id="main-style-link">
+    <link rel="stylesheet" href="https://appsrv1-147a1.kxcdn.com/django-datta-able-enh/css/customizer.css">
+
+    <link rel="stylesheet" href="{% static 'assets/css/landing.css' %}">
+</head>
+
+<body>
+<!-- [ Nav ] start -->
+{% include 'user_ui/navbar.html' %}
+{% block body %}
+{% endblock body %}
+<!-- [ contact ] end -->
+<!-- [ Footer ] Start -->
+<div class="footer-top"></div>
+<footer class="bg-dark">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-lg-4">
+                <ul class="list-unstyled">
+                    <li>
+                        <a href="#"><img src="https://appsrv1-147a1.kxcdn.com/django-datta-able-enh/images/logo.png" alt="logo"></a>
+                    </li>
+                    <li class="mt-3 mb-3">
+                        <p>Easy - Flexible - Always updated - makes Datta Able a really powerful backend
+                            template.</p>
+                    </li>
+                    <li class="mt-3 mb-3 d-flex align-items-center">
+                        <a class="d-inline-block" href="http://Codedthemes.ticksy.com">Support by Ticksy</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <h5>Useful links</h5>
+                <ul class="list-unstyled">
+                    <li class="mt-2 mb-2"><a href="#" target="_blank">Rate Datta Able</a></li>
+                    <li class="mt-2 mb-2"><a href="#" target="_blank">Collection</a></li>
+                    <li class="mt-2 mb-2"><a href="#" target="_blank">Themeforest Profile</a> </li>
+                    <li class="mt-2 mb-2"><a href="#" target="_blank">Portfolio</a></li>
+                </ul>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <h5>Trending Items</h5>
+                <ul class="list-unstyled">
+                    <li class="mt-2 mb-2"><a href="#" target="_blank" class="d-flex align-items-center">Able pro
+                        v7.0<span class="badge bg-danger ms-2">Hot</span></a> </li>
+                    <li class="mt-2 mb-2"><a href="#" target="_blank" class="d-flex align-items-center">Dash
+                        Able<span class="badge bg-primary ms-2">New</span></a> </li>
+                    <li class="mt-2 mb-2"><a href="#" target="_blank">Flat Able</a></li>
+                    <li class="mt-2 mb-2"><a href="#" target="_blank">Mega Able</a> </li>
+                </ul>
+                <h5 class="mt-4">Follow Us</h5>
+                <ul class="list-inline list-unstyled sos-icon">
+                    <li><a href="#" target="_blank" class="btn-facebook"><i class="fab fa-facebook-f"></i></a></li>
+                    <li><a href="#" target="_blank" class="btn-twitter"><i class="fab fa-twitter"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container b-footer">
+        <p>
+            &copy; Codedthemes - coded by
+            <a href="https://appseed.us/product/datta-able-pro/" target="_blank">AppSeed</a>
+        </p>
+        <span class="bottom-tag">Datta Able PRO</span>
+    </div>
+</footer>
+
+{% block javascripts %}
+    <script src="https://appsrv1-147a1.kxcdn.com/django-datta-able-enh/js/plugins/popper.min.js"></script>
+    <script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="https://appsrv1-147a1.kxcdn.com/django-datta-able-enh/front/wow.min.js"></script>
+
+    <script>
+        let ost = 0;
+        document.addEventListener('scroll', function () {
+            let cOst = document.documentElement.scrollTop;
+            if (cOst == 0) {
+                document.querySelector(".navbar").classList.add("top-nav-collapse");
+            } else if (cOst > ost) {
+                document.querySelector(".navbar").classList.add("top-nav-collapse");
+                document.querySelector(".navbar").classList.remove("default");
+            } else {
+                document.querySelector(".navbar").classList.add("default");
+                document.querySelector(".navbar").classList.remove("top-nav-collapse");
+            }
+            ost = cOst;
+        });
+        // End [ Menu hide/show on scroll ]
+        var wow = new WOW({
+            animateClass: 'animate__animated', // animation css class (default is animated)
+        });
+        wow.init();
+        var scrollSpy = new bootstrap.ScrollSpy(document.body, {
+            target: '#navbar-example'
+        })
+    </script>
+{% endblock %}
+</body>
+
+</html>

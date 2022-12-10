@@ -1,6 +1,13 @@
+from datetime import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 import os
+
+from notifications.models import notify_handler, Notification
+from notifications.signals import notify
+
+from tinymce.models import HTMLField
 
 
 def file_path(path):
@@ -15,6 +22,29 @@ def photo_path(path):
     # return _func
 
 
+class NotificationsCTA(models.Model):
+    notification = models.OneToOneField(Notification, on_delete=models.CASCADE, blank=False, default=None)
+    cta_link = models.CharField(max_length=255, blank=True, default=None)
+    notification_type = models.CharField(max_length=255, blank=True, default=None, null=True)
+
+    def __str__(self):
+        return str(self.cta_link)
+
+
+def notify_handler(*args, **kwargs):
+    notifications = notify_handler(*args, **kwargs)
+    cta_link = kwargs.get('cta_link', None)
+    notification_type = kwargs.get('type', None)
+    for notification in notifications:
+        NotificationsCTA.objects.create(notification=notification, cta_link=cta_link,
+                                        notification_type=notification_type)
+    return notifications
+
+
+notify.disconnect(notify_handler, dispatch_uid='notifications.models.notification')
+notify.connect(notify_handler, dispatch_uid='notifications.models.notification')
+
+
 class Purok(models.Model):
     name = models.CharField(max_length=50)
 
@@ -24,36 +54,6 @@ class Purok(models.Model):
     def save(self, *args, **kwargs):
         self.name = self.name.upper()
         super(Purok, self).save(*args, **kwargs)
-
-
-class BrgyOfficial(models.Model):
-    fname = models.CharField(max_length=50)
-    mname = models.CharField(max_length=50, blank=True)
-    lname = models.CharField(max_length=50)
-    ext_name = models.CharField(max_length=5, blank=True)
-    position = models.CharField(max_length=50)
-    start_term = models.DateField()
-    end_term = models.DateField()
-    photo = models.ImageField(upload_to='brgy_officials/', blank=True, default='brgy_officials/default.jpg')
-    date_added = models.DateTimeField(auto_now_add=True)
-    stat = (
-        ['ACTIVE', 'ACTIVE'],
-        ['INACTIVE', 'INACTIVE'],
-    )
-    status = models.CharField(max_length=10, choices=stat, default='active')
-
-    unique_together = ('fname', 'mname', 'lname', 'ext_name', 'position', 'start_term', 'end_term')
-
-    def __str__(self):
-        return self.fname + ' ' + self.lname
-
-    def save(self, *args, **kwargs):
-        self.fname = self.fname.upper()
-        self.mname = self.mname.upper()
-        self.lname = self.lname.upper()
-        self.ext_name = self.ext_name.upper()
-        self.position = self.position.upper()
-        super(BrgyOfficial, self).save(*args, **kwargs)
 
 
 class Hotline(models.Model):
@@ -107,6 +107,7 @@ class Resident(models.Model):
     tel_no = models.CharField(max_length=15, blank=True)
     email = models.EmailField(max_length=50, blank=True)
     photo = models.ImageField(upload_to=photo_path('residents'), blank=True, default='residents/avatar.png')
+    resident_since = models.DateField(blank=False, default=None)
     date_added = models.DateTimeField(auto_now_add=True)
 
     stat_1 = (
@@ -114,8 +115,14 @@ class Resident(models.Model):
         ['MOVED OUT', 'MOVED OUT'],
     )
     status = models.CharField(max_length=10, choices=stat_1, default='RESIDING')
+    fullname = models.CharField(max_length=100, blank=True, null=True)
+    is_approved = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('fname', 'lname', 'mname', 'ext_name', 'bdate')
+
     def __str__(self):
-        return self.fname + ' ' + self.lname
+        return self.fname + ' ' + self.mname + ' ' + self.lname + ' ' + self.ext_name
 
     def save(self, *args, **kwargs):
         self.fname = self.fname.upper()
@@ -125,29 +132,35 @@ class Resident(models.Model):
         self.religion = self.religion.upper()
         self.occupation = self.occupation.upper()
         self.address_line1 = self.address_line1.upper()
-        if self.phone_no1[0:2] != '+63':
-            self.phone_no1 = '+63' + self.phone_no1
-        if self.phone_no2 != '':
-            if self.phone_no2[0:2] != '+63':
-                self.phone_no2 = '+63' + self.phone_no2
+        self.fullname = self.fname + ' ' + self.mname + ' ' + self.lname + ' ' + self.ext_name
+        # if self.phone_no1[0:2] != '+63':
+        #     self.phone_no1 = '+63' + self.phone_no1
+        # if self.phone_no2 != '':
+        #     if self.phone_no2[0:2] != '+63':
+        #         self.phone_no2 = '+63' + self.phone_no2
         super(Resident, self).save(*args, **kwargs)
 
+    @property
+    def get_fullname(self):
+        return self.fname + ' ' + self.mname + ' ' + self.lname + ' ' + self.ext_name
 
-class EmergencyContact(models.Model):
-    resident = models.ForeignKey(Resident, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
-    relationship = models.CharField(max_length=50)
-    phone_no = models.CharField(max_length=11, blank=False, default=None)
-    address = models.CharField(max_length=255, blank=False)
 
-    def __str__(self):
-        return self.name
+# class EmergencyContact(models.Model):
+#     resident = models.ForeignKey(Resident, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=50)
+#     relationship = models.CharField(max_length=50)
+#     phone_no = models.CharField(max_length=11, blank=False, default=None)
+#     address = models.CharField(max_length=255, blank=False)
+#
+#     def __str__(self):
+#         return self.name
+#
+#     def save(self, *args, **kwargs):
+#         self.name = self.name.upper()
+#         self.relationship = self.relationship.upper()
+#         self.address = self.address.upper()
+#         super(EmergencyContact, self).save(*args, **kwargs)
 
-    def save(self, *args, **kwargs):
-        self.name = self.name.upper()
-        self.relationship = self.relationship.upper()
-        self.address = self.address.upper()
-        super(EmergencyContact, self).save(*args, **kwargs)
 
 # RECOGNIZED ORGANIZATIONS
 class BrgyOrganization(models.Model):
@@ -178,15 +191,19 @@ class OrgMember(models.Model):
 
 # BLOTTERS
 class Blotter(models.Model):
-    blotter_no = models.AutoField(primary_key=True)
+    blotter_no = models.CharField(max_length=50, default='MASILI-BLOTTER-000000')
     incident_type = models.CharField(max_length=50, blank=False)
     datetimeReported = models.DateTimeField(auto_now_add=True)
-    dateOfIncident = models.DateField(blank=False)
+    dateOfIncident = models.DateTimeField(blank=False)
     placeOfIncident = models.CharField(max_length=50, blank=False)
     hearingDate = models.DateField(blank=False)
     hearingTime = models.TimeField(blank=False)
-    status = models.CharField(max_length=50, blank=False)
-    narrative = models.TextField(blank=False)
+    _stat = (
+        ['PENDING', 'PENDING'],
+        ['RESOLVED', 'RESOLVED'],
+    )
+    status = models.CharField(max_length=50, choices=_stat, default='PENDING')
+    narrative = HTMLField(blank=False)
     recordedBy = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
 
     def __str__(self):
@@ -201,10 +218,7 @@ class Blotter(models.Model):
 
 class Complainant(models.Model):
     blotter_no = models.ForeignKey(Blotter, on_delete=models.CASCADE)
-    fname = models.CharField(max_length=50, blank=False)
-    lname = models.CharField(max_length=50, blank=False)
-    mname = models.CharField(max_length=50, blank=True)
-    ext_name = models.CharField(max_length=5, blank=True)
+    full_name = models.CharField(max_length=50, blank=False)
     contact = models.CharField(max_length=11, blank=False)
     address = models.CharField(max_length=50, blank=False)
 
@@ -212,19 +226,14 @@ class Complainant(models.Model):
         return self.blotter_no
 
     def save(self, *args, **kwargs):
-        self.fname = self.fname.upper()
-        self.mname = self.mname.upper()
-        self.lname = self.lname.upper()
-        self.ext_name = self.ext_name.upper()
+        self.full_name = self.full_name.upper()
         self.address = self.address.upper()
         super(Complainant, self).save(*args, **kwargs)
 
 
 class Respondent(models.Model):
     blotter_no = models.ForeignKey(Blotter, on_delete=models.CASCADE)
-    fname = models.CharField(max_length=50, blank=False)
-    lname = models.CharField(max_length=50, blank=False)
-    mname = models.CharField(max_length=50, blank=True)
+    full_name = models.CharField(max_length=50, blank=False)
     ext_name = models.CharField(max_length=5, blank=True)
     contact = models.CharField(max_length=11, blank=False)
     address = models.CharField(max_length=50, blank=False)
@@ -233,34 +242,31 @@ class Respondent(models.Model):
         return self.blotter_no
 
     def save(self, *args, **kwargs):
-        self.fname = self.fname.upper()
-        self.mname = self.mname.upper()
-        self.lname = self.lname.upper()
-        self.ext_name = self.ext_name.upper()
+        self.full_name = self.full_name.upper()
         self.address = self.address.upper()
         super(Respondent, self).save(*args, **kwargs)
 
 
-class Witness(models.Model):
+class Hearing(models.Model):
     blotter_no = models.ForeignKey(Blotter, on_delete=models.CASCADE)
-    fname = models.CharField(max_length=50, blank=False)
-    lname = models.CharField(max_length=50, blank=False)
-    mname = models.CharField(max_length=50, blank=True)
-    ext_name = models.CharField(max_length=5, blank=True)
-    contact = models.CharField(max_length=11, blank=False)
-    address = models.CharField(max_length=50, blank=False)
+    date = models.DateField(blank=False)
+    time = models.TimeField(blank=False)
+    _stat = (
+        ['PENDING', 'PENDING'],
+        ['RESOLVED', 'RESOLVED'],
+    )
+    status = models.CharField(max_length=50, choices=_stat, default='PENDING')
+    remarks = HTMLField(max_length=50, blank=True)
+    files = models.FileField(upload_to='blotter_files/', blank=True)
+
 
     def __str__(self):
         return self.blotter_no
 
     def save(self, *args, **kwargs):
-        self.fname = self.fname.upper()
-        self.mname = self.mname.upper()
-        self.lname = self.lname.upper()
-        self.ext_name = self.ext_name.upper()
-        self.address = self.address.upper()
-        super(Witness, self).save(*args, **kwargs)
-
+        self.status = self.status.upper()
+        self.remarks = self.remarks.upper()
+        super(Hearing, self).save(*args, **kwargs)
 
 # ANNOUNCEMENTS
 class Announcement(models.Model):
@@ -269,7 +275,7 @@ class Announcement(models.Model):
     date_posted = models.DateTimeField(auto_now_add=True)
     posted_by = models.CharField(max_length=50, blank=False)
     stat = (
-        ['SENT', 'SENT'],
+        ['APPROVED', 'APPROVED'],
         ['PENDING', 'PENDING'],
     )
     status = models.CharField(max_length=50, choices=stat, default='PENDING')
@@ -283,25 +289,23 @@ class Announcement(models.Model):
         super(Announcement, self).save(*args, **kwargs)
 
 
-
 class Gallery(models.Model):
     caption = models.CharField(max_length=50, blank=True)
     photo = models.ImageField(upload_to='gallery/', blank=False)
+    date_uploaded = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return str(self.id)
-
 
     class Meta:
         verbose_name = 'Gallery'
         verbose_name_plural = 'Gallery'
 
 
-
 class Ordinance(models.Model):
     ordinance_no = models.CharField(max_length=50, blank=False)
     title = models.CharField(max_length=255, blank=False)
-    provisions = models.TextField(blank=False)
+    provisions = HTMLField(blank=False)
     presiding_officer = models.CharField(max_length=50, blank=False)
     date_posted = models.DateTimeField(auto_now_add=True)
     posted_by = models.CharField(max_length=50, blank=False)
@@ -312,6 +316,9 @@ class Ordinance(models.Model):
     )
     status = models.CharField(max_length=50, choices=stat, default='ACTIVE')
     attested_by = models.TextField(blank=True)
+    signed_ordinance = models.FileField(upload_to=file_path('ordinances/'), blank=True, default=None, null=True)
+    active_chairman = models.CharField(max_length=50, blank=True, default=None, null=True)
+
     def __str__(self):
         return self.ordinance_no
 
@@ -319,3 +326,114 @@ class Ordinance(models.Model):
         self.ordinance_no = self.ordinance_no.upper()
         self.title = self.title.upper()
         super(Ordinance, self).save(*args, **kwargs)
+
+
+# SESSIONS
+class Session(models.Model):
+    session_no = models.CharField(max_length=50, blank=False)
+    session_date = models.DateField(blank=False)
+    session_start = models.TimeField(blank=False)
+    session_end = models.TimeField(blank=False)
+    attendees = models.TextField(blank=False)
+    other_attendees = models.TextField(blank=True)
+    agenda = models.TextField(blank=False)
+    minutes_of_meeting = HTMLField(blank=False)
+
+    def __str__(self):
+        return self.session_no
+
+
+class CertificateRequest(models.Model):
+    transaction_number = models.CharField(max_length=50)
+    certs = (
+        ['INDIGENCY', 'INDIGENCY'],
+        ['LIVE IN', 'LIVE IN'],
+    )
+    certificate_type = models.CharField(max_length=50, choices=certs, default='INDIGENCY')
+    full_name = models.ForeignKey(Resident, on_delete=models.CASCADE)
+    purpose = models.CharField(max_length=50)
+    request_date = models.DateTimeField(auto_now_add=True)
+    date_printed = models.DateField(blank=True, null=True)
+    date_issued = models.DateField(blank=True, null=True)
+    requestor = models.CharField(max_length=50)
+    stat = (
+        ['PENDING', 'PENDING'],
+        ['PROCESSED', 'PROCESSED'],
+        ['ISSUED', 'ISSUED'],
+    )
+    status = models.CharField(max_length=50, choices=stat, default='PENDING')
+    signed_certificates = models.FileField(upload_to=file_path('certificates/'), blank=True, default=None, null=True)
+    method = (
+        ['ONLINE', 'ONLINE'],
+        ['WALK IN', 'WALK IN']
+    )
+    request_method = models.CharField(max_length=50, choices=method, default='WALK IN')
+
+    def __str__(self):
+        return self.transaction_number
+
+
+class Certificate(models.Model):
+    transaction_number = models.CharField(max_length=50)
+    certs = (
+        ['INDIGENCY', 'INDIGENCY'],
+        ['LIVE IN', 'LIVE IN'],
+    )
+    certificate_type = models.CharField(max_length=50, choices=certs, default='INDIGENCY')
+    request_date = models.DateTimeField(auto_now_add=True)
+    date_printed = models.DateField(blank=True, null=True)
+    date_issued = models.DateField(blank=True, null=True)
+    stat = (
+        ['PENDING', 'PENDING'],
+        ['PROCESSED', 'PROCESSED'],
+        ['ISSUED', 'ISSUED'],
+    )
+    status = models.CharField(max_length=50, choices=stat, default='PENDING')
+    attachment = models.FileField(upload_to=file_path('certificates/'), blank=True, default=None, null=True)
+
+    def __str__(self):
+        return self.transaction_number
+
+
+class certificate_of_indigency(models.Model):
+    transaction_number = models.ForeignKey(CertificateRequest, on_delete=models.CASCADE)
+    full_name = models.ForeignKey(Resident, on_delete=models.CASCADE)
+    purpose = models.CharField(max_length=50, null=True)
+    requestor = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.transaction_number.transaction_number
+
+
+class certfiticate_of_live_in(models.Model):
+    transaction_number = models.ForeignKey(CertificateRequest, on_delete=models.CASCADE)
+    name_1 = models.ForeignKey(Resident, on_delete=models.CASCADE, related_name='name_1')
+    name_2 = models.ForeignKey(Resident, on_delete=models.CASCADE, related_name='name_2')
+    relationship = models.CharField(max_length=50, null=True)
+    live_in_since = models.DateField(null=False)
+
+    def __str__(self):
+        return self.transaction_number.transaction_number
+
+
+class BarangayOfficial(models.Model):
+    fullname = models.ForeignKey(Resident, on_delete=models.CASCADE)
+    position = models.CharField(max_length=50)
+    date_appointed = models.DateField(blank=False)
+    end_term = models.DateField(blank=True, null=True)
+    stat = (
+        ['ACTIVE', 'ACTIVE'],
+        ['INACTIVE', 'INACTIVE'],
+    )
+    status = models.CharField(max_length=50, choices=stat, default='ACTIVE')
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('fullname', 'position', 'date_appointed', 'end_term', 'status')
+
+    def __str__(self):
+        return self.fullname.fullname
+
+    def save(self, *args, **kwargs):
+        self.position = self.position.upper()
+        super(BarangayOfficial, self).save(*args, **kwargs)

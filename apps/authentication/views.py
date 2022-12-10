@@ -1,5 +1,7 @@
 from time import sleep
 
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -9,7 +11,9 @@ from django.template import loader
 from . import helper
 from .forms import *
 from .models import Profile
+from apps.home import models as home_models
 
+from notifications.signals import notify
 
 def login_view(request):
     form = LoginForm(request.POST or None)
@@ -19,14 +23,22 @@ def login_view(request):
     if request.method == "POST":
 
         if form.is_valid():
+
             email = form.cleaned_data.get("email")
             password = form.cleaned_data.get("password")
-            user = authenticate(request, username=email, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect("home")
+            if User.objects.filter(email=email).exists():
+                user = authenticate(request, username=email, password=password)
+                if user is not None:
+                    get_user = User.objects.get(email=email)
+                    if get_user.is_active:
+                        login(request, user)
+                        return redirect("home")
+                    else:
+                        msg = 'Your account has not been approved yet. We will send you an email notification once approved.'
+                else:
+                    msg = 'Invalid credentials.'
             else:
-                msg = 'Invalid credentials'
+                msg = 'Email address is not associated with any account.'
         else:
             msg = 'Error validating the form'
 
@@ -47,21 +59,27 @@ def register_user(request):
             if User.objects.filter(email=email).exists():
                 msg = 'Email address is already registered.'
             else:
-                form.save()
+                bdate = request.POST['bdate']
+                __user = form.save(commit=False)
+                __user.username = email
+                __user.is_active = False
+                __user.save()
                 user = authenticate(email=email, password=raw_password)
-
                 _user = User.objects.get(email=email)
 
-                profile = Profile(user=_user)
-                profile.is_resident = True
-                profile.save()
+                profile = Profile.objects.create(user=_user, birthdate=bdate)
 
-                request.session['message'] = 'Registration successful. Redirecting to login page...'
+                success = True
+                _chairman = User.objects.get(profile__account_type='CHAIRMAN')
+                notify.send(_user, recipient=_chairman, verb='has requested to join the Masili Portal.', cta_link='/accounts_management/pending_approval/approve/{}'.format(_user.id))
+
+
+                request.session['message'] = 'Your account has been queued for approval. You will receive an email ' \
+                                             'once your account has been approved. '
                 request.session['flag'] = 'registration_success'
-                return redirect("/redirecting/")
+                return render(request, "accounts/redirecting_template.html", {'message': request.session['message']})
                 sleep(3)
                 return redirect("/login/")
-                success = True
         else:
             msg = 'Form is not valid'
     else:
@@ -144,36 +162,56 @@ def redirecting(request):
     return render(request, "accounts/redirecting_template.html", context)
 
 
-
 def accounts(request):
-    accounts = User.objects.all()
-    context = {'segment': {'accounts'}, 'accounts': accounts}
+    accounts = User.objects.filter(is_active=True)
+    context = {'segment': {'accounts', 'account_type'}, 'accounts': accounts}
     html_template = loader.get_template('home/account_mgmt/accounts_list.html')
     return HttpResponse(html_template.render(context, request))
 
 
 def account_update(request, id):
     account = User.objects.get(id=id)
-    if request.method == 'POST':
-        _type = request.POST['account_type']
 
-        profile = Profile.objects.get(user=account)
-        if _type == 'ADMIN':
-            profile.is_resident = False
-            profile.is_admin = True
-            profile.is_superadmin = False
-        elif _type == 'SUPERADMIN':
-            profile.is_resident = False
-            profile.is_admin = False
-            profile.is_superadmin = True
-        else:
-            profile.is_resident = True
-            profile.is_admin = False
-            profile.is_superadmin = False
-        profile.save()
+    if request.method == 'POST':
+        form = AccountForm(request.POST, instance=account)
+        if form.is_valid():
+            form.save(commit=False)
+            _account_type = form.cleaned_data.get('account_type')
+            profile = Profile.objects.get(user=account)
+            profile.account_type = _account_type
+            profile.save()
+            form.save()
+            messages.success(request, 'Account updated successfully.')
+            return redirect('accounts')
+    form = AccountForm(instance=account)
+    context = {'segment': {'accounts', 'update', 'account_type'}, 'account': account, 'form': form}
+    html_template = loader.get_template('home/account_mgmt/account_data.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def approve_credentials(request, id):
+    account = User.objects.get(id=id)
+    try:
+        resident = home_models.Resident.objects.get(fname__iexact=account.first_name, lname__iexact=account.last_name)
+    except home_models.Resident.DoesNotExist:
+        resident = None
+    if request.method == 'POST':
+        account.is_active = True
+        account.save()
+        helper.send_email(account.email, 'Approved', 'Your Masili Portal account has been approved. You can now '
+                                                     'logged in and access the services module on your portal',
+                          account.first_name, "")
+        messages.success(request, 'Account approved successfully.')
         return redirect('accounts')
 
-
-    context = {'segment': {'accounts', 'update'}, 'account': account}
+    context = {'segment': {'accounts', 'acc_forApproval'}, 'account': account, 'resident': resident}
+    print(context)
     html_template = loader.get_template('home/account_mgmt/account_data.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def account_forApproval(request):
+    accounts = User.objects.filter(is_active=False)
+    context = {'segment': {'accounts', 'acc_forApproval'}, 'accounts': accounts}
+    html_template = loader.get_template('home/account_mgmt/accounts_list.html')
     return HttpResponse(html_template.render(context, request))

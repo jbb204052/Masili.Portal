@@ -1,0 +1,107 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Blotter {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <style>
+        .border-start {
+            border-left: 1px solid #dee2e6!important;
+        }
+    </style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">
+                                            Blotter Record
+                                        </h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'ordinances' %}">List of Blotters</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">
+                                            {% if 'add' in segment %}
+                                                Add
+                                            {% else %}
+                                                Update
+                                            {% endif %}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <form class="row" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Blotter No: <u><b class="f-18">{{ blotter_no }}</b></u></h5>
+                                        </div>
+                                        <div class="card-block">
+                                            {% for message in messages %}
+                                                {% if 'success' in message.tags %}
+                                                    <p class="alert alert-success" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+                                                {% else %}
+                                                    <p class="alert alert-warning" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <div class="row">
+                                                <div class="col-lg-3">
+                                                    <h5>Incident Info</h5>
+                                                    {{ form.as_p }}
+                                                </div>
+                                                <div class="col-lg-3 border-start">
+                                                    <h5>Complainant Info</h5>
+                                                    {{ complainant_form.as_p }}
+                                                </div>
+                                                <div class="col-lg-3 border-start">
+                                                    <h5>Respondent Info</h5>
+                                                    {{ respondent_form.as_p }}
+                                                </div>
+                                                <div class="col-lg-3 border-start">
+                                                    <h5>Witness Info</h5>
+                                                    {{ witness_form.as_p }}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 mb-2 mt-2">
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-primary float-right">
+                                                        <i class="fa fa-save"></i>
+                                                        {% if 'add' in segment %}
+                                                            Save
+                                                        {% elif 'update' in segment %}
+                                                            Update
+                                                        {% endif %}
+                                                    </button>
+                                                    <a href='{% url 'blotters' %}' class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+{% endblock javascripts %}

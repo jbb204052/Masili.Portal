@@ -4,7 +4,21 @@
 {% block title %} Ordinance {% endblock %}
 
 <!-- Specific CSS goes HERE -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://use.typekit.net/oew1lfj.css">
+    <link href='https://fonts.googleapis.com/css?family=EB Garamond' rel='stylesheet'>
+
+    <style>
+        #PrintMe {
+            font-family: 'EB Garamond';
+            color: black;
+            line-height: 1.5;
+            margin: 0 auto;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+    </style>
+{% endblock stylesheets %}
 
 {% block content %}
 
@@ -43,39 +57,39 @@
                                 {% csrf_token %}
                                 <div class="col-lg-12">
                                     <div class="card">
-                                        <div class="card-header">
+                                        <div class="card-header mb-lg-5">
                                             <h5>Ordinance No: <b class="f-18">{{ ordinance.ordinance_no }}</b></h5>
 
                                             <button type="button" class="btn btn-primary float-right" onclick="printMe('PrintMe')"><i class="fas fa-print"></i> Print</button>
                                         </div>
                                         <div class="card-block" id="PrintMe">
-                                            <p style="text-align: center; font-size: 15px;"><img style="float: left;" title="Logo" src="{% static 'media/brgy_logo/calamba.png' %}" alt="Calamba Seal" width="100" height="100"></p>
-                                            <h2 style="text-align: center;"><img style="float: right;" src="{% static 'media/brgy_logo/logo.png' %}" alt="" width="100" height="100"></h2>
+                                            <img style="float: left;" title="Logo" src="{% static 'media/brgy_logo/calamba.png' %}" alt="Calamba Seal" width="100" height="100">
+                                            <img style="float: right;" src="{% static 'media/brgy_logo/logo.png' %}" alt="" width="100" height="100">
                                             <div class="d-flex justify-content-center" style="text-align: center">
-                                                <p>Republic of the Philippines<br>
+                                                <p style="font-weight: bold; font-size: 14px">Republic of the Philippines<br>
                                                     Province of Laguna<br>
                                                     City of Calamba<br>
-                                                    Region IV-A<br>
-                                                    -o0o-<br>
-                                                    Barangay Masili<br>
-                                                    <a href="#">barangaymasili@gmail.com</a>
+                                                    <span style="font-size: 18px">Barangay Masili</span><br>
+                                                    <span style="color: red"> 049-502-9459</span>
                                                 </p>
                                             </div>
                                             <div class="d-flex justify-content-center mt-3" style="text-align: center">
-                                                <br>
-                                                <p><strong style="font-size: 24px">OFFICE OF THE SANGGUNIANG BARANGAY</strong><br><br>
-                                                    <strong style="font-size: 16px">Ordinance Number {{ ordinance.ordinance_no }} Series of {{ year }}</strong><br><br>
-                                                    <strong style="font-size: 16px">"{{ ordinance.title }}"</strong><br><br>
-                                                </p>
+                                                <b>
+                                                    <h5><b>TANGGAPAN NG PUNONG BARANGAY</b></h5>
+                                                    <br>
+                                                    <h5><b>Ordinance Number {{ ordinance.ordinance_no }} Series of {{ year }}</b></h5>
+                                                    <br>
+                                                    <h4><b>"{{ ordinance.title }}"</b></h4>
+                                                </b>
                                             </div>
-                                            <div class="d-flex justify-content-start mt-3">
-                                                <p style="font-size: 14px">{{ ordinance.provisions }}</p>
+                                            <div class="mt-3">
+                                                <p style="font-size: 14px">{{ ordinance.provisions|safe }}</p>
                                                 </p>
                                             </div>
                                             <br><br><br>
                                             <div class="d-flex justify-content-end" style="width: 400px; float: right; text-align: justify">
                                                 <p class="font-size:12px"><strong>I HEREBY CERTIFY THAT THE FOREGOING ORDINANCE WAS APPROVED BY THE SANGGUNIANG BARANGAY OF MASILI.</strong><br><br><br>
-                                                    <span style="float: right; font-weight: bold">{{ ordinance.presiding_officer }}<br>
+                                                    <span style="float: right;">{{ ordinance.presiding_officer }}<br>
                                                     Presiding Officer</span> <br>
                                                 </p>
                                             </div>

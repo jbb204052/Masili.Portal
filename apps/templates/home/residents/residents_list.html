@@ -45,7 +45,7 @@
                     <div class="main-body">
                         <div class="page-wrapper">
                             <div class="row">
-                                <div class="col-xl-4">
+                                <div class="col-xl-3">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5>Statistics</h5>
@@ -62,11 +62,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-8">
+                                <div class="col-xl-9">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5>List</h5>
-                                            <a href="{% url 'resident_add' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i>Add New Resident </a>
+                                            {% if request.user.profile.account_type == 'CHAIRMAN' or request.user.profile.account_type == 'SECRETARY' %}
+                                                <a href="{% url 'resident_add' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i>Add New Resident </a>
+                                            {% endif %}
                                         </div>
                                         <div class="card-block table-border-style">
                                             {% for message in messages %}

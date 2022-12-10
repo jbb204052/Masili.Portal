@@ -32,7 +32,7 @@
                                         <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
                                         <li class="breadcrumb-item"><a href="{% url 'hotlines' %}">List of Officials</a></li>
                                         <li class="breadcrumb-item"><a href="javascript:">
-                                            View - {{ resident_id }}
+                                            View - {{ resident.res_id }}
                                         </a></li>
                                     </ul>
                                 </div>
@@ -55,30 +55,59 @@
                                                 </div>
                                                 <div class="col-sm-9 border-start">
                                                     <h3 class="mb-5">{{ resident.fname }}&nbsp;{{ resident.mname }}&nbsp;{{ resident.lname }}&nbsp;{{ resident.ext_name }}</h3>
-                                                    <p class="mb-1">Gender:&nbsp;{{ resident.gender }}</p>
-                                                    <p class="mb-1">Birthdate:&nbsp;{{ resident.bdate}}</p>
-                                                    <p class="mb-1">Religion:&nbsp;{{ resident.religion }}</p>
-                                                    <p class="mb-1">Civil Status:&nbsp;{{ resident.civil_status }}</p>
-                                                    <p class="mb-1">Occupation:&nbsp;{{ resident.civil_status }}</p>
-                                                    <p class="mb-1">Contact:&nbsp;{{ resident.phone_no1 }}
-                                                        {% if resident.phone_no2 != '' %}
-                                                        , {{ resident.phone_no2 }}
-                                                        {% endif %}
-                                                    </p>
-                                                    <p class="mb-1">Email:&nbsp;{{ resident.email }}</p>
-                                                    <p class="mb-1">Address:&nbsp;{{ resident.address_line1 }},&nbsp; {{ resident.purok }}</p>
-                                                    <p class="mb-1">Residence Status:&nbsp;{{ resident.status }}</p>
+                                                    <table class="table table-borderless w-75">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td>Gender</td>
+                                                            <td>:</td>
+                                                            <td>{{ resident.gender }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Birthdate</td>
+                                                            <td>:</td>
+                                                            <td>{{ resident.bdate }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Religion</td>
+                                                            <td>:</td>
+                                                            <td>{{ resident.religion }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Civil Status</td>
+                                                            <td>:</td>
+                                                            <td>{{ resident.civil_status }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Occupation</td>
+                                                            <td>:</td>
+                                                            <td>{{ resident.occupation }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Address</td>
+                                                            <td>:</td>
+                                                            <td>{{ resident.purok }}, {{ resident.address_line1 }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Contact</td>
+                                                            <td>:</td>
+                                                            <td>{{ resident.phone_no1 }}
+                                                                {% if resident.phone_no2 != '' %}
+                                                                    , {{ resident.phone_no2 }}
+                                                                {% endif %}<br>{{ resident.email }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Residence Status</td>
+                                                            <td>:</td>
+                                                            <td>{{ resident.status }}</td>
+                                                        </tr>
 
-{#                                                    <h5 class="mt-4">Emergency Contact</h5>#}
-{#                                                    <p class="mb-1"> {{ emergency.name }}</p>#}
-{#                                                    <p class="mb-1"> {{ emergency.relationship }}</p>#}
-{#                                                    <p class="mb-1"> {{ emergency.phone_no }}</p>#}
-{#                                                    <p class="mb-1"> {{ emergency.address }}</p>#}
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 mb-2 mt-2">
                                                 <div class="form-group">
-                                                    <a href="#" class="btn btn-primary float-right">
+                                                    <a href="{% url 'resident_edit' resident.id %}" class="btn btn-primary float-right">
                                                         <i class="fa fa-save"></i> Update
                                                     </a>
                                                     <a href="{% url 'residents' %}" class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>

@@ -1,0 +1,139 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Certificates {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">
+                                            Certificate
+                                        </h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="#">Issued Certificates</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">{{ type_of_certificate }}</a>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <form class="row" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="col-xl-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>{{ type_of_certificate }}</h5>
+                                            <h6 class="float-right">Transaction No: {{ transaction_no }}</h6>
+                                        </div>
+                                        <div class="card-block">
+                                            {% for message in messages %}
+                                                {% if 'success' in message.tags %}
+                                                    <p class="alert alert-success" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+                                                {% else %}
+                                                    <p class="alert alert-warning" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <div class="row">
+
+                                                <div class="col-sm-12 mb-3">
+                                                    <div class="form-group">
+                                                        <label>Fullname</label>
+                                                        <input class="form-control" type="text" list="cert_fullname_list" id="fullname" name="fullname" placeholder="Fullname" required>
+                                                        <datalist id="cert_fullname_list">
+                                                            {% for resident in residents %}
+                                                                <option value="{{ resident }}"></option>
+                                                            {% endfor %}
+                                                        </datalist>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-12 mb-4">
+                                                    <div class="form-group mb-1">
+                                                        <label>Requestor</label>
+                                                        {{ form.requestor }}
+                                                        {{ form.requestor.errors }}
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input input-primary" type="checkbox" id="customCheckc1">
+                                                        <label class="form-check-label" for="customCheckc1">Same as above</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-12 mb-3">
+                                                    <div class="form-group">
+                                                        <label>Purpose</label>
+                                                        {{ form.purpose }}
+                                                        {{ form.purpose.errors }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-12 mb-3">
+                                                    <div class="form-group">
+                                                        <label>Status</label>
+                                                        {{ form.status }}
+                                                        {{ form.status.errors }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-12 mb-2 mt-2">
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-primary float-right" id="btn_button">
+                                                            <i id="spinner" class="fas fa-save"></i>Create
+                                                        </button>
+                                                        {#                                                        <button type="submit" hidden id="btn_submit"></button>#}
+
+                                                        <a href='{% url 'certificates' %}' class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function(){
+            $('#customCheckc1').click(function(){
+                if($(this).is(':checked')){
+                    $('#requestor').val($('#fullname').val());
+                }else{
+                    $('#requestor').val('');
+                }
+            });
+        });
+
+        {#    onclick btn_button #}
+        {#    $('#btn_button').click(function(){#}
+        {#        $('#spinner').addClass('fa-spinner fa-spin');#}
+        {#        $('#btn_button').attr('disabled', true);#}
+        {#        $('#btn_button').attr('type', 'submit');#}
+        {#        window.setTimeout(3000)#}
+        {#    });#}
+
+    </script>
+{% endblock javascripts %}

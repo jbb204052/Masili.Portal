@@ -15,14 +15,15 @@ class Profile(models.Model):
     types = (
         ['RESIDENT', 'RESIDENT'],
         ['ADMIN', 'ADMIN'],
-        ['SUPERADMIN', 'SUPERADMIN'],
+        ['OFFICIAL', 'OFFICIAL'],
+        ['CHAIRMAN', 'CHAIRMAN'],
+        ['SECRETARY', 'SECRETARY'],
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    is_resident = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
-    is_superadmin = models.BooleanField(default=False)
+    account_type = models.CharField(max_length=20, choices=types, default='RESIDENT')
     photo = models.ImageField(upload_to=photo_path('profile_pics'), blank=True, default='profile_pics/default.jpg', storage=OverwriteStorage())
-    added = models.DateTimeField(auto_now_add=True)
+    birthdate = models.DateField(null=False)
+
     def __str__(self):
         return self.user.email
 

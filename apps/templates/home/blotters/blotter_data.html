@@ -1,0 +1,144 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Blotter {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <style>
+        .border-start {
+            border-left: 1px solid #dee2e6!important;
+        }
+    </style>
+    {{ form.media }}
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">
+                                            Blotter Record
+                                        </h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'ordinances' %}">List of Blotters</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">
+                                            {% if 'add' in segment %}
+                                                Add
+                                            {% else %}
+                                                Update
+                                            {% endif %}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-body">
+                        <div class="page-wrapper">
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Blotter No: <b>{{ blotter_no }}</b></h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <form method="post" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <h5>A. Incident Information</h5>
+                                                <div class="form-group row">
+                                                    <div class="col-lg-4 mb-3">
+                                                        <label class="form-label">Type of Incident</label>
+                                                        {{ form.incident_type }}
+                                                    </div>
+                                                    <div class="col-lg-4 mb-3">
+                                                        <label class="form-label">Date and Time of Incident</label>
+                                                        {{  form.dateOfIncident }}
+                                                    </div>
+                                                    <div class="col-lg-4 mb-3">
+                                                        <label class="form-label">Place of Incident</label>
+                                                        {{  form.placeOfIncident }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-lg-12 mb-5">
+                                                    <label>Narrative</label>
+                                                    {{ form.narrative }}
+                                                </div>
+                                                <hr>
+                                                <h5>B. Complainant Information</h5>
+                                                <div class="form-group row">
+                                                    <div class="col-lg-4 mb-3">
+                                                        <label class="form-label">Fullname</label>
+                                                        {{ complainant_form.full_name }}
+                                                    </div>
+                                                    <div class="col-lg-4 mb-3">
+                                                        <label class="form-label">Contact</label>
+                                                        {{ complainant_form.contact }}
+                                                    </div>
+                                                    <div class="col-lg-4 mb-3">
+                                                        <label class="form-label">Address</label>
+                                                        {{ complainant_form.address }}
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <h5>C. Respondent Information</h5>
+                                                <div class="form-group row">
+                                                    <div class="col-lg-4 mb-3">
+                                                        <label class="form-label">Fullname</label>
+                                                        {{ respondent_form.full_name }}
+                                                    </div>
+                                                    <div class="col-lg-4 mb-3">
+                                                        <label class="form-label">Contact</label>
+                                                        {{ respondent_form.contact }}
+                                                    </div>
+                                                    <div class="col-lg-4 mb-3">
+                                                        <label class="form-label">Address</label>
+                                                        {{ respondent_form.address }}
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <h5>D. Schedule a Hearing</h5>
+                                                <div class="form-group row">
+                                                    <div class="col-lg-4 mb-3">
+                                                        <label class="form-label">Hearing Date</label>
+                                                        {{ form.hearingDate }}
+                                                    </div>
+                                                    <div class="col-lg-4 mb-3">
+                                                        <label class="form-label">Hearing Time</label>
+                                                        {{ form.hearingTime }}
+                                                    </div>
+                                                    <div class="col-lg-4 mb-3">
+                                                        <label class="form-label">Status</label>
+                                                        {{ form.status }}
+                                                    </div>
+                                                </div>
+
+                                                <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Save</button>
+                                                <a href="{% url 'blotters' %}" class="btn btn-light float-right"><i class="fas fa-arrow-left"></i> Back</a>
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+{% endblock javascripts %}

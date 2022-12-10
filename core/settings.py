@@ -35,8 +35,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'livereload',
     'django.contrib.staticfiles',
     'apps.authentication',
+    'tinymce',
     'apps.home',  # Enable the inner home (home)
     'allauth',  # OAuth new
     'allauth.account',  # OAuth new
@@ -44,7 +46,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',  # OAuth new
     'allauth.socialaccount.providers.facebook',  # OAuth new
     "sslserver",
-    'axes'
+    'axes',
+    'notifications',
+    # 'calendarium',
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -62,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'axes.middleware.AxesMiddleware',
+    'livereload.middleware.LiveReloadScript',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -197,3 +202,5 @@ AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP = True
 AXES_LOCKOUT_TEMPLATE = os.path.join(TEMPLATE_DIR, "accounts/locked_template.html")
 
 USE_TZ = True
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
