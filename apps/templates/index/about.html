@@ -127,7 +127,7 @@
                 <div class="row g-5">
                     <div class="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
                         <div class="position-relative rounded-top">
-                            <img class="img-fluid rounded-top w-100" src="{% if chairman.photo %} {{ chairman.photo.url }} {% else %} {% static 'media/brgy_officials/default.jpg' %} {% endif %}" alt="">
+                            <img class="img-fluid rounded-top w-100" src="{{ chairman.fullname.photo.url }}" alt="">
                             <div class="position-absolute bottom-0 end-0 d-flex flex-column bg-white p-1" style="margin-right: -25px;">
                             </div>
                         </div>
@@ -137,26 +137,73 @@
                         </div>
                     </div>
                     <div class="col-lg-8 wow slideInUp" data-wow-delay="0.6s">
-                        <div class="bg-primary text-center rounded-bottom p-4">
-                            <h3 class="text-white">Barangay Councilors</h3>
-                        </div>
+                        {#                        <div class="bg-primary text-center rounded-bottom p-4">#}
+                        {#                            <h3 class="text-white">Barangay Councilors</h3>#}
+                        {#                        </div>#}
                         <div class="position-relative">
-                            <table class="table table-borderless">
-                                <tbody>
+                            <div class="row">
                                 {% for councilor in councilors %}
-                                    <tr>
-                                        <td><img class="img-fluid rounded-circle w-25" src="{{ councilor.photo.url }}"></td>
-                                        <td>{{ councilor.fname }} {{ councilor.lname }}</td>
-                                    </tr>
+                                    <div class="col-sm-4 wow slideInUp" data-wow-delay="0.3s">
+                                        <div class="position-relative rounded-top" style="text-align: center">
+                                            <img style="height: 200px" class="img-fluid rounded-top" src="{{ councilor.fullname.photo.url }}" alt="">
+                                            <div class="position-absolute bottom-0 end-0 d-flex flex-column bg-white p-1" style="margin-right: -25px;">
+                                            </div>
+                                        </div>
+                                        <div class="bg-primary text-center rounded-bottom p-4">
+                                            <h5 class="text-white">{{ councilor.fullname.fname.title }} {{ councilor.fullname.lname.title }}</h5>
+                                            <p class="text-white m-0">{{ councilor.position.title }}</p>
+                                        </div>
+                                    </div>
                                 {% endfor %}
-                                </tbody>
-                            </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="container">
+                <div class="text-center mx-auto mb-5" style="max-width: 600px;">
+                    <h1 class="display-5 mb-0">SK Officials</h1>
+                </div>
+                <div class="row g-5">
+                    <div class="col-lg-8 wow slideInUp" data-wow-delay="0.6s">
+                        {#                        <div class="bg-primary text-center rounded-bottom p-4">#}
+                        {#                            <h3 class="text-white">Barangay Councilors</h3>#}
+                        {#                        </div>#}
+                        <div class="position-relative">
+                            <div class="row">
+                                {% for councilor in skcouncilors %}
+                                    <div class="col-sm-4 wow slideInUp" data-wow-delay="0.3s">
+                                        <div class="position-relative rounded-top" style="text-align: center">
+                                            <img style="height: 200px" class="img-fluid rounded-top" src="{{ councilor.fullname.photo.url }}" alt="">
+                                            <div class="position-absolute bottom-0 end-0 d-flex flex-column bg-white p-1" style="margin-right: -25px;">
+                                            </div>
+                                        </div>
+                                        <div class="bg-primary text-center rounded-bottom p-4">
+                                            <h5 class="text-white">{{ councilor.fullname.fname.title }} {{ councilor.fullname.lname.title }}</h5>
+                                            <p class="text-white m-0">{{ councilor.position.title }}</p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
+                        <div class="position-relative rounded-top">
+                            <img class="img-fluid rounded-top w-100" src="{{ chairman.fullname.photo.url }}" alt="">
+                            <div class="position-absolute bottom-0 end-0 d-flex flex-column bg-white p-1" style="margin-right: -25px;">
+                            </div>
+                        </div>
+                        <div class="bg-primary text-center rounded-bottom p-4">
+                            <h3 class="text-white">{{ skchairman }}</h3>
+                            <p class="text-white m-0">SK Chairman</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- About End -->
 

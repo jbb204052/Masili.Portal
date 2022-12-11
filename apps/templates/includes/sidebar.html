@@ -22,7 +22,6 @@
                             class="pcoded-mtext">Dashboard</span></a>
                 </li>
 
-
                 {% if request.user.profile.account_type == "CHAIRMAN" %}
                     <li class="nav-item pcoded-hasmenu {% if 'accounts' in segment %} active pcoded-trigger {% endif %}">
                         <a href="#" class="nav-link"><span class="pcoded-micon"><i class="fas fa-lock"></i></span><span
@@ -59,11 +58,22 @@
                             class="pcoded-mtext">Ordinances</span></a>
                 </li>
 
-                <li class="nav-item {% if 'residents' in segment %} active {% endif %}">
-                    <a href="{% url 'residents' %}" class="nav-link "><span class="pcoded-micon"><i class="fas fa-users"></i></span><span
-                            class="pcoded-mtext">Residents</span></a>
-                </li>
+                {% if request.user.profile.account_type == "CHAIRMAN" %}
+                    <li class="nav-item pcoded-hasmenu {% if 'residents' in segment %} active pcoded-trigger {% endif %}">
+                        <a href="#" class="nav-link"><span class="pcoded-micon"><i class="fas fa-lock"></i></span><span
+                                class="pcoded-mtext">Residents</span></a>
+                        <ul class="pcoded-submenu">
+                            <li class="{% if 'res_forApproval' in segment %} active {% endif %}"><a href="{% url 'residents_for_approval' %}" class="">For Approval</a></li>
+                            <li class="{% if 'app_residents' in segment %} active {% endif %}"><a href="{% url 'residents' %}" class="">All Residents</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item {% if 'residents' in segment %} active {% endif %}">
+                        <a href="{% url 'residents' %}" class="nav-link "><span class="pcoded-micon"><i class="fas fa-users"></i></span><span
+                                class="pcoded-mtext">Residents</span></a>
+                    </li>
 
+                {% endif %}
                 <li class="nav-item pcoded-menu-caption">
                     <label>Forms</label>
                 </li>

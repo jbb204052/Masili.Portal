@@ -48,6 +48,8 @@ urlpatterns = [
     path('residents/add/', views.resident_data, name='resident_add'),
     path('residents/view/<int:id>/', views.resident_view, name='resident_view'),
     path('residents/edit/<int:id>/', views.resident_edit, name='resident_edit'),
+    path('residents/forapproval/', views.residents_for_approval, name='residents_for_approval'),
+    path('residents/approve/<int:id>/', views.resident_approve, name='resident_approve'),
 
 
     # OFFICIALS

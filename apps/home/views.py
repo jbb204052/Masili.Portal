@@ -17,6 +17,18 @@ from notifications.signals import notify
 from apps.authentication import models as auth_models
 
 
+Purok = ['PUROK 1', 'PUROK 2', 'PUROK 3', 'PUROK 4', 'PUROK 5', 'PUROK 6']
+# Purok = (
+#     ('PUROK 1', 'PUROK 1'),
+#     ('PUROK 2', 'PUROK 2'),
+#     ('PUROK 3', 'PUROK 3'),
+#     ('PUROK 4', 'PUROK 4'),
+#     ('PUROK 5', 'PUROK 5'),
+#     ('PUROK 6', 'PUROK 6'),
+# )
+
+
+
 def index(request):
     population = models.Resident.objects.filter(status='RESIDING').count()
     officials_count = models.BarangayOfficial.objects.filter(status='ACTIVE').count()
@@ -50,14 +62,16 @@ def user_ui(request):
 
 
 def about(request):
-    chairman = auth_models.User.objects.filter(profile__account_type='CHAIRMAN')
-    print(chairman)
-    for i in chairman:
-        notify.send(sender=request.user, recipient=i, verb='Viewed the About Page', cta_link='/about')
+    # chairman = auth_models.User.objects.filter(profile__account_type='CHAIRMAN')
+    # print(chairman)
+    # for i in chairman:
+    #     notify.send(sender=request.user, recipient=i, verb='Viewed the About Page', cta_link='/about')
     officials = models.BarangayOfficial.objects.filter(status='ACTIVE')
     _chairman = officials.filter(position='BARANGAY CHAIRMAN').first()
-    _councilors = officials.filter(position='BARANGAY COUNCILOR')
-    context = {'segment': 'about', 'chairman': _chairman, 'councilors': _councilors}
+    _councilors = officials.filter(position__contains='BARANGAY').exclude(position='BARANGAY CHAIRMAN')
+    _skchairman = officials.filter(position='SK CHAIRMAN').first()
+    _skcouncilors = officials.filter(position__contains='SK').exclude(position='SK CHAIRMAN')
+    context = {'segment': 'about', 'chairman': _chairman, 'councilors': _councilors, 'officials': officials, 'skchairman': _skchairman, 'skcouncilors': _skcouncilors}
     html_template = loader.get_template('index/about.html')
     return HttpResponse(html_template.render(context, request))
 
@@ -206,13 +220,12 @@ def announcements(request, opt):
 
 def getRecipientList(arg):
     orgs = models.BrgyOrganization.objects.all()
-    puroks = models.Purok.objects.all()
     recipients = None
     if arg == 'ALL':
         recipients = models.Resident.objects.filter(status='RESIDING').values_list('phone_no1', flat=True)
     elif arg in orgs.values_list('org_name', flat=True):
         recipients = models.OrgMember.objects.filter(org__org_name=arg).values_list('member__phone_no1', flat=True)
-    elif arg in puroks.values_list('name', flat=True):
+    elif arg in Purok:
         recipients = models.Resident.objects.filter(purok__name=arg, status='RESIDING').values_list('phone_no1', flat=True)
     print(recipients)
     return recipients
@@ -221,7 +234,6 @@ def getRecipientList(arg):
 @login_required(login_url="/login/")
 def announcement_data(request):
     orgs = models.BrgyOrganization.objects.all()
-    puroks = models.Purok.objects.all()
     if request.method == 'POST':
         announcement_form = forms.AnnouncementForm(request.POST)
         if announcement_form.is_valid():
@@ -251,7 +263,7 @@ def announcement_data(request):
             messages.error(request, 'Error adding announcement!')
 
     announcement_form = forms.AnnouncementForm()
-    context = {'segment': {'announcements', 'add', 'all'}, 'form': announcement_form, 'organization': orgs, 'puroks': puroks}
+    context = {'segment': {'announcements', 'add', 'all'}, 'form': announcement_form, 'organization': orgs, 'puroks': Purok}
     html_template = loader.get_template('home/announcements/announcement_data.html')
     return HttpResponse(html_template.render(context, request))
 
@@ -401,15 +413,20 @@ def ordinance_edit(request, id=0):
 @login_required(login_url="/login/")
 def residents(request):
     residents = models.Resident.objects.filter(is_approved=True)
-    puroks = models.Purok.objects.all()
-
-    # get the number or residents per purok
+    puroks = Purok
     purok_residents = []
     for purok in puroks:
         purok_residents.append(models.Resident.objects.filter(purok=purok, is_approved=True).count())
     count = residents.count()
-    context = {'segment': {'residents'}, 'residents': residents, 'count': count, 'puroks': puroks,
+    context = {'segment': {'residents', 'app_residents'}, 'residents': residents, 'count': count, 'puroks': puroks,
                'purok_residents': purok_residents}
+    html_template = loader.get_template('home/residents/residents_list.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def residents_for_approval(request):
+    residents = models.Resident.objects.filter(is_approved=False)
+    context = {'segment': {'residents', 'res_forApproval'}, 'residents': residents}
     html_template = loader.get_template('home/residents/residents_list.html')
     return HttpResponse(html_template.render(context, request))
 
@@ -417,11 +434,27 @@ def residents(request):
 @login_required(login_url="/login/")
 def resident_view(request, id):
     resident = models.Resident.objects.get(id=id)
-    # emergency = models.EmergencyContact.objects.filter(resident=resident)
-    context = {'segment': {'residents', 'view'}, 'resident': resident}
+    official_data = models.BarangayOfficial.objects.filter(fullname_id=resident.id).order_by('-date_appointed')
+    print(official_data)
+    org_member = models.OrgMember.objects.filter(member__res_id=id)
+    membership = []
+    if official_data:
+        for data in official_data:
+            membership.append(f'{data.position} | {data.date_appointed.year}-{data.end_term.year}')
+    if org_member:
+        for data in org_member:
+            membership.append(data.org.org_name)
+    context = {'segment': {'residents', 'view'}, 'resident': resident, 'membership': membership}
     html_template = loader.get_template('home/residents/resident_view.html')
     return HttpResponse(html_template.render(context, request))
 
+
+def resident_approve(request, id):
+    resident = models.Resident.objects.get(id=id)
+    resident.is_approved = True
+    resident.save()
+    messages.success(request, 'Resident successfully approved!')
+    return HttpResponseRedirect(reverse('res_forApproval'))
 
 @login_required(login_url="/login/")
 def resident_data(request):
@@ -617,7 +650,7 @@ def certificate_of_indigency_data(request):
         form = forms.CertificateRequestForm(request.POST)
         if form.is_valid():
             fullname = request.POST['fullname']
-            res = models.Resident.objects.filter(fullname=fullname).first()
+            res = models.Resident.objects.filter(fullname=fullname)
             cert = form.save(commit=False)
             cert.full_name = res
             cert.transaction_number = transaction_no
@@ -746,8 +779,7 @@ def official_update(request, id):
 def official_view(request, id):
     _official = models.BarangayOfficial.objects.get(id=id)
 
-    history = models.BarangayOfficial.objects.filter(fullname=_official.fullname)
-
+    history = models.BarangayOfficial.objects.filter(fullname=_official.fullname).order_by('-date_appointed')
     context = {'segment': {'officials', 'view'}, 'official': _official, 'history': history}
     html_template = loader.get_template('home/officials/official_view.html')
     return HttpResponse(html_template.render(context, request))

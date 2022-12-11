@@ -71,7 +71,7 @@ def register_user(request):
 
                 success = True
                 _chairman = User.objects.get(profile__account_type='CHAIRMAN')
-                notify.send(_user, recipient=_chairman, verb='has requested to join the Masili Portal.', cta_link='/accounts_management/pending_approval/approve/{}'.format(_user.id))
+                # notify.send(request.user, recipient=_chairman, verb='has requested to join the Masili Portal.', cta_link='/accounts_management/pending_approval/approve/{}'.format(_user.id))
 
 
                 request.session['message'] = 'Your account has been queued for approval. You will receive an email ' \

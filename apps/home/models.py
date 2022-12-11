@@ -13,31 +13,27 @@ from tinymce.models import HTMLField
 def file_path(path):
     def _func(instance, filename):
         return os.path.join(path + str(instance.ordinance_no), filename)
-    # return _func
+    return _func
 
 
 def photo_path(path):
     def _func(instance, filename):
         return os.path.join(path, str(instance.id) + '.png')
-    # return _func
+    return _func
 
 
 class NotificationsCTA(models.Model):
     notification = models.OneToOneField(Notification, on_delete=models.CASCADE, blank=False, default=None)
     cta_link = models.CharField(max_length=255, blank=True, default=None)
-    notification_type = models.CharField(max_length=255, blank=True, default=None, null=True)
-
     def __str__(self):
         return str(self.cta_link)
 
 
 def notify_handler(*args, **kwargs):
     notifications = notify_handler(*args, **kwargs)
-    cta_link = kwargs.get('cta_link', None)
-    notification_type = kwargs.get('type', None)
+    cta_link = kwargs.get('cta_link', '')
     for notification in notifications:
-        NotificationsCTA.objects.create(notification=notification, cta_link=cta_link,
-                                        notification_type=notification_type)
+        NotificationsCTA.objects.create(notification=notification, cta_link=cta_link)
     return notifications
 
 
@@ -45,15 +41,26 @@ notify.disconnect(notify_handler, dispatch_uid='notifications.models.notificatio
 notify.connect(notify_handler, dispatch_uid='notifications.models.notification')
 
 
-class Purok(models.Model):
-    name = models.CharField(max_length=50)
+# class Purok(models.Model):
+#     name = models.CharField(max_length=50)
+#
+#     def __str__(self):
+#         return self.name
+#
+#     def save(self, *args, **kwargs):
+#         self.name = self.name.upper()
+#         super(Purok, self).save(*args, **kwargs)
+#
 
-    def __str__(self):
-        return self.name
 
-    def save(self, *args, **kwargs):
-        self.name = self.name.upper()
-        super(Purok, self).save(*args, **kwargs)
+Purok = (
+    ['PUROK 1', 'PUROK 1'],
+    ['PUROK 2', 'PUROK 2'],
+    ['PUROK 3', 'PUROK 3'],
+    ['PUROK 4', 'PUROK 4'],
+    ['PUROK 5', 'PUROK 5'],
+    ['PUROK 6', 'PUROK 6'],
+)
 
 
 class Hotline(models.Model):
@@ -99,7 +106,7 @@ class Resident(models.Model):
 
     # Address
     address_line1 = models.CharField(max_length=50, blank=False, default=None)
-    purok = models.ForeignKey(Purok, on_delete=models.CASCADE, blank=False, default=None)
+    purok = models.CharField(max_length=50, choices=Purok, blank=False, default='PUROK 1')
 
     # Contact
     phone_no1 = models.CharField(max_length=11, blank=False, default=None)

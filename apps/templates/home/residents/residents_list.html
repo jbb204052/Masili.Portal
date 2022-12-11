@@ -45,23 +45,25 @@
                     <div class="main-body">
                         <div class="page-wrapper">
                             <div class="row">
-                                <div class="col-xl-3">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5>Statistics</h5>
-                                        </div>
-                                        <div class="card-block table-border-style">
-                                            <div class="card order-card" style="background-color: #17a2b8">
-                                                <div class="card-body" style="padding-bottom: 20px">
-                                                    <h4 class="text-white">Total Population</h4>
-                                                    <h1 class="text-end text-white"><i class="fas fa-users float-right"></i><span>{{ count }}</span></h1>
-                                                </div>
+                                {% if not 'res_forApproval' in segment %}
+                                    <div class="col-xl-3">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>Statistics</h5>
                                             </div>
-                                            <hr>
-                                            <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                            <div class="card-block table-border-style">
+                                                <div class="card order-card" style="background-color: #17a2b8">
+                                                    <div class="card-body" style="padding-bottom: 20px">
+                                                        <h4 class="text-white">Total Population</h4>
+                                                        <h1 class="text-end text-white"><i class="fas fa-users float-right"></i><span>{{ count }}</span></h1>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                {% endif %}
                                 <div class="col-xl-9">
                                     <div class="card">
                                         <div class="card-header">
@@ -228,7 +230,7 @@
         var donutData        = {
             labels: [
                 {% for purok in puroks %}
-                    '{{ purok.name }}',
+                    '{{ purok }}',
                 {% endfor %}
             ],
             datasets: [

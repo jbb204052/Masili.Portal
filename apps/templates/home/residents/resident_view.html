@@ -43,7 +43,7 @@
                         <div class="page-wrapper">
                             <form class="row" method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
-                                <div class="col-sm-8">
+                                <div class="col-xl-8">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5>Resident Information</h5>
@@ -112,6 +112,23 @@
                                                     </a>
                                                     <a href="{% url 'residents' %}" class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Organization Membership</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div id="content">
+                                                <ul>
+                                                    {% for membership in membership %}
+                                                        <li>{{ membership }}</li>
+                                                    {% endfor %}
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
