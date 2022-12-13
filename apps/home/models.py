@@ -12,14 +12,14 @@ from tinymce.models import HTMLField
 
 def file_path(path):
     def _func(instance, filename):
-        return os.path.join(path + str(instance.ordinance_no), filename)
-    return _func
+        return os.path.join(path + str(instance.id), filename)
+    # return _func
 
 
 def photo_path(path):
     def _func(instance, filename):
         return os.path.join(path, str(instance.id) + '.png')
-    return _func
+    # return _func
 
 
 class NotificationsCTA(models.Model):
@@ -297,7 +297,6 @@ class Announcement(models.Model):
 
 
 class Gallery(models.Model):
-    caption = models.CharField(max_length=50, blank=True)
     photo = models.ImageField(upload_to='gallery/', blank=False)
     date_uploaded = models.DateTimeField(auto_now_add=True)
 
@@ -444,3 +443,38 @@ class BarangayOfficial(models.Model):
     def save(self, *args, **kwargs):
         self.position = self.position.upper()
         super(BarangayOfficial, self).save(*args, **kwargs)
+
+
+class News(models.Model):
+    title = models.CharField(max_length=50)
+    front_image = models.ImageField(upload_to=file_path('news/'), blank=True, default=None, null=True)
+    content = HTMLField()
+    date_posted = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+    posted_by = models.CharField(max_length=50)
+    status = (
+        ['PUBLISHED', 'PUBLISHED'],
+        ['DRAFT', 'DRAFT'],
+    )
+    post_status = models.CharField(max_length=50, choices=status, default='DRAFT')
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        self.title = self.title.upper()
+        super(News, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name_plural = 'News'
+
+
+class Event(models.Model):
+    title = models.CharField(max_length=50)
+    description = models.TextField()
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    event_for = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.title

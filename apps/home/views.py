@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timezone
 from time import sleep
 
@@ -6,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import transaction, IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template import loader
 from django.urls import reverse
@@ -56,8 +57,9 @@ def user_ui(request):
     get_three = models.Gallery.objects.order_by('-date_uploaded')[:3]
     residents = models.Resident.objects.count()
     officials_count = models.BarangayOfficial.objects.count()
+    news = models.News.objects.filter(post_status='PUBLISHED').order_by('-date_posted')[0:3]
     context = {'segment': {'user_ui'}, 'residents': residents, 'gallery': get_three,
-               'count': range(1, get_three.count() + 1), 'officials_count': officials_count}
+               'count': range(1, get_three.count() + 1), 'officials_count': officials_count, 'news_list': news}
     return render(request, 'index/index.html', context)
 
 
@@ -71,9 +73,16 @@ def about(request):
     _councilors = officials.filter(position__contains='BARANGAY').exclude(position='BARANGAY CHAIRMAN')
     _skchairman = officials.filter(position='SK CHAIRMAN').first()
     _skcouncilors = officials.filter(position__contains='SK').exclude(position='SK CHAIRMAN')
-    context = {'segment': 'about', 'chairman': _chairman, 'councilors': _councilors, 'officials': officials, 'skchairman': _skchairman, 'skcouncilors': _skcouncilors}
+    _hotlines = models.Hotline.objects.all()
+    context = {'segment': 'about', 'chairman': _chairman, 'councilors': _councilors, 'officials': officials, 'skchairman': _skchairman, 'skcouncilors': _skcouncilors, 'hotlines': _hotlines}
     html_template = loader.get_template('index/about.html')
     return HttpResponse(html_template.render(context, request))
+
+
+def portfolio(request):
+    gallery = models.Gallery.objects.all().order_by('-date_uploaded')
+    context = {'segment': 'portfolio', 'gallery': gallery}
+    return render(request, 'index/portfolio.html', context)
 
 
 @login_required(login_url="/login/")
@@ -298,21 +307,35 @@ def gallery(request):
     return HttpResponse(html_template.render(context, request))
 
 
-@login_required(login_url="/login/")
-def gallery_upload(request):
-    if request.method == 'POST':
-        gallery_form = forms.GalleryForm(request.POST, request.FILES)
-        if gallery_form.is_valid():
-            gallery_form.save()
-            messages.success(request, 'Photo successfully added!')
-            return HttpResponseRedirect(reverse('gallery'))
-        else:
-            messages.error(request, 'Error adding photo!')
+# @login_required(login_url="/login/")
+# def gallery_upload(request):
+#     if request.method == 'POST':
+#         gallery_form = forms.GalleryForm(request.POST, request.FILES)
+#         if gallery_form.is_valid():
+#             gallery_form.save()
+#             messages.success(request, 'Photo successfully added!')
+#             return HttpResponseRedirect(reverse('gallery'))
+#         else:
+#             messages.error(request, 'Error adding photo!')
+#
+#     form = forms.GalleryForm()
+#     context = {'segment': 'gallery', 'form': form}
+#     return render(request, 'home/gallery/upload.html', context)
 
-    form = forms.GalleryForm()
-    context = {'segment': 'gallery', 'form': form}
+
+def gallery_upload(request):
+    context = {'segment': 'gallery'}
     return render(request, 'home/gallery/upload.html', context)
 
+
+def dropzone_image(request):
+    if request.method == "POST":
+        image = request.FILES.get('file')
+        print(image)
+        img = models.Gallery.objects.create(photo=image)
+        messages.success(request, 'Photo successfully added!')
+        return JsonResponse({'success': True, 'image': img.photo.url})
+        # return HttpResponseRedirect(reverse('gallery'))
 
 @login_required(login_url="/login/")
 def ordinances(request):
@@ -563,12 +586,6 @@ def blotter_data(request):
     return HttpResponse(html_template.render(context, request))
 
 
-def portfolio(request):
-    context = {'segment': 'portfolio'}
-    html_template = loader.get_template('user_ui/portfolio.html')
-    return HttpResponse(html_template.render(context, request))
-
-
 def brgy_sessions(request):
     sessions = models.Session.objects.all()
     context = {'segment': 'sessions', 'sessions': sessions}
@@ -797,3 +814,65 @@ def notification_read_all(request):
         _notification.unread = False
         _notification.save()
     return redirect('notifications')
+
+
+def news(request):
+    _news = models.News.objects.all().order_by('-date_posted')
+    context = {'segment': 'news', 'news_list': _news}
+    html_template = loader.get_template('home/news/news_list.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def news_data(request):
+    if request.method == 'POST':
+        form = forms.NewsForm(request.POST, request.FILES)
+        if form.is_valid():
+            _data = form.save(commit=False)
+            _data.posted_by = request.user
+            if request.user.profile.account_type == 'CHAIRMAN':
+                _data.status = 'PUBLISHED'
+            _data.save()
+            messages.success(request, 'News successfully added!')
+            return redirect('news')
+        else:
+            messages.error(request, 'Error adding news!')
+            form = forms.NewsForm(request.POST, request.FILES)
+    else:
+        form = forms.NewsForm()
+    context = {'segment': {'news', 'add'}, 'form': form}
+    html_template = loader.get_template('home/news/news_data.html')
+    return HttpResponse(html_template.render(context, request))
+
+def news_view(request, id):
+    _news = models.News.objects.get(id=id)
+    context = {'segment': {'news', 'view'}, 'news': _news}
+    html_template = loader.get_template('home/news/news_view.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def news_read(request, id, title):
+    _news = models.News.objects.get(id=id)
+    other_news = models.News.objects.filter(post_status='PUBLISHED').exclude(id=id).order_by('-date_posted')[:5]
+    html_template = loader.get_template('index/news_info.html')
+    return HttpResponse(html_template.render({'news': _news, 'other_news': other_news}, request))
+
+
+def news_update(request, id):
+    _news = models.News.objects.get(id=id)
+    if request.method == 'POST':
+        form = forms.NewsForm(request.POST, request.FILES, instance=_news)
+        if form.is_valid():
+            _data = form.save(commit=False)
+            if request.user.profile.account_type == 'CHAIRMAN':
+                _data.status = 'PUBLISHED'
+            _data.save()
+            messages.success(request, 'News successfully updated!')
+            return redirect('news')
+        else:
+            messages.error(request, 'Error updating news!')
+            form = forms.NewsForm(request.POST, request.FILES, instance=_news)
+    else:
+        form = forms.NewsForm(instance=_news)
+    context = {'segment': {'news', 'update'}, 'form': form, 'news': _news}
+    html_template = loader.get_template('home/news/news_data.html')
+    return HttpResponse(html_template.render(context, request))

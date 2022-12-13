@@ -40,7 +40,7 @@
                     <div class="main-body">
                         <div class="page-wrapper">
                             <div class="row">
-                                <div class="col-xl-12">
+                                <div class="col-xl-9">
                                     <div class="card">
                                         <div class="card-header">
                                             <h5>List</h5>
@@ -96,9 +96,71 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- [ Hover-table ] end -->
+
+                                <div class="col-lg-3">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Filter</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-group row" bis_skin_checked="1">
+                                                <label class="col-3 col-form-label" style="font-weight: bold">Position</label>
+                                                <div class="col-9" bis_skin_checked="1">
+                                                    <div class="" bis_skin_checked="1">
+                                                        <input class="" name="group1" type="radio" value="chk_all" id="chk_all">
+                                                        <label class="" for="chk_all">
+                                                            All
+                                                        </label>
+                                                    </div>
+                                                    <div class="" bis_skin_checked="1">
+                                                        <input class="" name="group1" type="radio" value="chk_brgy" id="chk_brgy">
+                                                        <label class="" for="chk_brgy">
+                                                            Barangay Officials
+                                                        </label>
+                                                    </div>
+                                                    <div class="">
+                                                        <input class="" name="group1" type="radio" value="chk_sk" id="chk_sk">
+                                                        <label class="" for="chk_sk">
+                                                            SK Officials
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <hr class="w-100">
+                                                <label class="col-3 col-form-label" style="font-weight: bold">Status</label>
+                                                <div class="col-9" bis_skin_checked="1">
+                                                    <div class="" bis_skin_checked="1">
+                                                        <input class="" name="group2" type="radio" value="chk_all1" id="chk_all1">
+                                                        <label class="" for="chk_all1">
+                                                            All
+                                                        </label>
+                                                    </div>
+                                                    <div class="" bis_skin_checked="1">
+                                                        <input class="" name="group2" type="radio" value="chk_active" id="chk_active">
+                                                        <label class="" for="chk_active">
+                                                            Active
+                                                        </label>
+                                                    </div>
+                                                    <div class="">
+                                                        <input class="" name="group2" type="radio" value="chk_inactive" id="chk_inactive">
+                                                        <label class="" for="chk_inactive">
+                                                            Inactive
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+{#                                                <label class="col-3 col-form-label" style="font-weight: bold">Term (Range)</label>#}
+{#                                                <div class="col-9" bis_skin_checked="1">#}
+{#                                                    <div class="">#}
+{#                                                        <input class="form-control" type="text" id="min" placeholder="from">#}
+{#                                                        <br>#}
+{#                                                        <input class="form-control" type="text" id="max" placeholder="To">#}
+{#                                                    </div>#}
+{#                                                </div>#}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <!-- [ Main Content ] end -->
                         </div>
                     </div>
                 </div>
@@ -112,6 +174,7 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
+    {#    <script src="https://cdn.datatables.net/datetime/1.2.0/js/dataTables.dateTime.min.js"></script>#}
     <script src="{% static 'assets/plugins/datatables/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
     <script src="{% static 'assets/plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
@@ -127,7 +190,7 @@
     <script>
         $(function () {
             $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false, "paging": true, 'order': [[ 6, "desc" ]],
+                "responsive": true, "lengthChange": false, "autoWidth": false, "paging": true, 'order': [[ 6, "desc" ]], 'pageLength': 5,
                 buttons:[{
                     extend: 'collection',
                     text: 'Export',
@@ -213,5 +276,56 @@
                 $(this).remove();
             });
         }, 3000);
+    </script>
+
+    <script>
+        $(document).ready(function(){
+            $('input[type="radio"]').click(function(){
+                if($(this).attr("value")=="chk_all" || $(this).attr("value")=="chk_all1"){
+                    $("#example1").DataTable().search('').columns().search('').draw();
+                }
+                if($(this).attr("value")=="chk_brgy"){
+                    $("#example1").DataTable().columns(1).search('BARANGAY').draw();
+                }
+                if($(this).attr("value")=="chk_sk"){
+                    $("#example1").DataTable().columns(1).search('SK').draw();
+                }
+                if($(this).attr("value")=="chk_active"){
+                    $("#example1").DataTable().columns(4).search('Active').draw();
+                }
+                if($(this).attr("value")=="chk_inactive"){
+                    $("#example1").DataTable().columns(4).search('Inactive').draw();
+                }
+
+                if($(this).attr("value")=="chk_all" && $(this).attr("value")=="chk_active"){
+                    $("#example1").DataTable().columns(4).search('Active').draw();
+                }
+                if($(this).attr("value")=="chk_all" && $(this).attr("value")=="chk_inactive"){
+                    $("#example1").DataTable().columns(4).search('Inactive').draw();
+                }
+
+                if($(this).attr("value")=="chk_brgy" && $(this).attr("value")=="chk_active"){
+                    $("#example1").DataTable().columns(1).search('BARANGAY').columns(4).search('Active').draw();
+                }
+                if($(this).attr("value")=="chk_brgy" && $(this).attr("value")=="chk_inactive"){
+                    $("#example1").DataTable().columns(1).search('BARANGAY').columns(4).search('Inactive').draw();
+                }
+                if($(this).attr("value")=="chk_sk" && $(this).attr("value")=="chk_active"){
+                    $("#example1").DataTable().columns(1).search('SK').columns(4).search('Active').draw();
+                }
+                if($(this).attr("value")=="chk_sk" && $(this).attr("value")=="chk_inactive"){
+                    $("#example1").DataTable().columns(1).search('SK').columns(4).search('Inactive').draw();
+                }
+                if($(this).attr("value")=="chk_all" && $(this).attr("value")=="chk_brgy"){
+                    $("#example1").DataTable().columns(1).search('BARANGAY').draw();
+                }
+                if($(this).attr("value")=="chk_all" && $(this).attr("value")=="chk_sk"){
+                    $("#example1").DataTable().columns(1).search('SK').draw();
+                }
+
+            });
+        });
+
+
     </script>
 {% endblock javascripts %}

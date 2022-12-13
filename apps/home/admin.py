@@ -36,3 +36,5 @@ admin.site.register(models.Ordinance)
 admin.site.register(models.Session)
 
 admin.site.register(models.CertificateRequest)
+
+admin.site.register(models.News)

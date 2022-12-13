@@ -13,8 +13,10 @@
         <div class="navbar-nav ms-auto py-0">
             <a href="/" class="nav-item nav-link {% if 'user_ui' in segment %} active {% endif %}">Home</a>
             <a href="{% url 'about' %}" class="nav-item nav-link {% if 'about' in segment %} active {% endif %}">About</a>
+            <a href="#services" class="nav-item nav-link">News</a>
+
             <a href="#services" class="nav-item nav-link">Services</a>
-            <a href="" class="nav-item nav-link">Portfolio</a>
+            <a href="{% url 'portfolio' %}" class="nav-item nav-link {% if 'portfolio' in segment %} active {% endif %}">Portfolio</a>
             {% if request.user.is_authenticated %}
                 <div class="nav-item dropdown" style="margin-right: 30px">
                     {#                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Account</a>#}

@@ -159,14 +159,45 @@
         });
 
 
-    tinymce.init({
-        height: "400",
-        selector: 'textarea',
-        content_style: 'body { font-family: "Open Sans", sans-serif }',
-        menubar: false,
-        toolbar: 'undo redo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | image | table',
-        plugins: 'image lists table',
-    });
+        tinymce.init({
+            height: "400",
+            selector: 'textarea',
+            content_style: 'body { font-family: "Open Sans", sans-serif }',
+            menubar: false,
+            toolbar: 'undo redo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | image | table',
+            plugins: 'image lists table',
+            file_picker_types: "image media",
+            {#set the size of images #}
+            image_dimensions: true,
+            image_class_list: [
+                {title: 'Responsive', value: 'img-responsive'}
+            ],
+
+
+            file_picker_callback: function (cb, value, meta) {
+                var input = document.createElement("input");
+                input.setAttribute("type", "file");
+                if (meta.filetype == "image") {
+                    input.setAttribute("accept", "image/*");}
+                if (meta.filetype == "media") {
+                    input.setAttribute("accept", "video/*");}
+
+                input.onchange = function () {
+                    var file = this.files[0];
+                    var reader = new FileReader();
+                    reader.onload = function () {
+                        var id = "blobid" + (new Date()).getTime();
+                        var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                        var base64 = reader.result.split(",")[1];
+                        var blobInfo = blobCache.create(id, file, base64);
+                        blobCache.add(blobInfo);
+                        cb(blobInfo.blobUri(), { title: file.name });
+                    };
+                    reader.readAsDataURL(file);
+                };
+                input.click();
+            },
+        });
 
     </script>
 {% endblock javascripts %}

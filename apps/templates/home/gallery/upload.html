@@ -1,9 +1,12 @@
 {% extends "layouts/base.html" %}
-
+{% load static %}
 {% block title %} Gallery {% endblock %}
 
 <!-- Specific CSS goes HERE -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/plugins/dropzone/dropzone-5.7.0/dist/basic.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/plugins/dropzone/dropzone-5.7.0/dist/dropzone.css' %}">
+{% endblock stylesheets %}
 
 {% block content %}
 
@@ -31,52 +34,25 @@
                             </div>
                         </div>
                     </div>
-                    <div class="main-body">
-                        <div class="page-wrapper">
-                            <form class="row" method="post" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                <div class="col-sm-6">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5>Upload Photo</h5>
-                                        </div>
-                                        <div class="card-block">
-                                            {% for message in messages %}
-                                                {% if 'success' in message.tags %}
-                                                    <p class="alert alert-success" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
-                                                {% else %}
-                                                    <p class="alert alert-warning" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
-                                                {% endif %}
-                                            {% endfor %}
+                    <div class="card">
+                        <div class="row">
+                            <!-- [ file-upload ] start -->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>File Upload</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <form action="{% url 'dropzone-image' %}" id="DidDropzone" class="dropzone" accept-charset="UTF-8" method="POST">
+                                            {% csrf_token %}
+                                            <div class="dz-message">Click or drop images to upload</div>
+                                        </form>
+                                        <br>
+                                        <button id="image-btn" type="submit" >Add images</button>
 
-                                            <div class="row">
-                                                <div class="col-sm-12 mb-4">
-                                                    <div class="form-group">
-                                                        <label>Caption</label>
-                                                        {{ form.caption }}
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-12 mb-4">
-                                                    <div class="form-group">
-                                                        <label>Caption</label>
-                                                        {{ form.photo }}
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-12 mb-2 mt-2">
-                                                    <div class="form-group">
-                                                        <button type="submit" class="btn btn-primary float-right">
-                                                            <i class="fa fa-save"></i> Save
-                                                        </button>
-                                                        <a href='{% url 'gallery' %}' class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -87,4 +63,35 @@
 {% endblock content %}
 
 {% block javascripts %}
+    <script src="{% static 'assets/plugins/dropzone/dropzone-5.7.0/dist/dropzone.js' %}"></script>
+    <script>
+        Dropzone.options.DidDropzone = {
+            maxFileSize : 4,
+            parallelUploads : 10,
+            uploadMultiple: true,
+            autoProcessQueue : false,
+            addRemoveLinks : true,
+            init: function() {
+                var submitButton = document.querySelector("#image-btn")
+                myDropzone = this; // closure
+                myDropzone = this;
+                submitButton.addEventListener("click", function() {
+                    myDropzone.processQueue();
+                });
+                myDropzone.on("addedfile", function(file) {
+                    if (!file.type.match(/image.*/)) {
+                        if(file.type.match(/application.zip/)){
+                            myDropzone.emit("thumbnail", file, "path/to/img");
+                        } else {
+                            myDropzone.emit("thumbnail", file, "path/to/img");
+                        }
+                    }
+                });
+                myDropzone.on("complete", function(file) {
+                    myDropzone.removeFile(file);
+                });
+            },
+        };
+    </script>
+
 {% endblock javascripts %}

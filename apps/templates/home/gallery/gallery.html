@@ -1,9 +1,12 @@
 {% extends "layouts/base.html" %}
-
+{% load static %}
 {% block title %} Gallery {% endblock %}
 
 <!-- Specific CSS goes HERE -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/plugins/dropzone/dropzone-5.7.0/dist/basic.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/plugins/dropzone/dropzone-5.7.0/dist/dropzone.css' %}">
+{% endblock stylesheets %}
 
 {% block content %}
 
@@ -40,7 +43,10 @@
                                     <div class="card" bis_skin_checked="1">
                                         <div class="card-header" bis_skin_checked="1">
                                             <h5>Barangay Photos</h5>
-                                            <a href="{% url 'gallery_upload' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i> Upload Photo</a>
+                                            {#                                            <a href="{% url 'gallery_upload' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i> Upload Photo</a>#}
+                                            <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#exampleModalCenter">
+                                                Launch demo modal
+                                            </button>
                                         </div>
                                         <div class="card-block" bis_skin_checked="1">
                                             {% for message in messages %}
@@ -79,7 +85,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -87,9 +92,54 @@
         </div>
     </div>
 
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'dropzone-image' %}" id="dropzone" class="dropzone" accept-charset="UTF-8" method="POST">
+                        {% csrf_token %}
+                        <div class="dz-message">Click or drop images to upload</div>
+                    </form>
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="btn-upload" type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock content %}
 
 {% block javascripts %}
+    <script src="{% static 'assets/plugins/dropzone/dropzone-5.7.0/dist/dropzone.js' %}"></script>
+    <script>
+        Dropzone.autoDiscover = false;
+
+        var myDropzone = new Dropzone("#dropzone", {
+            autoProcessQueue: false,
+            parallelUploads: 100, // Number of files process at a time (default 2)
+            maxFiles: 100,
+            maxFilesize: 10, // MB
+            acceptedFiles: ".jpeg,.jpg,.png,.gif",
+            addRemoveLinks: true,
+            dictRemoveFile: "Remove",
+            success: function (file, response) {
+                $('#exampleModalCenter').modal('hide');
+                location.reload();
+            },
+        });
+
+        $('#btn-upload').click(function(){
+            myDropzone.processQueue();
+        });
+    </script>
     <script>
         var lightboxModal = new bootstrap.Modal(document.getElementById('lightboxModal'));
         var elem = document.querySelectorAll("[data-lightbox]");
@@ -122,5 +172,23 @@
                 $(this).remove();
             });
         }, 3000);
+    </script>
+    <script>
+        var exampleModal = document.getElementById('exampleModal')
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+            // Button that triggered the modal
+            var button = event.relatedTarget
+            // Extract info from data-bs-* attributes
+            var recipient = button.getAttribute('data-bs-whatever')
+            // If necessary, you could initiate an AJAX request here
+            // and then do the updating in a callback.
+            //
+            // Update the modal's content.
+            var modalTitle = exampleModal.querySelector('.modal-title')
+            var modalBodyInput = exampleModal.querySelector('.modal-body input')
+
+            modalTitle.textContent = 'New message to ' + recipient
+            modalBodyInput.value = recipient
+        })
     </script>
 {% endblock javascripts %}

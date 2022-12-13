@@ -260,12 +260,13 @@ h6,
 
 .blog-date {
     position: absolute;
-    width: 90px;
+    width: 100px;
     height: 65px;
     top: 75px;
     left: -25px;
-    display: flex;
+    /*display: flex;*/
     align-items: center;
+    text-align: center;
     justify-content: center;
     flex-direction: column;
     background: var(--secondary);
@@ -281,4 +282,8 @@ h6,
     border: 13px solid;
     border-color: transparent #D34351 #D34351 transparent;
     z-index: -1;
+}
+
+.blog-date .h6{
+    word-wrap: break-word;
 }

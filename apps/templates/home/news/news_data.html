@@ -1,0 +1,157 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} News {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    {{ form.media }}
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">
+                                            Add News
+                                        </h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'news' %}">List of News</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">Draft</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <form class="row" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="col-lg-8">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>News Details</h5>
+                                        </div>
+                                        <div class="card-block">
+                                            {% for message in messages %}
+                                                {% if 'success' in message.tags %}
+                                                    <p class="alert alert-success" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+                                                {% else %}
+                                                    <p class="alert alert-warning" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <div class="col-lg-12 mb-4">
+                                                <div class="form-group">
+                                                    <label>Title</label>
+                                                    {{ form.title }}
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12 mb-4">
+                                                <div class="form-group">
+                                                    <label>Image Banner</label>
+                                                    <br>
+                                                    <img src="{% if 'update' in segment %}{{ news.front_image.url }}{% endif %}" class="m-b-5 w-75 text-center" id="news_photo_view" style="cursor: pointer">
+                                                    <br>
+
+                                                    <label class="btn btn-secondary">
+                                                        <i class="fas fa-edit">{{ form.front_image }}</i> Upload image
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12 mb-4">
+                                                <div class="form-group">
+                                                    <label>Content</label>
+                                                    {{ form.content }}
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12 mb-2 mt-2">
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-primary float-right">
+                                                        <i class="fa fa-save"></i>Save
+                                                    </button>
+                                                    <a href='{% url 'news' %}' class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+    <script>
+        $('input[name="attendees_checkbox"]').on('change', function() {
+            var attendees = $('input[id="attendees"]').val();
+            if (this.checked) {
+                if (attendees == '') {
+                    $('input[id="attendees"]').val(this.id);
+                } else {
+                    $('input[id="attendees"]').val(attendees + ',' + this.id);
+                }
+            } else {
+                var new_attendees = attendees.replace(this.id, '');
+                $('input[id="attendees"]').val(new_attendees);
+            }
+        });
+
+
+        tinymce.init({
+            height: "500",
+            selector: 'textarea',
+            content_style: 'body { font-family: "Open Sans", sans-serif }',
+            menubar: false,
+            toolbar: 'undo redo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | image | table',
+            plugins: 'image lists table',
+            file_picker_types: "image media",
+
+
+            file_picker_callback: function (cb, value, meta) {
+                var input = document.createElement("input");
+                input.setAttribute("type", "file");
+                if (meta.filetype == "image") {
+                    input.setAttribute("accept", "image/*");}
+                if (meta.filetype == "media") {
+                    input.setAttribute("accept", "video/*");}
+
+                input.onchange = function () {
+                    var file = this.files[0];
+                    var reader = new FileReader();
+                    reader.onload = function () {
+                        var id = "blobid" + (new Date()).getTime();
+                        var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                        var base64 = reader.result.split(",")[1];
+                        var blobInfo = blobCache.create(id, file, base64);
+                        blobCache.add(blobInfo);
+                        cb(blobInfo.blobUri(), { title: file.name });
+                    };
+                    reader.readAsDataURL(file);
+                };
+                input.click();
+            },
+        });
+        document.getElementById('front_image').onchange = (e) => {
+            document.getElementById('news_photo_view').setAttribute('src', URL.createObjectURL(e.target.files[0]))
+        }
+
+    </script>
+{% endblock javascripts %}

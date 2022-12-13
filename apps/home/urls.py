@@ -36,6 +36,7 @@ urlpatterns = [
     # GALLERY
     path('gallery/', views.gallery, name='gallery'),
     path('gallery/upload/', views.gallery_upload, name='gallery_upload'),
+    path('dropzone-image/', views.dropzone_image, name='dropzone-image'),
 
     # ORDINANCES
     path('ordinances/', views.ordinances, name='ordinances'),
@@ -88,4 +89,13 @@ urlpatterns = [
     # NOTIFICATION
     path('notifications/read/<int:id>', views.notification, name='notification_read'),
     path('notifications/mark_all_as_read', views.notification_read_all, name='notification_read_all'),
+
+
+    # NEWS
+    path('news/', views.news, name='news'),
+    path('news/add/', views.news_data, name='news_add'),
+    path('news/view/<int:id>', views.news_view, name='news_view'),
+    path('news/read/<int:id>/<str:title>', views.news_read, name='news_read'),
+    path('news/update/<int:id>', views.news_update, name='news_update'),
+
 ]

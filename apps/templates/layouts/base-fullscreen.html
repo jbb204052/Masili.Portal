@@ -43,8 +43,6 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
-    <script src="{% static 'notifications/notify.js' %}" type="text/javascript"></script>
-    {% register_notify_callbacks callbacks='fill_notification_list,fill_notification_badge,notification_control' %}
 {% endblock javascripts %}
 
 </body>

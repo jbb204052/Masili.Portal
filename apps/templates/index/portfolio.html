@@ -1,0 +1,65 @@
+{% extends 'index/base.html' %}
+{% load static %}
+{% block title %}
+    Portfolio
+{% endblock %}
+
+{% block content %}
+    <!-- Hero Start -->
+    <div class="container-fluid bg-primary p-5 hero-header mb-5">
+        <div class="row py-3">
+            <div class="col-xl-12 text-center">
+                <h1 class="display-1 text-white animated zoomIn">Portfolio</h1>
+                <a href="{% url 'user_ui' %}" class="h4 text-white">Home</a>
+                <i class="far fa-circle text-white px-2"></i>
+                <a href="" class="h4 text-white">Photos</a>
+            </div>
+        </div>
+    </div>
+    <!-- Hero End -->
+
+
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="row" bis_skin_checked="1">
+
+                {% for photo in gallery %}
+                    <div class="col-lg-6" bis_skin_checked="1">
+                        <div class="thumbnail mb-4" bis_skin_checked="1">
+                            <div class="thumb" bis_skin_checked="1">
+                                <a data-lightbox="{{ photo.photo.url }}"><img style="height: 350px; width: 650px; object-fit: cover" src="{{ photo.photo.url }}" class="img-fluid img-thumbnail m-b-10" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade modal-lightbox" id="lightboxModal" tabindex="-1" aria-labelledby="lightboxModalLabel" bis_skin_checked="1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" bis_skin_checked="1">
+            <div class="modal-content border-0" bis_skin_checked="1">
+                <button type=" button" class="btn-close btn-close-white position-absolute bottom-100 start-100 translate-middle1" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-body p-0" bis_skin_checked="1">
+                    <img src="#" alt="images" class="modal-image img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+
+    <script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script>
+{#    defince bootstrap modal#}
+    $('#lightboxModal').on('show.bs.modal', function (event) {
+    {#    on click the images #}
+        var button = $(event.relatedTarget)
+        var image = button.data('data-lightbox')
+        var modal = $(this)
+        modal.find('.modal-image').attr('src', image)
+    })
+    </script>
+
+{% endblock %}

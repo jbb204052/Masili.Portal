@@ -52,12 +52,7 @@ class AnnouncementForm(ModelForm):
 class GalleryForm(ModelForm):
     class Meta:
         model = models.Gallery
-        fields = '__all__'
-        widgets = {
-            'caption': TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}),
-            'photo': FileInput(attrs={'class': 'form-control', 'placeholder': 'Image'}),
-        }
-
+        fields = ['photo']
 
 class OrdinanceForm(ModelForm):
     class Meta:
@@ -186,4 +181,12 @@ class OfficialForm(ModelForm):
         }
 
 
-
+class NewsForm(ModelForm):
+    class Meta:
+        model = models.News
+        fields = ['title', 'content', 'front_image']
+        widgets = {
+            'title': TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}),
+            'content': TinyMCE(attrs={'class': 'form-control', 'placeholder': 'Content'}),
+            'front_image': FileInput(attrs={'class': 'form-control', 'id': 'front_image', 'hidden': 'true'}),
+        }

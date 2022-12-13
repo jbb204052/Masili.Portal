@@ -1,0 +1,83 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %} News {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">
+                                            News
+                                        </h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'news' %}">List of news</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">News | Read View</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <form class="row" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="col-lg-8">
+                                    <div class="card">
+                                        <div class="card-header mb-lg-5">
+                                            <h5>News</h5>
+                                            {#                                            <button type="button" class="btn btn-primary float-right" onclick="printMe('PrintMe')"><i class="fas fa-print"></i> Print</button>#}
+                                        </div>
+                                        <div class="card-block align-content-center text-center" id="PrintMe">
+                                            <h3 style="font-weight: bold" class="text-center">{{ news.title }}</h3>
+                                            <img src="{{ news.front_image.url }}" class="img-fluid w-75" alt="Responsive image">
+                                            <div class="col-lg-12 m-20 text-left">
+                                                {{ news.content|safe }}
+                                            </div>
+                                            <div class="float-right">
+                                                <a href="{% url 'news' %}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
+                                                <a href="{% url 'news_update' news.id %}" class="btn btn-primary"><i class="fas fa-edit"></i> Update</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+    <script>
+        function printMe(divName){
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+
+        }
+    </script>
+{% endblock javascripts %}
