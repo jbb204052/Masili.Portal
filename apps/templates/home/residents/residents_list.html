@@ -15,6 +15,7 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
+
 {% endblock stylesheets %}
 
 {% block content %}
@@ -50,6 +51,17 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 <h5>Statistics</h5>
+                                                <div class="card-header-right" bis_skin_checked="1">
+                                                    <div class="btn-group card-option" bis_skin_checked="1">
+                                                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="feather icon-more-horizontal"></i>
+                                                        </button>
+                                                        <ul class="list-unstyled card-option dropdown-menu dropdown-menu-end" style="">
+                                                            <li class="dropdown-item minimize-card"><a href="#!" style=""><span><i class="feather icon-minus"></i> collapse</span><span style="display:none"><i class="feather icon-plus"></i> expand</span></a></li>
+                                                            <li class="dropdown-item reload-card"><a href="#!"><i class="feather icon-refresh-cw"></i> reload</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="card-block table-border-style">
                                                 <div class="card order-card" style="background-color: #17a2b8">
@@ -150,7 +162,7 @@
     <script>
         $(function () {
             $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false, "paging": true, 'order':[6, 'desc'],
+                "responsive": true, "lengthChange": false, "autoWidth": false, "paging": true, 'order':[6, 'desc'], 'pageLength': 5,
                 buttons:[{
                     extend: 'collection',
                     text: 'Export',
@@ -185,31 +197,6 @@
                         extend: 'colvis',
                         text: 'Column Visibility'
                     },
-                    {
-                        extend: 'collection',
-                        text: 'Filter',
-                        buttons: [{
-                            text: 'All Officials',
-                            action: function (e, dt, node, config) {
-                                dt.search('').columns().search('').draw();
-                            }
-                        },
-                            {
-                                text: 'Active Officials',
-                                action: function (e, dt, node, config) {
-                                    var searchTerm = 'Active',
-                                        regex = '\\b' + searchTerm + '\\b';
-                                    dt.columns(4).search(regex, true, false).draw();
-                                }
-                            },
-                            {
-                                text: 'Inactive Officials',
-                                action: function (e, dt, node, config) {
-                                    dt.columns(4).search('Inactive').draw();
-                                }
-                            },
-                        ]
-                    }
                 ],
                 columnDefs:[
                     {'visible': false, 'targets': 6}
