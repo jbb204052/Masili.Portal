@@ -9,6 +9,8 @@ from notifications.signals import notify
 
 from tinymce.models import HTMLField
 
+from auditlog.registry import auditlog
+
 
 def file_path(path):
     def _func(instance, filename):
@@ -25,6 +27,7 @@ def photo_path(path):
 class NotificationsCTA(models.Model):
     notification = models.OneToOneField(Notification, on_delete=models.CASCADE, blank=False, default=None)
     cta_link = models.CharField(max_length=255, blank=True, default=None)
+
     def __str__(self):
         return str(self.cta_link)
 
@@ -39,7 +42,6 @@ def notify_handler(*args, **kwargs):
 
 notify.disconnect(notify_handler, dispatch_uid='notifications.models.notification')
 notify.connect(notify_handler, dispatch_uid='notifications.models.notification')
-
 
 # class Purok(models.Model):
 #     name = models.CharField(max_length=50)
@@ -140,11 +142,11 @@ class Resident(models.Model):
         self.occupation = self.occupation.upper()
         self.address_line1 = self.address_line1.upper()
         self.fullname = self.fname + ' ' + self.mname + ' ' + self.lname + ' ' + self.ext_name
-        # if self.phone_no1[0:2] != '+63':
-        #     self.phone_no1 = '+63' + self.phone_no1
-        # if self.phone_no2 != '':
-        #     if self.phone_no2[0:2] != '+63':
-        #         self.phone_no2 = '+63' + self.phone_no2
+        if self.phone_no1[0:2] != '+63':
+            self.phone_no1 = '+63' + self.phone_no1
+        if self.phone_no2 != '':
+            if self.phone_no2[0:2] != '+63':
+                self.phone_no2 = '+63' + self.phone_no2
         super(Resident, self).save(*args, **kwargs)
 
     @property
@@ -265,13 +267,13 @@ class Hearing(models.Model):
     remarks = HTMLField(blank=False)
     files = models.FileField(upload_to='blotter_files/', blank=True, null=True)
 
-
     def __str__(self):
         return str(self.blotter) + ' | ' + self.hearing_no
 
     def save(self, *args, **kwargs):
         self.status = self.status.upper()
         super(Hearing, self).save(*args, **kwargs)
+
 
 # ANNOUNCEMENTS
 class Announcement(models.Model):
@@ -373,6 +375,7 @@ class CertificateRequest(models.Model):
     )
     request_method = models.CharField(max_length=50, choices=method, default='WALK IN')
     chairman = models.CharField(max_length=50, blank=True, default=None, null=True)
+
     def __str__(self):
         return self.transaction_number
 
@@ -476,3 +479,54 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class BusinessPermit(models.Model):
+    business_no = models.CharField(max_length=50, blank=False)
+    business_name = models.CharField(max_length=50, unique=True)
+    location = models.CharField(max_length=50, blank=False)
+    classification = models.CharField(max_length=50, blank=False)
+    owner = models.CharField(max_length=50, blank=False)
+    residence_certificate_number = models.CharField(max_length=50, blank=False)
+    date_issued = models.DateField(auto_now_add=True)
+    capital_investment = models.CharField(max_length=50, blank=False)
+    gross_sales_or_receipts = models.CharField(max_length=50, blank=False)
+
+    previous_OR_number = models.CharField(max_length=50, blank=False)
+    date_issued1 = models.DateField()
+    amount_to_collect = models.CharField(max_length=50, blank=False)
+    paid_OR_number = models.CharField(max_length=50, blank=False)
+    date_issued2 = models.DateField()
+    amount_collected = models.CharField(max_length=50, blank=False)
+    chairman = models.CharField(max_length=50)
+    stat = (
+        ['PENDING', 'PENDING'],
+        ['PRINTED', 'PRINTED'],
+        ['ISSUED', 'ISSUED'],
+    )
+    status = models.CharField(max_length=50, choices=stat, default='PENDING')
+    signed_permits = models.FileField(upload_to=file_path('business_permit/'), blank=True, default=None, null=True)
+    type = models.CharField(max_length=50, blank=True)
+
+    def __str__(self):
+        return str(self.business_name)
+
+
+class BusinessClosure(models.Model):
+    transaction_no = models.CharField(max_length=50, blank=False)
+    business_name = models.ForeignKey(BusinessPermit, on_delete=models.CASCADE)
+    reason = models.CharField(max_length=50)
+    date_closed = models.DateField(blank=False)
+    date_issued = models.DateField(auto_now_add=True)
+    stat = (
+        ['PENDING', 'PENDING'],
+        ['PRINTED', 'PRINTED'],
+        ['ISSUED', 'ISSUED'],
+    )
+    status = models.CharField(max_length=50, choices=stat, default='CLOSED')
+    chairman = models.CharField(max_length=50)
+    signed_permits = models.FileField(upload_to=file_path('business_closure/'), blank=True, default=None, null=True)
+    type = models.CharField(max_length=50)
+
+    def __str__(self):
+        return str(self.business_name)

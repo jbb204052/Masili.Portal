@@ -1,0 +1,113 @@
+{% extends 'home/permit/permit_base.html' %}
+
+{% block certificate_content %}
+    <h4 style="text-align: center">
+        OFFICE OF THE BARANGAY CHAIRMAN
+        <hr class="my-1">
+        BARANGAY BUSINESS CLEARANCE/CERTIFICATE
+    </h4>
+    <br>
+    <p style="float: right"><u>{{ permit.date_issued }}</u></p>
+    <p></p>
+    <table class="table table-borderless">
+        <tbody>
+        <tr>
+            <td>BUSINESS NAME</td>
+            <td>:</td>
+            <td>{{ permit.business_name }}</td>
+        </tr>
+        <tr>
+            <td>LOCATION</td>
+            <td>:</td>
+            <td>{{ permit.location }}</td>
+        </tr>
+        <tr>
+            <td>CLASSIFICATION/NATURE OF BUSINESS</td>
+            <td>:</td>
+            <td>{{ permit.classification }}</td>
+        </tr>
+        <tr>
+            <td>NAME OF OWNER/PROPRIETOR</td>
+            <td>:</td>
+            <td>{{ permit.owner }}</td>
+        </tr>
+        <tr>
+            <td>RESIDENCE CERTIFICATE NO.</td>
+            <td>:</td>
+            <td>{{ permit.residence_certificate_number }}</td>
+        </tr>
+        <tr>
+            <td>DATE ISSUED</td>
+            <td>:</td>
+            <td>{{ permit.date_issued }}</td>
+        </tr>
+        <tr>
+            <td>ISSUED AT</td>
+            <td>:</td>
+            <td>BARANGAY MASILI, CALAMBA LAGUNA</td>
+        </tr>
+        <tr>
+            <td>CAPITAL INVESTMENT</td>
+            <td>:</td>
+            <td>{{ permit.capital_investment }}</td>
+        </tr>
+        <tr>
+            <td>GROSS SALES OR RECEIPTS</td>
+            <td>:</td>
+            <td>{{ permit.gross_sales_or_receipts }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <p style="float: right"><u>{{ permit.owner.upper }}</u><br>Signature of Applicant</p>
+    <br><br><br>
+
+    <table class="table table-borderless">
+        <tbody>
+        <tr>
+            <td>PREVIES O.R NUMBER</td>
+            <td>:</td>
+            <td>{{ permit.previous_OR_number }}</td>
+        </tr>
+        <tr>
+            <td>DATE ISSUED</td>
+            <td>:</td>
+            <td>{{ permit.date_issued1 }}</td>
+        </tr>
+        <tr>
+            <td>ISSUED AT</td>
+            <td>:</td>
+            <td>MASILI, CALAMBA CITY</td>
+        </tr>
+        <tr>
+            <td>AMOUNT TO COLLECT</td>
+            <td>:</td>
+            <td>{{ permit.amount_to_collect }}</td>
+        </tr>
+        <tr>
+            <td>PAID O.R NO.</td>
+            <td>:</td>
+            <td>{{ permit.paid_OR_number }}</td>
+        </tr>
+        <tr>
+            <td>DATE ISSUED</td>
+            <td>:</td>
+            <td>{{ permit.date_issued2 }}</td>
+        </tr>
+        <tr>
+            <td>ISSUED AT</td>
+            <td>:</td>
+            <td>BARANGAY MASILI, CALAMBA LAGUNA</td>
+        </tr>
+        <tr>
+            <td>AMOUNT COLLECTED</td>
+            <td>:</td>
+            <td>{{ permit.amount_collected }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <br><br><br>
+    <p style="float: right">APPROVED BY:<br><br><br><b>{{ permit.chairman }}</b><br>Barangay Chairman</p>
+
+{% endblock %}

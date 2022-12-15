@@ -1,0 +1,42 @@
+{% extends 'index/base.html' %}
+{% load static %}
+{% block title %}
+    Certificate Request
+{% endblock %}
+{% block content %}
+    <!-- Hero Start -->
+    <div class="container-fluid bg-primary p-5 hero-header mb-5">
+        <div class="row py-5">
+            <div class="col-12 text-center">
+                <h1 class="display-1 text-white animated zoomIn">Certificate of Indigency</h1>
+                <a href="{% url 'user_ui' %}" class="h4 text-white">Home</a>
+                <i class="far fa-circle text-white px-2"></i>
+                <a href="" class="h4 text-white">Certificate Request</a>
+            </div>
+        </div>
+    </div>
+    <!-- Hero End -->
+
+
+    <!-- About Start -->
+    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="row gx-5">
+                <div class="col-lg-5 mb-5 mb-lg-0" style="min-height: 500px;">
+                    <div class="position-relative h-75">
+                        <img class="position-absolute w-100 h-75 rounded wow zoomIn" data-wow-delay="0.3s" src="{% static 'media/brgy_logo/logo.png' %}" style="object-fit: contain;">
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input data-class="mb-4" type="text" class="form-control" placeholder="Purpose" required name="purpose">
+                        <br>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

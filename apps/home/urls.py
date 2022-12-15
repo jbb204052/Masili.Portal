@@ -91,6 +91,8 @@ urlpatterns = [
     path('certificates/issued/<int:id>', views.issued_certificates, name='issued_certificates'),
     path('certificates/print/<int:id>', views.printed_certificate, name='printed_certificate'),
 
+    path('certificates/request', views.request_certificates, name='request_certificates'),
+
 
     # NOTIFICATION
     path('notifications/read/<int:id>', views.notification, name='notification_read'),
@@ -103,5 +105,16 @@ urlpatterns = [
     path('news/view/<int:id>', views.news_view, name='news_view'),
     path('news/read/<int:id>/<str:title>', views.news_read, name='news_read'),
     path('news/update/<int:id>', views.news_update, name='news_update'),
+
+
+
+    # BUSINESS PERMIT
+    path('business_permit/', views.business_permit, name='business_permit'),
+    path('business_permit/add/', views.business_permit_data, name='business_permit_add'),
+    path('business_permit/view/<int:id>', views.business_permit_view, name='business_permit_view'),
+    path('business_permit/print/<int:id>', views.business_permit_print, name='permit_print'),
+    path('business_permit/issued/<int:id>', views.issued_business_permit, name='issued_business_permit'),
+
+    path('business_permit/business_closure/add/', views.business_closure_data, name='business_closure_add'),
 
 ]

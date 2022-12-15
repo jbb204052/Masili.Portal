@@ -1,0 +1,247 @@
+{% extends "layouts/base.html" %}
+{% load static filename %}
+
+{% block title %} Business Permit {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <!-- Data Tables -->
+    <link rel="stylesheet" href="{% static 'assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/style.min.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/plugins/dropzone/dropzone-5.7.0/dist/basic.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/plugins/dropzone/dropzone-5.7.0/dist/dropzone.css' %}">
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <section class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">Business Permit</h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">List of Business Permit</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <div class="row">
+                                <div class="col-xl-3">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Statistics</h5>
+                                        </div>
+                                        <div class="card-block">
+                                            <div class="card order-card bg-c-blue" bis_skin_checked="1">
+                                                <div class="card-body" style="padding-bottom: 20px" bis_skin_checked="1">
+                                                    <h4 class="text-white">Issued Permit</h4>
+                                                    <h1 class="text-end text-white"><i class="fas fa-file-alt float-right"></i><span>{{ issued }}</span></h1>
+                                                </div>
+                                            </div>
+
+                                            <div class="card order-card bg-c-red" bis_skin_checked="1" id="_pending">
+                                                <div class="card-body" style="padding-bottom: 20px" bis_skin_checked="1">
+                                                    <h4 class="text-white">Pending Permit</h4>
+                                                    <h1 class="text-end text-white"><i class="fas fa-file float-right"></i><span>{{ pending }}</span></h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-9">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>List</h5>
+                                            <a href="#" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#exampleModalCenter"><i class="fas fa-plus"></i>New Certificate</a>
+{#                                            <a href="{% url 'business_permit_add' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i>New Certificate</a>#}
+
+                                        </div>
+                                        <div class="card-block table-border-style">
+                                            {% for message in messages %}
+                                                {% if 'success' in message.tags %}
+                                                    <p class="alert alert-success" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+                                                {% else %}
+                                                    <p class="alert alert-warning" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <div class="table-responsive">
+                                                <table id="example1" class="table table-bordered table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Transaction Number</th>
+                                                        <th>Type of Permit</th>
+                                                        <th>Business Name</th>
+                                                        <th>Classification</th>
+                                                        <th>Date Issued</th>
+                                                        <th>Status</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for permit in business_permit_list %}
+                                                        <tr>
+                                                            <td>{{ permit.business_no }}</td>
+                                                            <td>{{ permit.type }}</td>
+                                                            <td>{{ permit.business_name }}</td>
+                                                            <td>{% if permit.type == 'BUSINESS CLOSURE'%} {{ permit.business_name.classfication }}{% else %}{{ permit.classification }}{% endif %}</td>
+                                                            <td>{{ permit.date_issued }}</td>
+                                                            <td>
+                                                                {% if permit.status == 'ISSUED' %}
+                                                                    <span class="badge badge-success">{{ permit.status }}</span>
+                                                                {% elif permit.status == 'PRINTED' %}
+                                                                    <span class="badge badge-warning">{{ permit.status }}</span>
+                                                                {% else %}
+                                                                    <span class="badge badge-danger">{{ permit.status }}</span>
+                                                                {% endif %}
+                                                                <br>
+                                                                {% if permit.signed_permits %}
+                                                                    {% if permit.signed_permits.name|slice:"-3:" == "pdf" %}
+                                                                        <a href="{{ permit.signed_permits.url }}" target="_blank"><i class="fas fa-file-pdf"></i> {{ permit.signed_permits|filename }}</a><br>
+                                                                    {% else %}
+                                                                        <a href="{{permit.signed_permits.url }}" target="_blank"><img src="{{ permit.signed_permits.url }}" alt="" width="100px" height="100px"></a><br>
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                <a class="btn btn-icon btn-outline-primary" href="{% url 'business_permit_view' permit.id %}" title="View"><i class="feather icon-eye"></i></a>
+                                                                {% if permit.status != 'PRINTED' and permit.status != 'ISSUED' %}
+                                                                    <a class="btn btn-icon btn-outline-primary" href="{% url 'permit_print' permit.id %}" title="Print"><i class="feather icon-printer"></i></a>
+                                                                {% elif permit.status != 'ISSUED' %}
+                                                                    <a href="{% url 'issued_business_permit' permit.id %}" class="btn btn-icon btn-outline-primary" title="Issued"><i class="feather icon-check-circle"></i></a>
+                                                                {% endif %}
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                    <tfoot>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Type of Certificate</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-30 text-center">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card order-card bg-c-blue" bis_skin_checked="1">
+                                <a href="{% url 'business_permit_add' %}" class="card-body">
+                                    <h4 class="text-white">Business<br>Permit</h4>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <a href="{% url 'business_closure_add' %}" class="card order-card bg-c-purple" bis_skin_checked="1">
+                                <div class="card-body">
+                                    <h4 class="text-white">Business Closure</h4>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [ Main Content ] end -->
+{% endblock %}
+
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+    <script src="{% static 'assets/plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/jszip/jszip.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/pdfmake/pdfmake.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/pdfmake/vfs_fonts.js' %}"></script>
+    <script src="{% static 'assets/plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/dropzone/dropzone-5.7.0/dist/dropzone.js' %}"></script>
+    <script>
+        $(function () {
+            $("#example1").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false, "paging": true, 'order':[0, 'desc'], 'dom': 'Bfrtip',
+                buttons:[
+                    {#{#}
+                    {#    extend: 'colvis',#}
+                    {#    text: 'Column Visibility'#}
+
+                    {
+                        text: 'All Certificates',
+                        action: function(e, dt, node,  config){
+                            dt.search('').columns().search('').draw();
+                        }
+                    },
+                    {
+                        text: 'Pending',
+                        action: function(e, dt, node,  config){
+                            var search = 'PENDING',
+                                regex = '\\b' + search + '\\b';
+                            dt.columns(4).search(regex, true, false).draw();
+                        }
+                    },
+                    {
+                        text: 'Issued',
+                        action: function(e, dt, node,  config){
+                            var search = 'ISSUED',
+                                regex = '\\b' + search + '\\b';
+                            dt.columns(4).search(regex, true, false).draw();
+                        }
+                    },
+
+
+                ],
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+    </script>
+    <script>
+        //close alert after 3 seconds
+        window.setTimeout(function() {
+            $(".alert").fadeTo(300, 0).slideUp(300, function(){
+                $(this).remove();
+            });
+        }, 3000);
+    </script>
+{% endblock javascripts %}

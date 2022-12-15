@@ -1,5 +1,6 @@
 import json
 from datetime import datetime, timezone
+from itertools import chain
 from time import sleep
 
 from django import template
@@ -95,6 +96,30 @@ def portfolio(request):
     gallery = models.Gallery.objects.all().order_by('-date_uploaded')
     context = {'segment': 'portfolio', 'gallery': gallery}
     return render(request, 'index/portfolio.html', context)
+
+
+@login_required(login_url='/login/')
+def request_certificates(request):
+    _certificates = models.CertificateRequest.objects.count();
+    if _certificates == 0:
+        transaction_no = f'IND-{datetime.now().year}-0001'
+    else:
+        transaction_no = f'IND-{datetime.now().year}-{str(int(_certificates) + 1).zfill(4)}'
+
+    if request.method == 'POST':
+        purpose = request.POST.get('purpose')
+        res = models.Resident.objects.filter(lname=request.user.last_name, fname=request.user.first_name, bdate=request.user.profile.birthdate).first()
+        print(res)
+        cert_type = 'INDIGENCY'
+        requestor = res.fullname
+        chairman = models.BarangayOfficial.objects.filter(position='BARANGAY CHAIRMAN', status='ACTIVE').first()
+        createCertificate = models.CertificateRequest.objects.create(transaction_number=transaction_no, purpose=purpose, full_name=res, certificate_type=cert_type, requestor=requestor, status='PENDING', chairman=chairman.fullname.fullname)
+        createCertificate.save()
+        messages.success(request, 'Your request has been sent to the Barangay Officials. Please wait for their response.')
+        return HttpResponseRedirect('user_ui')
+    context = {'segment': 'request_certificates'}
+    return render(request, 'index/certificate_request.html', context)
+
 
 
 @login_required(login_url="/login/")
@@ -247,7 +272,7 @@ def getRecipientList(arg):
     elif arg in orgs.values_list('org_name', flat=True):
         recipients = models.OrgMember.objects.filter(org__org_name=arg).values_list('member__phone_no1', flat=True)
     elif arg in Purok:
-        recipients = models.Resident.objects.filter(purok__name=arg, status='RESIDING').values_list('phone_no1', flat=True)
+        recipients = models.Resident.objects.filter(purok=arg, status='RESIDING').values_list('phone_no1', flat=True)
     print(recipients)
     return recipients
 
@@ -781,7 +806,7 @@ def certificate_of_indigency_data(request):
             _resident = models.Resident.objects.get(fullname=fullname)
             certificate = models.CertificateRequest.objects.get(transaction_number=transaction_no)
             _age = datetime.now().year - _resident.bdate.year
-            # return render(request, 'home/certificates/indigency.html', {'resident': _resident, 'certificate': certificate, 'chairman': _chairman, 'age': _age})
+            # return render(request, 'home/certificates/business.html', {'resident': _resident, 'certificate': certificate, 'chairman': _chairman, 'age': _age})
             return HttpResponseRedirect(reverse('indigency'))
         else:
             messages.error(request, 'Error adding certificate!')
@@ -988,4 +1013,101 @@ def news_update(request, id):
         form = forms.NewsForm(instance=_news)
     context = {'segment': {'news', 'update'}, 'form': form, 'news': _news}
     html_template = loader.get_template('home/news/news_data.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def business_permit(request):
+    _business_permit = models.BusinessPermit.objects.all().order_by('-date_issued')
+    _business_closure = models.BusinessClosure.objects.all().order_by('-date_issued')
+    _business_permit = list(chain(_business_permit, _business_closure))
+    issued = models.BusinessPermit.objects.filter(status='ISSUED').count()
+    p= ['PENDING', 'PRINTED']
+    pending = models.BusinessPermit.objects.filter(status__in=p).count()
+    context = {'segment': 'permits', 'business_permit_list': _business_permit, 'issued': issued, 'pending': pending}
+    html_template = loader.get_template('home/permit/permit_list.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def business_permit_data(request):
+    _businessPermits = models.BusinessPermit.objects.count()
+    if _businessPermits == 0:
+        _permit_no = f'BUS-{datetime.now().year}-0001'
+    else:
+        _permit_no = f'BUS-{datetime.now().year}-{str(int(_businessPermits) + 1).zfill(4)}'
+
+    if request.method == 'POST':
+        form = forms.BusinessPermitForm(request.POST)
+        if form.is_valid():
+            _data = form.save(commit=False)
+            _data.business_no = _permit_no
+            _data.issued_by = request.user
+            _data.chairman = models.BarangayOfficial.objects.get(position='BARANGAY CHAIRMAN', status='ACTIVE').fullname
+            _data.type = 'BUSINESS PERMIT'
+            _data.save()
+            messages.success(request, 'Business Permit successfully added!')
+            return redirect('business_permit')
+        else:
+            messages.error(request, 'Error adding Business Permit!')
+            form = forms.BusinessPermitForm(request.POST)
+    else:
+        form = forms.BusinessPermitForm()
+    context = {'segment': {'permits', 'add'}, 'form': form}
+    html_template = loader.get_template('home/permit/permit_data.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def business_permit_view(request, id):
+    _business_permit = models.BusinessPermit.objects.get(id=id)
+    context = {'segment': {'permits', 'view'}, 'permit': _business_permit}
+    html_template = loader.get_template('home/permit/business.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def business_permit_print(request, id):
+    _business_permit = models.BusinessPermit.objects.get(id=id)
+    _business_permit.status = 'PRINTED'
+    _business_permit.save()
+    messages.success(request, f'{_business_permit.business_no} has been printed!')
+    return HttpResponseRedirect(reverse('business_permit'))
+
+def issued_business_permit(request, id):
+    _business_permit = models.BusinessPermit.objects.get(id=id)
+
+    if request.method == 'POST':
+        _business_permit.status = 'ISSUED'
+        _business_permit.signed_permits = request.FILES['attachment']
+        _business_permit.save()
+        messages.success(request, f'{_business_permit.business_no} has been issued!')
+        return HttpResponseRedirect(reverse('business_permit'))
+    context = {'segment': 'permits', 'permit': _business_permit}
+    html_template = loader.get_template('home/permit/business_attachment.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def business_closure_data(request):
+    _permit = models.BusinessClosure.objects.count() + models.BusinessPermit.objects.count()
+    if _permit == 0:
+        _permit_no = f'BUS-CL-{datetime.now().year}-0001'
+    else:
+        _permit_no = f'BUS-CL-{datetime.now().year}-{str(int(_permit) + 1).zfill(4)}'
+
+    if request.method == 'POST':
+        form = forms.BusinessClosureForm(request.POST)
+        if form.is_valid():
+            _data = form.save(commit=False)
+            _data.transaction_no = _permit_no
+            _data.chairman = models.BarangayOfficial.objects.get(position='BARANGAY CHAIRMAN', status='ACTIVE').fullname
+            _data.type = 'BUSINESS CLOSURE'
+            _data.transaction_no = _permit_no
+            _data.status = 'PENDING'
+            _data.save()
+            messages.success(request, 'Business Closure successfully added!')
+            return redirect('business_permit')
+        else:
+            messages.error(request, 'Error adding Business Closure!')
+            form = forms.BusinessClosureForm(request.POST)
+    else:
+        form = forms.BusinessClosureForm()
+    context = {'segment': {'permits', 'add'}, 'form': form, 'transaction_no': _permit_no}
+    html_template = loader.get_template('home/permit/closure_data.html')
     return HttpResponse(html_template.render(context, request))

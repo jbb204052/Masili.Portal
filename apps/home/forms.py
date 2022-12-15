@@ -172,7 +172,6 @@ class CertificateRequestForm(ModelForm):
         model = models.CertificateRequest
         fields = ['purpose', 'requestor', 'status']
         widgets = {
-            # 'full_name': TextInput(attrs={'class': 'form-control text_input', 'placeholder': 'Fullname', 'id': 'fullname', "list":"cert_fullname_list", 'autocomplete':'off'}),
             'purpose': TextInput(attrs={'class': 'form-control', 'placeholder': 'Purpose'}),
             'requestor': TextInput(attrs={'class': 'form-control', 'placeholder': 'Requestor', 'id':'requestor'}),
             'status': Select(attrs={'class': 'form-control', 'placeholder': 'Status'}),
@@ -199,4 +198,40 @@ class NewsForm(ModelForm):
             'title': TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}),
             'content': TinyMCE(attrs={'class': 'form-control', 'placeholder': 'Content'}),
             'front_image': FileInput(attrs={'class': 'form-control', 'id': 'front_image', 'hidden': 'true'}),
+        }
+
+
+class BusinessPermitForm(ModelForm):
+    class Meta:
+        model = models.BusinessPermit
+        fields = '__all__'
+        exclude = ['date_issued', 'business_no', 'signed_permits', 'chairman', 'type']
+        widgets = {
+            'business_name': TextInput(attrs={'class': 'form-control', 'placeholder': 'Business Name'}),
+            'location': TextInput(attrs={'class': 'form-control', 'placeholder': 'Location'}),
+            'classification': TextInput(attrs={'class': 'form-control', 'placeholder': 'Classification'}),
+            'owner': TextInput(attrs={'class': 'form-control', 'placeholder': 'Owner'}),
+            'residence_certificate_number': TextInput(attrs={'class': 'form-control', 'placeholder': 'Residence Certificate Number'}),
+            'capital_investment': TextInput(attrs={'class': 'form-control', 'placeholder': 'Capital Investment'}),
+
+            'gross_sales_or_receipts': TextInput(attrs={'class': 'form-control', 'placeholder': 'Gross Sales or Receipts'}),
+            'previous_OR_number': TextInput(attrs={'class': 'form-control', 'placeholder': 'Previous OR Number'}),
+            'date_issued1': DateInput(attrs={'class': 'form-control', 'placeholder': 'Date Issued', 'type': 'date'}),
+            'amount_to_collect': TextInput(attrs={'class': 'form-control', 'placeholder': 'Amount to Collect'}),
+            'paid_OR_number': TextInput(attrs={'class': 'form-control', 'placeholder': 'Paid OR Number'}),
+            'date_issued2': DateInput(attrs={'class': 'form-control', 'placeholder': 'Date Issued', 'type': 'date'}),
+            'amount_collected': TextInput(attrs={'class': 'form-control', 'placeholder': 'Amount Collected'}),
+            'status': Select(attrs={'class': 'form-control', 'placeholder': 'Status'}),
+        }
+
+
+class BusinessClosureForm(ModelForm):
+    class Meta:
+        model = models.BusinessClosure
+        fields = '__all__'
+        exclude = ['date_issued', 'signed_permits', 'chairman', 'type', 'status', 'transaction_no']
+        widgets = {
+            'business_name': Select(attrs={'class': 'form-control', 'placeholder': 'Business Name', 'id': 'business_name'}),
+            'date_closed': DateInput(attrs={'class': 'form-control', 'placeholder': 'Date Closed', 'type': 'date'}),
+            'reason': TextInput(attrs={'class': 'form-control', 'placeholder': 'Reason'}),
         }

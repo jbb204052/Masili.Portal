@@ -1,0 +1,73 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Business Permit | {{ permit.business_no }} {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">
+                                            Business Permit
+                                        </h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'business_permit' %}">List of Permit</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">{{ permit.business_no }}</a>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <form class="row" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="col-xl-4">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Transaction No: {{ permit.business_no }}</h5>
+                                        </div>
+                                        <div class="card-block">
+                                            <div class="col-sm-12 mb-3">
+                                                <div class="form-group">
+                                                    <label>Attachment</label>
+                                                    <input class="form-control" type="file" name="attachment" required>
+                                                    <small>Upload a signed copy of the document as proof of issuance</small>
+                                                </div>
+                                                <div class="col-sm-12 mb-2 mt-2">
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-primary float-right" id="btn_button">
+                                                            <i id="spinner" class="fas fa-save"></i>Upload
+                                                        </button>
+                                                        <a href='{% url 'business_permit' %}' class="btn btn-light float-right"><i class="fa fa-arrow-left"></i> Back</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block javascripts %}
+{% endblock javascripts %}

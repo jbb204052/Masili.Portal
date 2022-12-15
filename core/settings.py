@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "sslserver",
     'axes',
     'notifications',
+    'auditlog',
     # 'calendarium',
 ]
 
@@ -68,6 +69,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'axes.middleware.AxesMiddleware',
     'livereload.middleware.LiveReloadScript',
+    'auditlog.middleware.AuditlogMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -165,7 +167,7 @@ MEDIA_ROOT = os.path.join(CORE_DIR, 'apps/static/media')
 MEDIA_URL = 'media/'
 
 #############################################################
-# OAuth settings 
+# OAuth settings
 
 GITHUB_ID = os.getenv('GITHUB_ID', None)
 GITHUB_SECRET = os.getenv('GITHUB_SECRET', None)
@@ -205,3 +207,4 @@ AXES_LOCKOUT_TEMPLATE = os.path.join(TEMPLATE_DIR, "accounts/locked_template.htm
 USE_TZ = True
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+AUDITLOG_INCLUDE_ALL_MODELS=True

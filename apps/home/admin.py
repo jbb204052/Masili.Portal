@@ -38,3 +38,4 @@ admin.site.register(models.Session)
 admin.site.register(models.CertificateRequest)
 
 admin.site.register(models.News)
+admin.site.register(models.BusinessPermit)
