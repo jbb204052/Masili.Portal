@@ -10,6 +10,7 @@ from django.db import transaction, IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template import loader
+from django.template.defaultfilters import safe
 from django.urls import reverse
 from . import models
 from . import forms
@@ -35,14 +36,25 @@ def index(request):
     officials_count = models.BarangayOfficial.objects.filter(status='ACTIVE').count()
     _pending_certificates = models.CertificateRequest.objects.filter(status='PENDING').count()
     gallery = models.Gallery.objects.all()
-
+    purok_population = []
+    for purok in Purok:
+        purok_population.append([purok, models.Resident.objects.filter(purok=purok, status='RESIDING').count()])
+    population_per_gender = []
+    gender = ['MALE', 'FEMALE']
+    for g in gender:
+        population_per_gender.append([g, models.Resident.objects.filter(gender=g, status='RESIDING').count()])
     _account_forBackend = ['ADMIN', 'OFFICIAL', 'SECRETARY', 'CHAIRMAN']
-
     if request.user.is_authenticated:
         if request.user.profile.account_type in _account_forBackend:
             notifications = request.user.notifications.unread()
+            captain = models.BarangayOfficial.objects.filter(position='BARANGAY CHAIRMAN', status='ACTIVE').first()
+            officials = models.BarangayOfficial.objects.filter(status='ACTIVE').exclude(position='BARANGAY CHAIRMAN')
+            _pending_blotters = models.Blotter.objects.filter(status='PENDING').count()
             context = {'segment': 'index', 'population': population, 'gallery': gallery,
-                       'notifications': notifications, 'pending_certificates': _pending_certificates, 'officials': officials_count}
+                       'notifications': notifications, 'pending_certificates': _pending_certificates,
+                       'officials_count': officials_count, 'purok_population': purok_population,
+                       'population_per_gender': population_per_gender, 'captain': captain,
+                       'officials': officials, 'pending_blotters': _pending_blotters}
             html_template = loader.get_template('home/index.html')
         else:
             return HttpResponseRedirect('index')
@@ -368,8 +380,8 @@ def ordinance_data(request):
             _presiding = request.POST['presiding']
             _data.presiding_officer = _presiding
             # get the active brgy chairman
-            chairman = models.BrgyOfficial.objects.get(position='BARANGAY CHAIRMAN')
-            _data.active_chairman = chairman
+            chairman = models.BarangayOfficial.objects.get(position='BARANGAY CHAIRMAN', status='ACTIVE')
+            _data.active_chairman = chairman.fullname
 
             files = request.FILES.getlist('files')
             for file in files:
@@ -566,12 +578,19 @@ def blotter_data(request):
             _data.posted_by = request.user.first_name + ' ' + request.user.last_name
             _data.recordedBy = request.user
             _data.save()
-            _data1 = complainant_form.save(commit=False)
-            _data1.blotter_no = _data
-            _data1.save()
-            _data2 = respondent_form.save(commit=False)
-            _data2.blotter_no = _data
-            _data2.save()
+
+            blotter = models.Blotter.objects.get(blotter_no=blotter_no)
+
+            _complainant = complainant_form.save(commit=False)
+            _complainant.blotter = blotter
+            _complainant.save()
+
+            _respondent = respondent_form.save(commit=False)
+            _respondent.blotter = blotter
+            _respondent.save()
+
+
+
             messages.success(request, 'Blotter successfully added!')
             return HttpResponseRedirect(reverse('blotters'))
         else:
@@ -583,6 +602,87 @@ def blotter_data(request):
     context = {'segment': {'blotters', 'add'}, 'form': form, 'blotter_no': blotter_no,
                'complainant_form': complainant_form, 'respondent_form': respondent_form}
     html_template = loader.get_template('home/blotters/blotter_data.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def blotter_view(request, id):
+    blotter = models.Blotter.objects.get(id=id)
+    complainant = models.Complainant.objects.get(blotter=blotter)
+    respondent = models.Respondent.objects.get(blotter=blotter)
+    hearing = models.Hearing.objects.filter(blotter=blotter).order_by('-date')
+    print(hearing)
+    context = {'segment': {'blotters', 'view'}, 'blotter': blotter,
+               'complainant': complainant, 'respondent': respondent, 'hearings': hearing}
+    html_template = loader.get_template('home/blotters/blotter_view.html')
+    return HttpResponse(html_template.render(context, request))
+
+
+def blotter_print(request, id):
+    blotter = models.Blotter.objects.get(id=id)
+    complainant = models.Complainant.objects.get(blotter=blotter)
+    respondent = models.Respondent.objects.get(blotter=blotter)
+    import io
+    from django.http import FileResponse
+    from docxtpl import DocxTemplate
+
+    doc = DocxTemplate("home/blotters/blotter_template.docx")
+    context = {
+        "blotter_no": blotter.blotter_no,
+        "dateReported": blotter.datetimeReported,
+        "incident_type": blotter.incident_type,
+        "dateOfIncident": blotter.dateOfIncident,
+        "placeOfIncident": blotter.placeOfIncident,
+        "complainant_fullname": complainant.full_name,
+        "complainant_contactNo": complainant.contact,
+        "complainant_address": complainant.address,
+        "respondent_fullname": respondent.full_name,
+        "res_contactNo": respondent.contact,
+        "res_address": respondent.address,
+        "narrative": blotter.narrative|safe,
+        "official_name": blotter.recordedBy.fullname,
+        "position": blotter.recordedBy.position,
+    }
+
+    doc_io = io.BytesIO()
+    doc.save(doc_io)
+    doc_io.seek(0)
+    response = HttpResponse(doc_io.read())
+    response['Content-Disposition'] = 'attachment; filename=blotter.docx'
+    response['Content-Type'] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    return response
+    # context = {'segment': {'blotters', 'view'}, 'blotter': blotter,
+    #            'complainant': complainant, 'respondent': respondent, 'hearings': hearing}
+    # html_template = loader.get_template('home/blotters/blotter_print.html')
+    # return HttpResponse(html_template.render(context, request))
+
+def hearing(request, id, blotter_no):
+    blotter = models.Blotter.objects.get(id=id)
+    complainant = models.Complainant.objects.get(blotter=blotter)
+    respondent = models.Respondent.objects.get(blotter=blotter)
+    hearing_count = models.Hearing.objects.filter(blotter=blotter).count()
+    if hearing_count == 0:
+        hearing_no = f'01'
+    else:
+        hearing_no = str(int(hearing_count) + 1).zfill(2)
+    if request.method == 'POST':
+        hearing_form = forms.HearingForm(request.POST, request.FILES)
+        if hearing_form.is_valid():
+            _data = hearing_form.save(commit=False)
+            _data.blotter = blotter
+            _data.hearing_no = hearing_no
+            _data.save()
+            # change the blotter status
+            blotter.status = _data.status
+            blotter.save()
+            messages.success(request, 'Hearing successfully added!')
+            return HttpResponseRedirect(reverse('blotter_view', kwargs={'id': id}))
+        else:
+            messages.error(request, 'Error adding hearing!')
+
+    form = forms.HearingForm()
+    context = {'segment': {'blotters', 'view'}, 'blotter': blotter,
+               'complainant': complainant, 'respondent': respondent, 'form': form, 'hearing_no': hearing_no}
+    html_template = loader.get_template('home/blotters/hearing.html')
     return HttpResponse(html_template.render(context, request))
 
 
@@ -636,9 +736,7 @@ def brgy_session_view(request, id):
 
 def certificate_of_indigency_view(request):
     chairman = models.BarangayOfficial.objects.filter(position='BARANGAY CHAIRMAN', status='ACTIVE').first()
-    chairman_fullname = chairman.fname + ' ' + chairman.mname[0] + '. ' + chairman.lname
-
-    context = {'segment': {'certificates', 'indigency', 'view'}, 'brgy_chairman': chairman_fullname}
+    context = {'segment': {'certificates', 'indigency', 'view'}, 'brgy_chairman': chairman.fullname}
     html_template = loader.get_template('home/certificates/indigency.html')
     return HttpResponse(html_template.render(context, request))
 
@@ -667,9 +765,12 @@ def certificate_of_indigency_data(request):
         form = forms.CertificateRequestForm(request.POST)
         if form.is_valid():
             fullname = request.POST['fullname']
-            res = models.Resident.objects.filter(fullname=fullname)
+            _chairman = models.BarangayOfficial.objects.filter(position='BARANGAY CHAIRMAN', status='ACTIVE').first()
+            print(_chairman)
+            res = models.Resident.objects.filter(fullname=fullname).first()
             cert = form.save(commit=False)
             cert.full_name = res
+            cert.chairman = _chairman.fullname
             cert.transaction_number = transaction_no
             cert.certificate_type = "INDIGENCY"
             cert.request_method = 'WALK IN'
@@ -677,12 +778,11 @@ def certificate_of_indigency_data(request):
             messages.success(request, 'Certificate successfully added!')
 
 
-
             _resident = models.Resident.objects.get(fullname=fullname)
             certificate = models.CertificateRequest.objects.get(transaction_number=transaction_no)
-            _chairman = models.BrgyOfficial.objects.filter(position='BARANGAY CHAIRMAN', status='ACTIVE').first()
             _age = datetime.now().year - _resident.bdate.year
-            return render(request, 'home/certificates/indigency.html', {'resident': _resident, 'certificate': certificate, 'chairman': _chairman, 'age': _age})
+            # return render(request, 'home/certificates/indigency.html', {'resident': _resident, 'certificate': certificate, 'chairman': _chairman, 'age': _age})
+            return HttpResponseRedirect(reverse('indigency'))
         else:
             messages.error(request, 'Error adding certificate!')
             form = forms.CertificateRequestForm(request.POST)
@@ -696,10 +796,19 @@ def certificate_of_indigency_data(request):
 
 def issued_certificates(request, id):
     _certificate = models.CertificateRequest.objects.get(id=id)
-    _certificate.status = 'ISSUED'
-    _certificate.save()
-    messages.success(request, f'{_certificate.transaction_number} has been issued!')
-    return HttpResponseRedirect(reverse('certificates'))
+    # _certificate.status = 'ISSUED'
+    # _certificate.save()
+    # messages.success(request, f'{_certificate.transaction_number} has been issued!')
+    # return HttpResponseRedirect(reverse('certificates'))
+    if request.method == 'POST':
+        _certificate.status = 'ISSUED'
+        _certificate.signed_certificates = request.FILES['attachment']
+        _certificate.save()
+        messages.success(request, f'{_certificate.transaction_number} has been issued!')
+        return HttpResponseRedirect(reverse('certificates'))
+    context = {'segment': 'certificates', 'certificate': _certificate}
+    html_template = loader.get_template('home/certificates/certificate_attachment.html')
+    return HttpResponse(html_template.render(context, request))
 
 def indigency_print(request, id):
     certificate = models.CertificateRequest.objects.get(id=id)
@@ -708,16 +817,20 @@ def indigency_print(request, id):
     aux = lambda x: 'Mr.' if res.gender == 'MALE' else 'Ms.'
     age = datetime.now().year - res.bdate.year
     is_samePerson = res.fullname == certificate.requestor
-    chairman = models.BarangayOfficial.objects.filter(position='BARANGAY CHAIRMAN', status='ACTIVE').first()
-    print(res.fullname)
-    print(certificate.requestor)
-    print(is_samePerson)
+    chairman = certificate.chairman
 
     context = {'segment': {'certificates', 'indigency'}, 'aux': aux, 'age': age, 'resident': res,
                'certificate': certificate, 'type_of_certificate': 'Indigency', 'is_samePerson': is_samePerson, 'chairman': chairman}
     html_template = loader.get_template('home/certificates/indigency.html')
     return HttpResponse(html_template.render(context, request))
 
+
+def printed_certificate(request, id):
+    certificate = models.CertificateRequest.objects.get(id=id)
+    certificate.status = 'PRINTED'
+    certificate.save()
+    messages.success(request, f'{certificate.transaction_number} has been printed!')
+    return HttpResponseRedirect(reverse('certificates'))
 
 def certificate_add(request, cert_type):
     _certificates = models.CertificateRequest.objects.count()

@@ -1,0 +1,107 @@
+{% extends "layouts/base.html" %}
+{% load static filename %}
+
+{% block title %} Blotter {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <!-- Data Tables -->
+    <link rel="stylesheet" href="{% static 'assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/style.min.css' %}">
+    <link href="{% static 'assets/css/timeline.css' %}" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <section class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">Blotter</h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'blotters' %}">List of Blotters</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">{{ blotter.blotter_no }}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <div class="row">
+                                <div class="col-xl-10">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Blotter - {{ blotter.blotter_no }}</h5>
+                                            {% if blotter.status == 'PENDING' %}
+                                                <span class="badge badge-danger">{{ blotter.status }}</span>
+                                            {% else %}
+                                                <span class="badge badge-success">{{ blotter.status }}</span>
+                                            {% endif %}
+                                            <div class="card-header-right">
+                                                <button onclick="printDiv('forPrint')" type="button" class="btn btn-outline-primary"><i class="feather icon-printer"></i> Print</button>
+                                            </div>
+                                        </div>
+                                        <div class="card-block" id="forPrint">
+                                            <table class="table-bordered">
+                                                <tbody>
+                                                <tr>
+                                                    <td>BLOTTER NO: <br><b>{{ blotter.blotter_no }}</b></td>
+                                                    <td rowspan="3" colspan="5" class="text-center align-middle">
+                                                        <h5 style="font-weight: bold">REPUBLIC OF THE PHILIPPINES<br>
+                                                        CALAMBA CITY<br>
+                                                        BARANGAY MASILI<br>
+                                                        BARANGAY INCIDENT RECORD FORM</h5>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>DATE AND TIME RECORDED<br><b>{{ blotter.datetimeReported }}</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>TYPE OF INCIDENT<br><b>{{ blotter.incident_type }}</b></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        window.setTimeout(function() {
+            $(".alert").fadeTo(300, 0).slideUp(300, function(){
+                $(this).remove();
+            });-invoice
+        }, 3000);
+
+        function printDiv(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+    </script>
+{% endblock javascripts %}

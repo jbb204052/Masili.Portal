@@ -1,5 +1,5 @@
 {% extends "layouts/base.html" %}
-{% load static %}
+{% load static filename %}
 
 {% block title %} Certificates {% endblock %}
 
@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="{% static 'assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/plugins/style.min.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/plugins/dropzone/dropzone-5.7.0/dist/basic.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/plugins/dropzone/dropzone-5.7.0/dist/dropzone.css' %}">
 {% endblock stylesheets %}
 
 {% block content %}
@@ -59,23 +62,6 @@
                                                     <h1 class="text-end text-white"><i class="fas fa-file float-right"></i><span>{{ pending }}</span></h1>
                                                 </div>
                                             </div>
-                                            {#                                            <hr class="my-1">#}
-{#                                            <br>#}
-{#                                            <table class="table table-borderless mb-0">#}
-{#                                                <tbody>#}
-{#                                                <tr>#}
-{#                                                    <td>Certificate of Indigency</td>#}
-{#                                                    <td>:</td>#}
-{#                                                    <td><h5>{{ indigency }}</h5></td>#}
-{#                                                </tr>#}
-{#                                                <tr>#}
-{#                                                    <td>Pagpapatunay na Live-in</td>#}
-{#                                                    <td>:</td>#}
-{#                                                    <td><h5>{{ livein }}</h5></td>#}
-{#                                                </tr>#}
-{#                                                <tr></tr>#}
-{#                                                </tbody>#}
-{#                                            </table>#}
                                         </div>
                                     </div>
                                 </div>
@@ -83,7 +69,9 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <h5>List</h5>
-                                            <a href="#" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#exampleModalCenter"><i class="fas fa-plus"></i>New Certificate</a>
+                                            {#                                            <a href="#" class="btn btn-outline-primary float-right" data-toggle="modal" data-target="#exampleModalCenter"><i class="fas fa-plus"></i>New Certificate</a>#}
+                                            <a href="{% url 'indigency_add' %}" class="btn btn-outline-primary float-right"><i class="fas fa-plus"></i>New Certificate</a>
+
                                         </div>
                                         <div class="card-block table-border-style">
                                             {% for message in messages %}
@@ -98,7 +86,7 @@
                                                     <thead>
                                                     <tr>
                                                         <th>Transaction Number</th>
-{#                                                        <th>Type of Certificate</th>#}
+                                                        {#                                                        <th>Type of Certificate</th>#}
                                                         <th>Requestor</th>
                                                         <th>Date of Transaction</th>
                                                         <th>Status</th>
@@ -109,19 +97,33 @@
                                                     {% for certificate in certificates %}
                                                         <tr>
                                                             <td>{{ certificate.transaction_number }}</td>
-{#                                                            <td>{{ certificate.certificate_type }}</td>#}
+                                                            {#                                                            <td>{{ certificate.certificate_type }}</td>#}
                                                             <td>{{ certificate.requestor }}</td>
                                                             <td>{{ certificate.request_date }}</td>
                                                             <td>
                                                                 {% if certificate.status == 'ISSUED' %}
-                                                                    <p><i class="fas fa-circle text-c-blue f-10"></i>&nbsp;ISSUED</p>
+                                                                    <span class="badge badge-success">{{ certificate.status }}</span>
+                                                                {% elif certificate.status == 'PRINTED' %}
+                                                                    <span class="badge badge-warning">{{ certificate.status }}</span>
                                                                 {% else %}
-                                                                    <p><i class="fas fa-circle text-c-red f-10"></i>&nbsp;PENDING</p>
+                                                                    <span class="badge badge-danger">{{ certificate.status }}</span>
+                                                                {% endif %}
+                                                                <br>
+                                                                {% if certificate.signed_certificates %}
+                                                                    {% if certificate.signed_certificates.name|slice:"-3:" == "pdf" %}
+                                                                        <a href="{{ certificate.signed_certificates.url }}" target="_blank"><i class="fas fa-file-pdf"></i> {{ certificate.signed_certificates|filename }}</a><br>
+                                                                    {% else %}
+                                                                        <a href="{{certificate.signed_certificates.url }}" target="_blank"><img src="{{ certificate.signed_certificates.url }}" alt="" width="100px" height="100px"></a><br>
+                                                                    {% endif %}
                                                                 {% endif %}
                                                             </td>
                                                             <td>
                                                                 <a class="btn btn-icon btn-outline-primary" href="{% if certificate.certificate_type == 'INDIGENCY' %}{% url 'cert_indigency' certificate.id %}{% endif %}" title="View"><i class="feather icon-eye"></i></a>
-                                                                <a class="btn btn-icon btn-outline-primary" href="{% url 'issued_certificates' certificate.id %}" title="Issued"><i class="feather icon-check-circle"></i></a>
+                                                                {% if certificate.status != 'PRINTED' %}
+                                                                <a class="btn btn-icon btn-outline-primary" href="{% url 'printed_certificate' certificate.id %}" title="Print"><i class="feather icon-printer"></i></a>
+                                                                {% elif certificate.status != 'ISSUED' %}
+                                                                    <a href="{% url 'issued_certificates' certificate.id %}" class="btn btn-icon btn-outline-primary" title="Issued"><i class="feather icon-check-circle"></i></a>
+                                                                {% endif %}
                                                             </td>
                                                         </tr>
                                                     {% endfor %}
@@ -152,22 +154,30 @@
                     </button>
                 </div>
                 <div class="modal-body p-30 text-center">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="card order-card bg-c-blue" bis_skin_checked="1">
-                                <a href="{% url 'indigency_add' %}" class="card-body">
-                                    <h4 class="text-white">Certificate of Indigency</h4>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <a href="#" class="card order-card bg-c-purple" bis_skin_checked="1">
-                                <div class="card-body">
-                                    <h4 class="text-white">Pagpapatunay na Live-in</h4>
-                                </div>
-                            </a>
-                        </div>
+                    <div class="col-sm-12">
+                        <form id="DidDropzone" class="dropzone" accept-charset="UTF-8" method="POST">
+                            {% csrf_token %}
+                            <div class="dz-message">Attachments</div>
+                        </form>
+                        <br>
+                        <button id="image-btn" type="submit" >Upload</button>
                     </div>
+                    {#                    <div class="row">#}
+                    {#                        <div class="col-lg-6">#}
+                    {#                            <div class="card order-card bg-c-blue" bis_skin_checked="1">#}
+                    {#                                <a href="{% url 'indigency_add' %}" class="card-body">#}
+                    {#                                    <h4 class="text-white">Certificate of Indigency</h4>#}
+                    {#                                </a>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {#                        <div class="col-lg-6">#}
+                    {#                            <a href="#" class="card order-card bg-c-purple" bis_skin_checked="1">#}
+                    {#                                <div class="card-body">#}
+                    {#                                    <h4 class="text-white">Pagpapatunay na Live-in</h4>#}
+                    {#                                </div>#}
+                    {#                            </a>#}
+                    {#                        </div>#}
+                    {#                    </div>#}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -194,7 +204,7 @@
     <script src="{% static 'assets/plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
     <script src="{% static 'assets/plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
     <script src="{% static 'assets/plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
-
+    <script src="{% static 'assets/plugins/dropzone/dropzone-5.7.0/dist/dropzone.js' %}"></script>
     <script>
         $(function () {
             $("#example1").DataTable({
@@ -239,15 +249,6 @@
                 $(this).remove();
             });
         }, 3000);
-
-        $('#exampleModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var recipient = button.data('whatever')
-            var modal = $(this)
-            modal.find('.modal-title').text('New message to ' + recipient)
-            modal.find('.modal-body input').val(recipient)
-        })
-
         function printDiv(divName){
             var printContents = document.getElementById(divName).innerHTML;
             var originalContents = document.body.innerHTML;

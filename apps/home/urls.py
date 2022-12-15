@@ -62,6 +62,11 @@ urlpatterns = [
     # BLOTTERS
     path('blotters/', views.blotters, name='blotters'),
     path('blotters/add/', views.blotter_data, name='blotter_add'),
+    path('blotters/view/<int:id>/', views.blotter_view, name='blotter_view'),
+    path('blotters/print/<int:id>/', views.blotter_print, name='blotter_print'),
+
+    # Hearing
+    path('hearing/add/<int:id>/<str:blotter_no>/', views.hearing, name='hearing'),
 
 
 
@@ -84,6 +89,7 @@ urlpatterns = [
     path('certificate/add/certificate_of_indigency', views.certificate_of_indigency_data, name="indigency_add"),
     path('certificate/certificate_of_indigency/view/<int:id>', views.indigency_print, name="cert_indigency"),
     path('certificates/issued/<int:id>', views.issued_certificates, name='issued_certificates'),
+    path('certificates/print/<int:id>', views.printed_certificate, name='printed_certificate'),
 
 
     # NOTIFICATION

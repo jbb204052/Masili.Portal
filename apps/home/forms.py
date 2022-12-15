@@ -142,6 +142,16 @@ class RespondentForm(ModelForm):
         }
 
 
+class HearingForm(ModelForm):
+    class Meta:
+        model = models.Hearing
+        fields = ['remarks', 'status', 'files']
+        widgets = {
+            'remarks': TinyMCE(attrs={'class': 'form-control', 'placeholder': 'Remarks'}),
+            'status': Select(attrs={'class': 'form-control', 'placeholder': 'Status'}),
+            'files': FileInput(attrs={'class': 'form-control', 'placeholder': 'Files'}),
+        }
+
 class SessionForm(ModelForm):
     class Meta:
         model = models.Session

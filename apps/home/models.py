@@ -224,13 +224,13 @@ class Blotter(models.Model):
 
 
 class Complainant(models.Model):
-    blotter_no = models.ForeignKey(Blotter, on_delete=models.CASCADE)
+    blotter = models.ForeignKey(Blotter, on_delete=models.CASCADE, blank=False, default=None)
     full_name = models.CharField(max_length=50, blank=False)
     contact = models.CharField(max_length=11, blank=False)
     address = models.CharField(max_length=50, blank=False)
 
     def __str__(self):
-        return self.blotter_no
+        return str(self.blotter)
 
     def save(self, *args, **kwargs):
         self.full_name = self.full_name.upper()
@@ -239,14 +239,13 @@ class Complainant(models.Model):
 
 
 class Respondent(models.Model):
-    blotter_no = models.ForeignKey(Blotter, on_delete=models.CASCADE)
+    blotter = models.ForeignKey(Blotter, on_delete=models.CASCADE, blank=False, default=None)
     full_name = models.CharField(max_length=50, blank=False)
-    ext_name = models.CharField(max_length=5, blank=True)
     contact = models.CharField(max_length=11, blank=False)
     address = models.CharField(max_length=50, blank=False)
 
     def __str__(self):
-        return self.blotter_no
+        return str(self.blotter)
 
     def save(self, *args, **kwargs):
         self.full_name = self.full_name.upper()
@@ -255,24 +254,23 @@ class Respondent(models.Model):
 
 
 class Hearing(models.Model):
-    blotter_no = models.ForeignKey(Blotter, on_delete=models.CASCADE)
-    date = models.DateField(blank=False)
-    time = models.TimeField(blank=False)
+    blotter = models.ForeignKey(Blotter, on_delete=models.CASCADE, blank=False, default=None)
+    hearing_no = models.CharField(max_length=50, default='1')
+    date = models.DateTimeField(blank=False, auto_now_add=True)
     _stat = (
         ['PENDING', 'PENDING'],
         ['RESOLVED', 'RESOLVED'],
     )
     status = models.CharField(max_length=50, choices=_stat, default='PENDING')
-    remarks = HTMLField(max_length=50, blank=True)
-    files = models.FileField(upload_to='blotter_files/', blank=True)
+    remarks = HTMLField(blank=False)
+    files = models.FileField(upload_to='blotter_files/', blank=True, null=True)
 
 
     def __str__(self):
-        return self.blotter_no
+        return str(self.blotter) + ' | ' + self.hearing_no
 
     def save(self, *args, **kwargs):
         self.status = self.status.upper()
-        self.remarks = self.remarks.upper()
         super(Hearing, self).save(*args, **kwargs)
 
 # ANNOUNCEMENTS
@@ -374,7 +372,7 @@ class CertificateRequest(models.Model):
         ['WALK IN', 'WALK IN']
     )
     request_method = models.CharField(max_length=50, choices=method, default='WALK IN')
-
+    chairman = models.CharField(max_length=50, blank=True, default=None, null=True)
     def __str__(self):
         return self.transaction_number
 
@@ -391,7 +389,7 @@ class Certificate(models.Model):
     date_issued = models.DateField(blank=True, null=True)
     stat = (
         ['PENDING', 'PENDING'],
-        ['PROCESSED', 'PROCESSED'],
+        ['PRINTED', 'PRINTED'],
         ['ISSUED', 'ISSUED'],
     )
     status = models.CharField(max_length=50, choices=stat, default='PENDING')

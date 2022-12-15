@@ -1,0 +1,178 @@
+{% extends "layouts/base.html" %}
+{% load static filename %}
+
+{% block title %} Blotter {% endblock %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <!-- Data Tables -->
+    <link rel="stylesheet" href="{% static 'assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/style.min.css' %}">
+    <link href="{% static 'assets/css/timeline.css' %}" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- [ Main Content ] start -->
+    <section class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <!-- [ breadcrumb ] start -->
+                    <div class="page-header">
+                        <div class="page-block">
+                            <div class="row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="page-header-title">
+                                        <h5 class="m-b-10">Blotter</h5>
+                                    </div>
+                                    <ul class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="/"><i class="feather icon-home"></i></a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'blotters' %}">List of Blotters</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript:">{{ blotter.blotter_no }}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="main-body" id="printTable">
+                        <div class="page-wrapper">
+                            <div class="row">
+                                <div class="col-xl-4">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Blotter - {{ blotter.blotter_no }}</h5>
+                                            {% if blotter.status == 'PENDING' %}
+                                                <span class="badge badge-danger">{{ blotter.status }}</span>
+                                            {% else %}
+                                                <span class="badge badge-success">{{ blotter.status }}</span>
+                                            {% endif %}
+{#                                            <div class="card-header-right">#}
+{#                                                <a href="{% url 'blotter_print' blotter.id %}" class="btn btn-primary"><i class="feather icon-printer"></i> Print</a>#}
+{#                                            </div>#}
+                                        </div>
+                                        <div class="card-block">
+                                            <h5 class="text-muted text-center">
+                                                {{ complainant.full_name }} VS {{ respondent.full_name }}
+                                            </h5>
+                                            <br>
+                                            <table class="table table-responsive">
+                                                <tbody>
+                                                <tr>
+                                                    <td>Type of Incident</td>
+                                                    <td>-</td>
+                                                    <td>{{ blotter.incident_type }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Incident Date</td>
+                                                    <td>-</td>
+                                                    <td>{{ blotter.dateOfIncident}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Place of Incident</td>
+                                                    <td>-</td>
+                                                    <td>{{ blotter.placeOfIncident}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Details</td>
+                                                    <td>-</td>
+                                                    <td style="word-wrap: break-word;min-width: 100%;max-width: 100%;white-space:normal;">{{ blotter.narrative|safe}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-8">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Hearing Timeline</h5>
+                                            <div class="card-header-right">
+                                                {% if blotter.status == 'PENDING' %}
+                                                    <a href="{% url 'hearing' id=blotter.id blotter_no=blotter.blotter_no %}" class="btn btn-primary text-white">Add Hearing</a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            {% for message in messages %}
+                                                {% if 'success' in message.tags %}
+                                                    <p class="alert alert-success" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+                                                {% else %}
+                                                    <p class="alert alert-warning" role="alert"><span style="font-weight:bold">{{ message }}</span></p>
+                                                {% endif %}
+                                            {% endfor %}
+                                            <div id="content">
+                                                <ul style="max-width: 95%" class="timeline">
+                                                    {% if hearings %}
+                                                        {% for record in hearings %}
+                                                            <li class="event">
+                                                                <h2><a href="#">Hearing No: {{ record.hearing_no }} {% if record.status == "PENDING"%}
+                                                                    <span class="badge badge-danger">UNRESOLVED</span>
+                                                                {% else %}
+                                                                    <span class="badge badge-success">{{ record.status }}</span>
+                                                                {% endif %}</a></h2>
+
+                                                                <p class="f-16"><i class="fas fa-calendar-alt"></i>{{ record.date }}</p>
+
+                                                                <p class="f-16"><i class="fas fa-book-open"></i> Remarks</p>
+                                                                <div class="ml-3">
+                                                                    <p>{{ record.remarks|safe }}</p>
+                                                                </div>
+
+                                                                {#                                                            if record.files has file in it#}
+                                                                {% if record.files %}
+                                                                    <p class="f-16"><i class="fas fa-file"></i> File</p>
+                                                                    <div class="ml-3" id="files">
+                                                                        {#                                                                        <a href="{{ record.files.url }}" target="_blank">{{ record.files.name }}</a><br>#}
+                                                                        {#                                                                    check if the file is pdf#}
+                                                                        {% if record.files.name|slice:"-3:" == "pdf" %}
+                                                                            <a href="{{ record.files.url }}" target="_blank"><i class="fas fa-file-pdf"></i> {{ record.files|filename }}</a><br>
+                                                                        {% else %}
+                                                                            <a href="{{ record.files.url }}" target="_blank"><img src="{{ record.files.url }}" alt="" width="100px" height="100px"></a><br>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                {% endif %}
+
+                                                            </li>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <li class="event">No Available Data</li>
+                                                    {% endif %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        //close alert after 3 seconds
+        window.setTimeout(function() {
+            $(".alert").fadeTo(300, 0).slideUp(300, function(){
+                $(this).remove();
+            });-invoice
+        }, 3000);
+
+
+        {#document.querySelector('.btn-print').addEventListener('click', function () {#}
+        {#    var link2 = document.createElement('link');#}
+        {#    link2.innerHTML =#}
+        {#        '<style>@media print{*,::after,::before{text-shadow:none!important;box-shadow:none!important}a:not(.btn){text-decoration:none}abbr[title]::after{content:" ("attr(title) ")"}pre{white-space:pre-wrap!important}blockquote,pre{border:1px solid #adb5bd;page-break-inside:avoid}thead{display:table-header-group}img,tr{page-break-inside:avoid}h2,h3,p{orphans:3;widows:3}h2,h3{page-break-after:avoid}@page{size:a3}body{min-width:992px!important}.container{min-width:992px!important}.page-header,.pcoded-navbar,.pcoded-mob-header,.pcoded-header,.menu-styler,.modal,.navbar{display:none}.pcoded-main-container{top:0;margin-left:0;}.invoice-contact{padding-top:0;}@page,.card-body,.card-header,body,.pcoded-content{padding:0;margin:0}.badge{border:1px solid #000}.table{border-collapse:collapse!important}.table td,.table th{background-color:#fff!important}.table-bordered td,.table-bordered th{border:1px solid #dee2e6!important}.table-dark{color:inherit}.table-dark tbody+tbody,.table-dark td,.table-dark th,.table-dark thead th{border-color:#dee2e6}.table .thead-dark th{color:inherit;border-color:#dee2e6}}</style>';#}
+        {#    document.getElementsByTagName('head')[0].appendChild(link2);#}
+        {#    window.print();#}
+
+    </script>
+{% endblock javascripts %}

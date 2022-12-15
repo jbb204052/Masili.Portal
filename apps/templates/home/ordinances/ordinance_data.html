@@ -70,7 +70,7 @@
                                                         <label>Presiding Officer</label>
                                                             <select name="presiding" class="form-control">
                                                                 {% for officer in officials %}
-                                                                    <option value="{{ officer.fname }}&nbsp;{{ officer.lname }}">{{ officer.fname }}&nbsp;{{ officer.lname }}</option>
+                                                                    <option value="{{ officer.fullname }}">{{ officer.fullname }}</option>
                                                                 {% endfor %}
                                                             </select>
                                                     </div>

@@ -71,9 +71,14 @@
                                                             <td>{{ blotter.blotter_no }}</td>
                                                             <td>{{ blotter.incident_type }}</td>
                                                             <td>{{ blotter.datetimeReported }}</td>
-                                                            <td>{{ blotter.status }}</td>
                                                             <td>
-                                                                <a class="btn btn-icon btn-outline-primary" href="#" title="View"><i class="feather icon-check-circle"></i></a>
+                                                                {% if blotter.status == 'PENDING' %}
+                                                                    <span class="badge badge-danger">{{ blotter.status }}</span>
+                                                                {% else %}
+                                                                    <span class="badge badge-success">{{ blotter.status }}</span>
+                                                                {% endif %}</td>
+                                                            <td>
+                                                                <a class="btn btn-icon btn-outline-primary" href="{% url 'blotter_view' blotter.id %}" title="View"><i class="feather icon-book"></i></a>
                                                             </td>
                                                         </tr>
                                                     {% endfor %}

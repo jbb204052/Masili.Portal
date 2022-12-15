@@ -101,7 +101,12 @@
             window.print();
 
             document.body.innerHTML = originalContents;
+        }
 
+        window.onafterprint = function(){
+            window.location.href = "{% url 'printed_certificate' certificate.id %}";
+
+            console.log({{ certificate.id }})
         }
     </script>
 {% endblock javascripts %}
